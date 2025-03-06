@@ -1,0 +1,21 @@
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:06<00:19,  6.34s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:12<00:12,  6.02s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:17<00:05,  5.67s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:19<00:00,  4.17s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:19<00:00,  4.82s/it]
+Traceback (most recent call last):
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/run_llama.py", line 75, in <module>
+    main()
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/run_llama.py", line 72, in main
+    run_inference(args.model_path, "Emily", args.option1, args.option2, args.max_tokens, args.temperature, args.output)
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/run_llama.py", line 30, in run_inference
+    inputs = tokenizer(question, return_tensors="pt", padding=True, truncation=True, max_length=300)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 2877, in __call__
+    encodings = self._call_one(text=text, text_pair=text_pair, **all_kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 2987, in _call_one
+    return self.encode_plus(
+           ^^^^^^^^^^^^^^^^^
+  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 3054, in encode_plus
+    padding_strategy, truncation_strategy, max_length, kwargs = self._get_padding_truncation_strategies(
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/transformers/tokenization_utils_base.py", line 2779, in _get_padding_truncation_strategies
+    raise ValueError(
+ValueError: Asking to pad but the tokenizer does not have a padding token. Please select a token to use as `pad_token` `(tokenizer.pad_token = tokenizer.eos_token e.g.)` or add a new pad token via `tokenizer.add_special_tokens({'pad_token': '[PAD]'})`.
