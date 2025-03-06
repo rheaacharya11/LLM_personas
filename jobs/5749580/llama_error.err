@@ -1,2 +1,0 @@
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:06<00:20,  6.90s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:13<00:14,  7.00s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:21<00:07,  7.36s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:23<00:00,  5.28s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:23<00:00,  5.96s/it]
-Setting `pad_token_id` to `eos_token_id`:128001 for open-end generation.
