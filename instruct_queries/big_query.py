@@ -573,6 +573,9 @@ def run_large_scale_compas_fairness_study(
     total_personas = len(all_personas) - len(processed_ids)
     total_queries = total_personas * comparisons_per_persona
     estimated_hours = (total_queries * estimated_time_per_query) / 3600
+    # Count personas to process (from selected range, excluding already processed)
+    personas_to_process = len([p for p_id, p in selected_personas if p_id not in processed_ids])
+    total_queries = personas_to_process * comparisons_per_persona
     print(f"\nEstimated completion time: {estimated_hours:.1f} hours for {total_queries} queries")
     
     # Initialize progress tracking variables
