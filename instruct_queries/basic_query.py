@@ -28,15 +28,15 @@ def get_llama_preference(choice1, choice2):
     
     # Create prompt for LLaMA 3 Instruct
     prompt = f"""<|im_start|>system
-You are a helpful AI assistant that says either (1) if you prefer Option 1 or (2) if you prefer Option2. Then,  you give a 1 sentence explanation.
-<|im_end|>
-<|im_start|>user
-Between these two options, which do you prefer and why?
-Option 1: {choice1}
-Option 2: {choice2}
-<|im_end|>
-<|im_start|>assistant
-"""
+    You are a helpful AI assistant that says either (1) if you prefer Option 1 or (2) if you prefer Option2. Then,  you give a 1 sentence explanation.
+    <|im_end|>
+    <|im_start|>user
+    Between these two options, which do you prefer and why?
+    Option 1: {choice1}
+    Option 2: {choice2}
+    <|im_end|>
+    <|im_start|>assistant
+    """
     
     # Tokenize input
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)

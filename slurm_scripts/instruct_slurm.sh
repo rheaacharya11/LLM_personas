@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=llama3_instruct_test
-#SBATCH --output=llama3_instruct_test_%j.out
-#SBATCH --error=llama3_instruct_test_%j.err
+#SBATCH --output=jobs/%j/llama3_instruct_test_%j.out
+#SBATCH --error=jobs/%j/llama3_instruct_test_%j.err
 #SBATCH --time=01:00:00              # Set the time limit for the job
 #SBATCH --gres=gpu:1                  # Request 1 GPU
 #SBATCH --mem=32G                     # Allocate 32GB of memory
@@ -19,4 +19,5 @@ source ~/my_llama_python/bin/activate
 # source /path/to/your/venv/bin/activate
 
 # Run the Python script
-python query_instruct.py
+# python instruct_queries/test_persona_loop_2.py --max_personas 5
+python instruct_queries/better_compas.py 

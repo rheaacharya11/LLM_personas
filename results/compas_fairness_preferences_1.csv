@@ -1,0 +1,146 @@
+persona,choice,choice_number,individual1_sex,individual1_age,individual1_race,individual1_priors,individual1_charge,individual1_score,individual1_recid,individual2_sex,individual2_age,individual2_race,individual2_priors,individual2_charge,individual2_score,individual2_recid
+"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",2,2,Female,21,African-American,0,M,6,0,Female,51,African-American,1,M,1,0
+"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",2,2,Male,54,Caucasian,2,F,2,0,Male,67,African-American,4,M,1,0
+"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",2,2,Female,29,Caucasian,1,F,4,1,Male,40,Other,4,M,1,1
+"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",1,1,Male,47,Caucasian,2,M,1,0,Male,36,Caucasian,0,M,7,1
+"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",2,2,Male,52,African-American,0,M,6,1,Male,30,African-American,9,F,3,1
