@@ -20,4 +20,5 @@ source ~/my_llama_python/bin/activate
 
 # Run the Python script
 # python instruct_queries/test_persona_loop_2.py --max_personas 5
-python instruct_queries/compas_unique.py 
+# python instruct_queries/compas_unique.py 
+python instruct_queries/big_query.py --output results/test_run.csv --comparisons 5 --batch_size 2 --debug

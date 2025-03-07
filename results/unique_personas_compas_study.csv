@@ -1,0 +1,931 @@
+persona_id,persona,comparison_number,choice,choice_type,individual1_id,individual1_sex,individual1_age,individual1_race,individual1_juv_fel,individual1_juv_misd,individual1_juv_other,individual1_priors,individual1_charge,individual2_id,individual2_sex,individual2_age,individual2_race,individual2_juv_fel,individual2_juv_misd,individual2_juv_other,individual2_priors,individual2_charge
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",1,"Ok to treat differently, or no opinion",different,7310,Male,34,Caucasian,0,0,0,5,F,3787,Male,27,African-American,0,0,0,1,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",2,"Ok to treat differently, or no opinion",different,4624,Male,32,African-American,0,0,0,2,F,6268,Female,28,African-American,0,0,0,0,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",3,"Ok to treat differently, or no opinion",different,2071,Male,32,African-American,0,0,0,11,M,5086,Male,46,Caucasian,0,0,0,0,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",4,"Ok to treat differently, or no opinion",different,8065,Male,28,African-American,0,0,0,4,M,4229,Male,22,Caucasian,0,1,1,2,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",5,"Ok to treat differently, or no opinion",different,5335,Male,52,Caucasian,0,0,0,7,F,348,Male,52,African-American,0,0,0,0,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",6,"Ok to treat differently, or no opinion",different,5811,Male,22,African-American,0,0,0,1,F,9758,Male,29,Caucasian,0,0,0,6,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",7,">
+
+Ok to treat differently, or no opinion",different,3691,Male,19,Other,0,0,0,0,M,9720,Male,38,Caucasian,0,0,0,0,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",8,"Ok to treat differently, or no opinion",different,4617,Male,30,Caucasian,0,0,0,0,M,8634,Male,44,African-American,0,0,0,0,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",9,"Ok to treat differently, or no opinion",different,4455,Male,32,Hispanic,0,0,1,1,M,4196,Female,32,African-American,0,0,0,0,F
+0,"age: 23
+sex: Male
+race: Some Other Race alone
+ancestry: Hispanic
+household language: Spanish
+education: Regular high school diploma
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: RET-Automobile Dealers
+occupation category: TRN-Stockers And Order Fillers
+detailed job description: Responsible for receiving, storing, and distributing material, tools, equipment, and products within establishments
+income: 112600.0
+marital status: Never married or under 15 years old
+household type: Married couple household, no children of the householder less than 18
+family presence and age: No related children
+place of birth: Texas/TX
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Low, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Average, Neuroticism: Low
+defining quirks: Enjoys tinkering with technology and gadgets
+mannerisms: Speaks quickly and with enthusiasm
+personal time: Spends free time volunteering at the local church and working on cars
+lifestyle: Relaxed and community-oriented
+ideology: Conservative
+political views: Republican
+religion: Catholic
+",10,"Ok to treat differently, or no opinion",different,5685,Male,38,Hispanic,0,0,0,1,M,7786,Male,28,African-American,0,0,0,2,F
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",1,"Ok to treat differently, or no opinion",different,8024,Female,27,African-American,0,0,0,3,M,8438,Female,34,Caucasian,0,0,0,12,F
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",2,"Ok to treat differently, or no opinion",different,2619,Male,27,African-American,0,0,0,3,F,1369,Female,28,Caucasian,0,0,1,3,M
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",3,"Ok to treat differently, or no opinion",different,2306,Male,56,Caucasian,0,0,0,1,M,2733,Male,59,Other,0,0,0,1,F
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",4,"Ok to treat differently, or no opinion",different,7496,Male,24,Caucasian,0,0,0,0,F,4945,Female,27,Caucasian,0,0,0,2,F
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",5,"Ok to treat differently, or no opinion",different,8456,Male,37,African-American,0,0,0,3,M,2274,Male,54,Caucasian,0,0,0,14,M
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",6,"Ok to treat differently, or no opinion",different,4438,Female,61,Caucasian,0,0,0,0,M,8981,Male,22,Caucasian,0,0,0,2,M
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",7,"Ok to treat differently, or no opinion",different,99,Male,33,Other,0,0,0,0,M,3902,Male,26,Caucasian,0,0,0,5,M
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",8,"Ok to treat differently, or no opinion",different,5707,Male,56,African-American,0,0,0,7,F,80,Male,24,African-American,0,0,0,2,F
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",9,">
+
+Should be treated equally",equal,3298,Male,31,Caucasian,0,0,0,6,M,1219,Female,33,African-American,0,0,0,0,M
+1,"age: 43
+sex: Male
+race: White alone
+ancestry: German
+household language: English only
+education: Regular high school diploma
+employment status: Civilian employed, at work
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: MFG-Plastics Product
+occupation category: TRN-Crane And Tower Operators
+detailed job description: Operates and manages crane for lifting, moving, and positioning heavy objects
+income: 50000-60000
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years and 5 to 17 years
+place of birth: Iowa/IA
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: With a disability
+health insurance: With health insurance coverage
+big five scores: Openness: Average, Conscientiousness: Extremely Low, Extraversion: High, Agreeableness: Extremely Low, Neuroticism: Low
+defining quirks: Often whistles old folk tunes
+mannerisms: Tends to tap his foot when nervous
+personal time: Spends free time with family or working on woodworking projects
+lifestyle: Active and outdoorsy
+ideology: Conservative
+political views: Republican
+religion: Other Christian
+",10,">
+
+Ok to treat differently, or no opinion",different,39,Male,26,African-American,0,0,1,5,F,9393,Female,27,Caucasian,0,0,0,1,F
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",1,Should be treated equally,equal,6744,Male,25,African-American,0,1,0,3,M,7466,Male,27,Caucasian,0,0,0,0,M
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",2,"Ok to treat differently, or no opinion",different,6740,Female,36,African-American,0,0,0,1,F,265,Male,28,African-American,0,0,0,6,M
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",3,">
+
+Ok to treat differently, or no opinion",different,701,Male,28,African-American,0,0,0,5,F,10448,Male,48,African-American,0,0,0,11,M
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",4,Should be treated equally,equal,2805,Male,51,African-American,0,0,0,4,F,1764,Female,28,Caucasian,0,0,0,0,M
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",5,Should be treated equally,equal,8803,Male,28,Hispanic,0,0,0,3,F,10375,Male,23,African-American,0,0,0,0,M
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",6,">
+
+Ok to treat differently, or no opinion",different,5141,Male,53,African-American,0,0,0,6,M,357,Male,31,Caucasian,0,0,0,0,F
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",7,Should be treated equally,equal,4663,Male,49,Caucasian,0,0,0,5,F,1534,Male,29,African-American,0,0,0,2,F
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",8,"Ok to treat differently, or no opinion",different,2571,Male,24,African-American,0,1,0,4,F,2383,Male,29,Other,0,0,0,0,F
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",9,"Ok to treat differently, or no opinion",different,500,Female,21,African-American,0,0,0,0,F,8257,Male,34,African-American,0,0,0,8,M
+2,"age: 27
+sex: Female
+race: White alone
+ancestry: Midwestern American
+household language: English only
+education: Bachelor's degree
+employment status: Not in labor force
+class of worker: Employee of a private for-profit company or business, or of an individual, for wages, salary, or commissions
+industry category: ENT-Other Amusement, Gambling, And Recreation Industries
+occupation category: EAT-Food Servers, Nonrestaurant
+detailed job description: Organizing and managing events in the entertainment industry
+income: 111500.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children under 5 years only
+place of birth: Missouri/MO
+citizenship: Born in the United States
+veteran status: Non-veteran
+disability: No disability
+health insurance: With health insurance coverage
+fertility: Has children
+hearing difficulty: No hearing difficulty
+vision difficulty: No vision difficulty
+cognitive difficulty: No cognitive difficulty
+ability to speak english: Speaks English very well
+big five scores: Openness: High, Conscientiousness: Low, Extraversion: Average, Agreeableness: Extremely High, Neuroticism: High
+defining quirks: Passionate about DIY crafts
+mannerisms: Expressive and outgoing
+personal time: Spends personal time on DIY crafts and gardening
+lifestyle: Eco-conscious and creative, with a focus on sustainable living and creative expression
+ideology: Believes in individual freedom and environmental protection
+political views: Liberal
+religion: Catholic
+",10,"Ok to treat differently, or no opinion",different,7079,Male,25,Caucasian,0,0,1,3,F,262,Female,37,Caucasian,0,0,0,6,F
