@@ -152,10 +152,10 @@ def llama_query(
     choice = None
     explanation = None
     
-    if "Should be treated equally" in assistant_response:
-        choice = "equal"
+    if "Should be treated similarly" in assistant_response:
+        choice = "similar"
         # Try to extract the explanation that comes after the choice
-        parts = assistant_response.split("Should be treated equally", 1)
+        parts = assistant_response.split("Should be treated similarly", 1)
         if len(parts) > 1 and parts[1].strip():
             explanation = parts[1].strip()
     elif "Ok to treat differently" in assistant_response:
@@ -341,7 +341,7 @@ def fairness_query(
     temperature: float = 0.7,
 ) -> LlamaResponse:
     """
-    Ask Llama to choose whether two individuals should be treated equally or differently.
+    Ask Llama to choose whether two individuals should be treated similarly or differently.
     
     Args:
         individual1: First individual from COMPAS dataset
@@ -467,7 +467,9 @@ def run_large_scale_compas_fairness_study(
     comparisons_per_persona: int = 50,
     batch_save_size: int = 10,
     debug: bool = False,
-    resume: bool = True
+    resume: bool = True,
+    start_persona_index: int = 0,
+    end_persona_index: int = None
 ):
     """
     Run a large-scale study asking all personas from unique_personas.parquet to evaluate 50 random COMPAS pairs each.
@@ -493,7 +495,30 @@ def run_large_scale_compas_fairness_study(
     if not all_personas:
         print("No personas found. Exiting.")
         return
-    
+    total_personas_count = len(all_personas)
+    # Validate persona index range
+    if start_persona_index < 0:
+        print(f"Warning: start_persona_index {start_persona_index} is negative, setting to 0")
+        start_persona_index = 0
+
+    if start_persona_index >= total_personas_count:
+        print(f"Error: start_persona_index {start_persona_index} exceeds total personas count {total_personas_count}")
+        return
+
+    if end_persona_index is None:
+        end_persona_index = total_personas_count - 1
+        print(f"No end_persona_index specified, setting to last persona: {end_persona_index}")
+    elif end_persona_index >= total_personas_count:
+        print(f"Warning: end_persona_index {end_persona_index} exceeds total personas count {total_personas_count}, setting to last persona: {total_personas_count - 1}")
+        end_persona_index = total_personas_count - 1
+    elif end_persona_index < start_persona_index:
+        print(f"Error: end_persona_index {end_persona_index} is less than start_persona_index {start_persona_index}")
+        return
+
+    # Filter personas based on range
+    selected_personas = all_personas[start_persona_index:end_persona_index + 1]
+    print(f"Selected personas: {len(selected_personas)} (from index {start_persona_index} to {end_persona_index})")
+        
     # Get already processed persona IDs if resuming
     processed_ids = set()
     if resume and os.path.exists(output_file):
@@ -548,12 +573,15 @@ def run_large_scale_compas_fairness_study(
     total_personas = len(all_personas) - len(processed_ids)
     total_queries = total_personas * comparisons_per_persona
     estimated_hours = (total_queries * estimated_time_per_query) / 3600
+    # Count personas to process (from selected range, excluding already processed)
+    personas_to_process = len([p for p_id, p in selected_personas if p_id not in processed_ids])
+    total_queries = personas_to_process * comparisons_per_persona
     print(f"\nEstimated completion time: {estimated_hours:.1f} hours for {total_queries} queries")
     
     # Initialize progress tracking variables
     start_time = time.time()
     persona_count = 0
-    total_persona_count = len(all_personas)
+    
     
     # Open CSV file for results
     with open(output_file, 'a', newline='') as csvfile:
@@ -566,7 +594,7 @@ def run_large_scale_compas_fairness_study(
         batch_results = []
         
         # Use tqdm for overall progress bar
-        for persona_idx, (persona_id, persona_text) in enumerate(tqdm(all_personas, desc="Processing personas")):
+        for persona_idx, (persona_id, persona_text) in enumerate(tqdm(selected_personas, desc="Processing personas")):
             # Skip already processed personas
             if persona_id in processed_ids:
                 continue
@@ -578,11 +606,11 @@ def run_large_scale_compas_fairness_study(
             # Calculate progress and ETA
             if persona_count > 1:
                 time_per_persona = elapsed_time / persona_count
-                remaining_personas = total_persona_count - persona_idx - 1
+                remaining_personas = total_personas_count - persona_idx - 1
                 eta_seconds = time_per_persona * remaining_personas
                 eta_hours = eta_seconds / 3600
                 
-                print(f"\nProgress: {persona_idx+1}/{total_persona_count} personas ({(persona_idx+1)/total_persona_count*100:.1f}%)")
+                print(f"\nProgress: {persona_idx+1}/{total_personas_count} personas ({(persona_idx+1)/total_personas_count*100:.1f}%)")
                 print(f"ETA: {eta_hours:.1f} hours")
             
             print(f"Processing persona {persona_id}:")
@@ -714,6 +742,8 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=10, help="Number of personas to process before saving")
     parser.add_argument("--debug", action="store_true", help="Enable debug output")
     parser.add_argument("--no-resume", dest="resume", action="store_false", help="Don't resume from last processed persona")
+    parser.add_argument("--start_index", type=int, default=0, help="Starting persona index (inclusive)")
+    parser.add_argument("--end_index", type=int, default=None, help="Ending persona index (inclusive, None for all)")
     parser.set_defaults(resume=True)
     
     args = parser.parse_args()
@@ -735,5 +765,7 @@ if __name__ == "__main__":
         comparisons_per_persona=args.comparisons,
         batch_save_size=args.batch_size,
         debug=args.debug,
+        start_persona_index=args.start_index,
+        end_persona_index=args.end_index,
         resume=args.resume
     )
