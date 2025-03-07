@@ -20,4 +20,4 @@ source ~/my_llama_python/bin/activate
 
 # Run the Python script
 # python instruct_queries/test_persona_loop_2.py --max_personas 5
-python instruct_queries/better_compas.py 
+python instruct_queries/compas_unique.py 

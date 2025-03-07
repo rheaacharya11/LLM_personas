@@ -1,0 +1,597 @@
+persona_id,persona,comparison_number,choice,choice_type,individual1_id,individual1_sex,individual1_age,individual1_race,individual1_juv_fel,individual1_juv_misd,individual1_juv_other,individual1_priors,individual1_charge,individual2_id,individual2_sex,individual2_age,individual2_race,individual2_juv_fel,individual2_juv_misd,individual2_juv_other,individual2_priors,individual2_charge
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",1,"Ok to treat differently, or no opinion",different,4950,Male,24,African-American,0,0,0,0,F,3306,Male,33,Caucasian,0,0,0,1,M
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",2,">
+
+Should be treated equally",equal,7446,Male,50,Caucasian,0,0,0,0,F,1800,Male,50,African-American,0,0,0,4,M
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",3,"Ok to treat differently, or no opinion",different,5689,Male,22,Caucasian,0,0,0,1,F,1101,Female,37,Hispanic,0,0,0,1,F
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",4,">
+
+Ok to treat differently, or no opinion",different,6730,Female,31,African-American,0,0,0,0,M,10237,Male,21,Caucasian,0,0,0,0,F
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",5,"Ok to treat differently, or no opinion",different,10131,Male,21,African-American,0,0,0,1,F,497,Female,23,Hispanic,0,0,0,1,M
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",6,"Ok to treat differently, or no opinion",different,7596,Male,29,African-American,3,0,0,6,F,8842,Male,46,Caucasian,0,0,0,1,F
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",7,"Ok to treat differently, or no opinion",different,4674,Male,20,African-American,0,0,0,0,M,7250,Male,56,African-American,0,0,0,9,F
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",8,">
+
+Ok to treat differently, or no opinion",different,621,Male,23,Hispanic,0,0,0,1,M,7158,Male,27,Caucasian,0,0,0,2,F
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",9,"Ok to treat differently, or no opinion",different,6107,Female,24,Caucasian,0,0,0,0,F,4581,Male,60,African-American,0,0,0,10,F
+0,"age: 42
+sex: Female
+race: White alone
+ancestry: Irish
+household language: English only
+education: Master's degree
+employment status: Civilian employed, at work
+class of worker: Employee of a private not-for-profit, tax-exempt, or charitable organization
+industry category: EDU-Elementary And Secondary Schools
+occupation category: EDU-Preschool And Kindergarten Teachers
+detailed job description: Teaches preschool and kindergarten students basic subjects and social skills
+income: 151000.0
+marital status: Married
+household type: Married couple household with children of the householder less than 18
+family presence and age: With related children 5 to 17 years only
+place of birth: Kansas/KS
+citizenship: Born in the United States
+veteran status: Non-Veteran
+disability: None
+health insurance: With health insurance coverage
+big five scores: Openness: Extremely High, Conscientiousness: Low, Extraversion: Extremely High, Agreeableness: Extremely Low, Neuroticism: High
+defining quirks: Collects children's books
+mannerisms: Often uses expressive hand gestures when speaking
+personal time: Reading, Planning lessons for students
+lifestyle: Busy, Family-oriented
+ideology: Social Liberal
+political views: Democrat
+religion: Catholic
+",10,"Ok to treat differently, or no opinion",different,1795,Female,22,Hispanic,0,0,0,0,F,7111,Male,47,Caucasian,0,0,0,3,M
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",1,">
+
+Should be treated equally",equal,9495,Male,21,Hispanic,0,1,0,2,F,8960,Male,36,African-American,0,0,0,2,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",2,Should be treated equally,equal,6160,Male,29,African-American,0,0,0,6,F,2231,Male,24,African-American,0,5,0,12,M
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",3,">
+
+Ok to treat differently, or no opinion",different,257,Male,23,Hispanic,0,0,0,0,F,467,Male,24,Other,0,1,0,9,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",4,Should be treated equally,equal,9691,Male,29,African-American,0,0,0,2,F,2035,Male,26,African-American,0,0,0,0,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",5,">
+
+Should be treated equally",equal,286,Male,32,African-American,0,0,0,13,F,7334,Male,26,African-American,0,1,0,24,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",6,"Ok to treat differently, or no opinion",different,4821,Male,22,African-American,0,0,0,5,M,4982,Male,38,Caucasian,0,0,0,2,M
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",7,Should be treated equally,equal,10437,Male,27,Caucasian,0,0,1,2,M,4033,Male,26,African-American,0,0,0,0,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",8,">
+
+Should be treated equally",equal,864,Male,24,Hispanic,0,0,0,8,F,9888,Male,39,African-American,0,0,0,8,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",9,">
+
+Ok to treat differently, or no opinion",different,9110,Male,49,African-American,0,0,0,3,F,2437,Male,28,Other,0,0,0,3,F
+1,"age: 30
+sex: Female
+race: White
+ancestry: Irish
+household language: English
+education: Master's Degree
+employment status: Employed
+class of worker: Private
+industry category: Arts, Entertainment, and Recreation
+occupation category: Art Director
+detailed job description: Oversees the artistic design of advertisements and print materials
+income: 197000
+marital status: Single
+household type: One-person household
+family presence and age: No family
+place of birth: California, USA
+citizenship: US Citizen
+veteran status: Non-Veteran
+disability: None
+health insurance: Private
+big five scores: Openness: Extremely High, Conscientiousness: Average, Extraversion: High, Agreeableness: Average, Neuroticism: Extremely Low
+defining quirks: Enjoys debating and expressing unique viewpoints
+mannerisms: Often uses hand gestures while speaking
+personal time: Spends free time painting or exploring new places
+lifestyle: Active and social
+ideology: Liberal
+political views: Democrat
+religion: Atheist
+",10,Should be treated equally,equal,9419,Male,45,African-American,0,0,0,0,F,1452,Female,21,Caucasian,0,1,0,0,M
