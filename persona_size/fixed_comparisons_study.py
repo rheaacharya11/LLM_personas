@@ -18,6 +18,108 @@ import datetime
 import gc
 import json
 from sklearn.model_selection import train_test_split
+def test_two_query_approach(model_path_prefix="../models/", model_name="llama3-8b-instruct"):
+    """
+    Test the two-query fairness assessment approach with a single comparison and basic persona.
+    
+    Args:
+        model_path_prefix: Directory prefix for model path
+        model_name: Name of the model to use
+        
+    Returns:
+        None (prints results)
+    """
+    print("Testing two-query fairness assessment approach...")
+    
+    # Load COMPAS data
+    train_df, _ = load_precleaned_data()
+    
+    # Generate a single comparison
+    random.seed(42)
+    individual1 = train_df.iloc[random.randint(0, len(train_df)-1)]
+    individual2 = train_df.iloc[random.randint(0, len(train_df)-1)]
+    
+    # Create a simple persona
+    persona = "a fair-minded judge with 20 years of experience in criminal justice"
+    
+    # Load model and tokenizer
+    print(f"Loading {model_name} model...")
+    model_path = f"{model_path_prefix}{model_name}"
+    
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    
+    model_instance = AutoModelForCausalLM.from_pretrained(
+        model_path,
+        torch_dtype=torch.bfloat16,
+        device_map="auto"
+    )
+    
+    # Get model enum
+    model_enum = LlamaModel.LLAMA3_8B
+    if "70b" in model_name:
+        model_enum = LlamaModel.LLAMA3_70B
+    
+    # Print individual details
+    print("\nPERSON X:")
+    print(f"- Gender: {individual1['sex']}")
+    print(f"- Age: {individual1['age']}")
+    print(f"- Race: {individual1['race']}")
+    print(f"- Juvenile felonies: {individual1['juv_fel_count']}")
+    print(f"- Juvenile misdemeanors: {individual1['juv_misd_count']}")
+    print(f"- Juvenile other: {individual1['juv_other_count']}")
+    print(f"- Prior convictions: {individual1['priors_count']}")
+    print(f"- Current charge severity: {individual1['c_charge_degree_full']}")
+    
+    print("\nPERSON Y:")
+    print(f"- Gender: {individual2['sex']}")
+    print(f"- Age: {individual2['age']}")
+    print(f"- Race: {individual2['race']}")
+    print(f"- Juvenile felonies: {individual2['juv_fel_count']}")
+    print(f"- Juvenile misdemeanors: {individual2['juv_misd_count']}")
+    print(f"- Juvenile other: {individual2['juv_other_count']}")
+    print(f"- Prior convictions: {individual2['priors_count']}")
+    print(f"- Current charge severity: {individual2['c_charge_degree_full']}")
+    
+    # Run the two-query approach
+    print("\nRunning two-query approach...")
+    response = fairness_query_two_step(
+        comparison_id=0,
+        individual1=individual1,
+        individual2=individual2,
+        model_instance=model_instance,
+        tokenizer=tokenizer,
+        persona=persona,
+        model=model_enum
+    )
+    
+    # Print results
+    print("\nX vs Y QUERY RESPONSE:")
+    print(response.x_vs_y_response)
+    
+    print("\nY vs X QUERY RESPONSE:")
+    print(response.y_vs_x_response)
+    
+    x_vs_y_answer, x_vs_y_explanation = extract_yes_no_and_explanation(response.x_vs_y_response)
+    y_vs_x_answer, y_vs_x_explanation = extract_yes_no_and_explanation(response.y_vs_x_response)
+    
+    print("\nEXTRACTED ANSWERS:")
+    print(f"X vs Y: {x_vs_y_answer} - {x_vs_y_explanation}")
+    print(f"Y vs X: {y_vs_x_answer} - {y_vs_x_explanation}")
+    
+    print("\nCOMBINED RESULT:")
+    print(f"Choice Type: {response.choice}")
+    print(f"Explanation: {response.explanation}")
+    
+    print("\nTest complete!")
+    
+    # Clean up to free memory
+    del model_instance
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
 
 class LlamaRole(Enum):
     SYSTEM = "system"
@@ -389,12 +491,12 @@ The COMPAS (Correctional Offender Management Profiling for Alternative Sanctions
 
 Recidivism prediction algorithms analyze factors like criminal history, demographics, and current charges to estimate the likelihood a person will commit future crimes. These predictions inform decisions about bail, sentencing, and parole.
 
-I'm going to show you information about two individuals from this dataset. In your view, as a matter of fairness, should the following two individuals receive similar recidivism risk prediction, or is it ok to give them different predictions? Remember higher predictions mean they are more likely to recommit a crime.
+I'm going to show you information about two individuals from this dataset. In your view, as a matter of fairness, how these two individuals should be assessed for recidivism prediction? "
 """
     
     # Create a comparison using side-by-side lists with clear labels
     comparison = f"""
-PERSON A:
+PERSON X:
 - Gender: {individual1['sex']}
 - Age: {individual1['age']}
 - Race: {individual1['race']}
@@ -404,7 +506,7 @@ PERSON A:
 - Prior convictions: {individual1['priors_count']}
 - Current charge severity: {individual1['c_charge_degree_full']}
 
-PERSON B:
+PERSON Y:
 - Gender: {individual2['sex']}
 - Age: {individual2['age']}
 - Race: {individual2['race']}
@@ -418,13 +520,13 @@ PERSON B:
     query = (
         f"{intro}\n\n"
         f"{comparison}\n\n"
-        f"In your view, as a matter of fairness, should the following two individuals receive "
-        f"the same recidivism prediction, or is it ok to give them different predictions?\n\n"
+        f"In your view, as a matter of fairness, which of the following statements best reflects"
+        f"how these two individuals should be assessed for recidivism prediction?\n"
         f"Please respond with ONLY one of these four exact phrases:\n"
-        f"\"Should be treated similarly\"\n"
         f"\"X at least as high as Y\"\n"
         f"\"Y at least as high as X\"\n"
-        f"\"Ok to treat differently, or no opinion\""
+        f"\"X similar to Y\"\n"
+        f"\"No opinion\""
     )
     
     return query
@@ -601,6 +703,7 @@ def run_fixed_comparisons_study(
 ):
     """
     Run a study where all personas evaluate the same fixed set of comparisons from the COMPAS dataset.
+    Uses the balanced multiple-choice approach for fairness assessments.
     
     Args:
         output_file: CSV file to save results
@@ -614,12 +717,15 @@ def run_fixed_comparisons_study(
         resume: Whether to resume from already processed pairs
         start_persona_index: First persona index to process
         end_persona_index: Last persona index to process
+        start_comparison_index: First comparison index to process
+        end_comparison_index: Last comparison index to process
+        force_regenerate_comparisons: Whether to regenerate comparisons file
         random_state: Random seed for reproducibility
     """
     # Create a timestamp for logging
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"Starting fixed comparisons COMPAS fairness study at {timestamp}")
-    print(f"Settings: {num_comparisons} fixed comparisons, batch size {batch_save_size}")
+    print(f"Settings: {num_comparisons} fixed comparisons, batch size {batch_save_size}, using balanced multiple-choice approach")
     
     # Set seeds for reproducibility
     random.seed(random_state)
@@ -655,15 +761,16 @@ def run_fixed_comparisons_study(
     selected_personas = all_personas[start_persona_index:end_persona_index + 1]
     print(f"Selected personas: {len(selected_personas)} (from index {start_persona_index} to {end_persona_index})")
     
-     # Load and prepare COMPAS data
+    # Load and prepare COMPAS data
     print("\nLoading COMPAS dataset...")
     train_df, test_df = load_precleaned_data()
+    
     # Check if we need to regenerate fixed comparisons
     if force_regenerate_comparisons or not os.path.exists(fixed_comparisons_file):
         print(f"Generating {num_comparisons} fixed comparisons from the training set...")
         fixed_comparisons = generate_fixed_comparisons(train_df, num_comparisons=num_comparisons, 
-                                                      output_file=fixed_comparisons_file, 
                                                       random_state=random_state)
+        save_comparisons_to_file(fixed_comparisons, output_file=fixed_comparisons_file)
     
     # Load fixed comparisons
     loaded_comparisons = load_comparisons_from_file(train_df, input_file=fixed_comparisons_file)
@@ -673,10 +780,9 @@ def run_fixed_comparisons_study(
         print(f"Warning: Only loaded {len(loaded_comparisons)} out of {num_comparisons} expected comparisons.")
         print("Regenerating comparisons file...")
         fixed_comparisons = generate_fixed_comparisons(train_df, num_comparisons=num_comparisons, 
-                                                      output_file=fixed_comparisons_file, 
-                                                      random_state=random_state)
+                                                     random_state=random_state)
+        save_comparisons_to_file(fixed_comparisons, output_file=fixed_comparisons_file)
         loaded_comparisons = load_comparisons_from_file(train_df, input_file=fixed_comparisons_file)
-    
     
     # Filter comparisons based on range
     if end_comparison_index is None:
@@ -704,7 +810,8 @@ def run_fixed_comparisons_study(
     
     # Define fieldnames for CSV
     fieldnames = [
-        'persona_id', 'persona', 'comparison_id', 'choice', 'choice_type', 'explanation',
+        'persona_id', 'persona', 'comparison_id', 
+        'chosen_option', 'option_order', 'choice_type', 'explanation',
         'individual1_id', 'individual1_sex', 'individual1_age', 'individual1_race', 
         'individual1_juv_fel', 'individual1_juv_misd', 'individual1_juv_other',
         'individual1_priors', 'individual1_charge',
@@ -731,7 +838,7 @@ def run_fixed_comparisons_study(
     print("Model and tokenizer loaded successfully")
     
     # Calculate estimated completion time
-    estimated_time_per_query = 5  # seconds
+    estimated_time_per_query = 8  # seconds
     total_personas = len(selected_personas)
     total_comparisons = len(filtered_comparisons)
     total_queries = total_personas * total_comparisons
@@ -775,8 +882,8 @@ def run_fixed_comparisons_study(
                     continue
                 
                 try:
-                    # Query the model with this persona and comparison
-                    response = fairness_query(
+                    # Use the balanced multiple-choice approach
+                    response = fairness_query_balanced(
                         comparison_id=comparison_id,
                         individual1=individual1,
                         individual2=individual2,
@@ -788,36 +895,24 @@ def run_fixed_comparisons_study(
                         temperature=temperature
                     )
                     
-                    # Get the choice text and type
-                    choice_text = response.full_text.strip()
-
-                    # Clean out any special tokens that might be in the response
-                    special_tokens = ["<|start_header_id|>", "<|end_header_id|>", "<|eot_id|>", 
-                                     "<|im_start|>", "<|im_end|>", "<|begin_of_text|>"]
-                    for token in special_tokens:
-                        choice_text = choice_text.replace(token, "")
-                    
-                    choice_text = choice_text.strip()
-                    choice_type = response.choice
-                    
-                    # Extract the explanation
-                    explanation = response.explanation
-                    
                     # Print response for verification if debugging
                     if debug:
                         print(f"Persona {persona_id}, Comparison {comparison_id}:")
-                        print(f"  Response: \"{choice_text}\" (Type: {choice_type if choice_type else 'unknown'})")
-                        if explanation:
-                            print(f"  Explanation: \"{explanation}\"")
+                        print(f"  Response: \"{response.full_text}\"")
+                        print(f"  Chosen option: {response.chosen_option}")
+                        print(f"  Option order: {response.option_order}")
+                        print(f"  Choice type: {response.choice}")
+                        print(f"  Explanation: {response.explanation}")
                     
                     # Create result dictionary
                     result = {
                         'persona_id': persona_id,
                         'persona': persona_text,
                         'comparison_id': comparison_id,
-                        'choice': choice_text,
-                        'choice_type': choice_type,
-                        'explanation': explanation,
+                        'chosen_option': response.chosen_option,
+                        'option_order': str(response.option_order),  # Convert list to string for CSV
+                        'choice_type': response.choice,
+                        'explanation': response.explanation,
                         # Individual 1 data
                         'individual1_id': individual1['id'],
                         'individual1_sex': individual1['sex'],
@@ -861,7 +956,7 @@ def run_fixed_comparisons_study(
                             torch.cuda.empty_cache()
                     
                     # Calculate and display progress
-                    if queries_completed % 100 == 0:
+                    if queries_completed % 50 == 0:
                         elapsed_time = time.time() - start_time
                         queries_per_second = queries_completed / elapsed_time
                         remaining_queries = total_personas * total_comparisons - queries_completed
@@ -874,6 +969,9 @@ def run_fixed_comparisons_study(
                     
                 except Exception as e:
                     print(f"Error processing persona {persona_id}, comparison {comparison_id}: {e}")
+                    # Try to log the error more completely
+                    import traceback
+                    traceback.print_exc()
         
         # Save any remaining results
         if batch_results:
@@ -889,7 +987,235 @@ def run_fixed_comparisons_study(
     print(f"\nStudy complete at {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Total time: {total_hours:.2f} hours")
     print(f"Results saved to {output_file}")
+# TWO QUERY APPROACH
+def create_balanced_fairness_query(individual1, individual2, randomize_options=True):
+    """
+    Create a balanced multiple-choice query about fairness in recidivism prediction.
+    
+    Args:
+        individual1: First individual (Person X) from COMPAS dataset
+        individual2: Second individual (Person Y) from COMPAS dataset
+        randomize_options: Whether to randomize the order of options
+        
+    Returns:
+        Tuple of (query_text, option_order) where option_order is the mapping 
+        of presented options to original options
+    """
+    intro = """
+The criminal justice system uses risk assessment algorithms to predict which defendants are likely to reoffend if released. These recidivism predictions influence important decisions about bail, sentencing, and parole. I'm going to show you information about two individuals and ask you to consider how their risk should be assessed from a fairness perspective.
+"""
+    
+    comparison = f"""
+PERSON X:
+- Gender: {individual1['sex']}
+- Age: {individual1['age']}
+- Race: {individual1['race']}
+- Juvenile felonies: {individual1['juv_fel_count']}
+- Juvenile misdemeanors: {individual1['juv_misd_count']}
+- Juvenile other: {individual1['juv_other_count']}
+- Prior convictions: {individual1['priors_count']}
+- Current charge severity: {individual1['c_charge_degree_full']}
 
+PERSON Y:
+- Gender: {individual2['sex']}
+- Age: {individual2['age']}
+- Race: {individual2['race']}
+- Juvenile felonies: {individual2['juv_fel_count']}
+- Juvenile misdemeanors: {individual2['juv_misd_count']}
+- Juvenile other: {individual2['juv_other_count']}
+- Prior convictions: {individual2['priors_count']}
+- Current charge severity: {individual2['c_charge_degree_full']}
+"""
+    
+    options = [
+        "Person X should have a higher recidivism risk score than Person Y",
+        "Person Y should have a higher recidivism risk score than Person X",
+        "Both should have approximately equal risk scores"
+    ]
+    
+    # Map the options to choice types
+    option_mapping = {
+        0: "x_higher_than_y",
+        1: "y_higher_than_x",
+        2: "similar"
+    }
+    
+    # Randomize options if requested
+    option_order = [0, 1, 2]  # Default order
+    if randomize_options:
+        import random
+        random.shuffle(option_order)
+    
+    # Create the ordered list of options
+    ordered_options = [options[i] for i in option_order]
+    
+    query = (
+        f"{intro}\n\n"
+        f"{comparison}\n\n"
+        f"Question: In your view, which statement is more accurate?\n"
+        f"1. {ordered_options[0]}\n"
+        f"2. {ordered_options[1]}\n"
+        f"3. {ordered_options[2]}\n\n"
+        f"Choose one option (1, 2, or 3) and briefly explain why."
+    )
+    
+    return query, option_order, option_mapping
+
+def extract_choice_and_explanation(response_text):
+    """
+    Extract the chosen option and explanation from the model's response.
+    
+    Args:
+        response_text: Text response from the model
+        
+    Returns:
+        Tuple of (chosen_option, explanation) where chosen_option is 1, 2, or 3
+    """
+    response_text = response_text.strip()
+    
+    # Default values
+    chosen_option = None
+    explanation = None
+    
+    # Check for a number at the beginning of the response
+    if response_text.startswith("1") or response_text.startswith("Option 1"):
+        chosen_option = 1
+    elif response_text.startswith("2") or response_text.startswith("Option 2"):
+        chosen_option = 2
+    elif response_text.startswith("3") or response_text.startswith("Option 3"):
+        chosen_option = 3
+    
+    # If no number at the beginning, look for patterns in the text
+    if chosen_option is None:
+        if "option 1" in response_text.lower() or "first option" in response_text.lower():
+            chosen_option = 1
+        elif "option 2" in response_text.lower() or "second option" in response_text.lower():
+            chosen_option = 2
+        elif "option 3" in response_text.lower() or "third option" in response_text.lower():
+            chosen_option = 3
+    
+    # Fall back to looking for the statement itself
+    if chosen_option is None:
+        response_lower = response_text.lower()
+        if "x should have a higher" in response_lower or "person x should have a higher" in response_lower:
+            chosen_option = 1  # This is a simplified fallback - may need refinement
+        elif "y should have a higher" in response_lower or "person y should have a higher" in response_lower:
+            chosen_option = 2  # This is a simplified fallback - may need refinement
+        elif "equal" in response_lower or "same" in response_lower or "similar" in response_lower:
+            chosen_option = 3  # This is a simplified fallback - may need refinement
+    
+    # Extract explanation - everything after the option choice
+    if chosen_option is not None:
+        # Find where the explanation starts after the option number
+        option_str = str(chosen_option)
+        if option_str in response_text:
+            explanation_start = response_text.find(option_str) + len(option_str)
+            explanation = response_text[explanation_start:].strip()
+            
+            # Remove common prefixes
+            prefixes = [".", ":", "-", ")"]
+            for prefix in prefixes:
+                if explanation.startswith(prefix):
+                    explanation = explanation[1:].strip()
+    else:
+        # If we couldn't identify an option, use the whole response as the explanation
+        explanation = response_text
+    
+    return chosen_option, explanation
+
+def fairness_query_balanced(
+    comparison_id,
+    individual1,
+    individual2,
+    model_instance,
+    tokenizer,
+    persona=None,
+    persona_id=None,
+    model=None,
+    max_tokens=512,
+    temperature=0.7
+):
+    """
+    Perform the balanced multiple-choice fairness assessment approach.
+    
+    Args:
+        comparison_id: ID for tracking this specific comparison
+        individual1: First individual from COMPAS dataset
+        individual2: Second individual from COMPAS dataset
+        model_instance: Pre-loaded model instance
+        tokenizer: Pre-loaded tokenizer
+        persona: Optional persona to assign to the model
+        persona_id: Optional persona ID number
+        model: Which Llama model to use
+        max_tokens: Maximum tokens to generate
+        temperature: Sampling temperature
+        
+    Returns:
+        LlamaResponse with the results
+    """
+    # Create base system prompt
+    base_system_prompt = "You are a helpful AI assistant"
+    
+    # Add persona if provided
+    if persona:
+        system_prompt = f"{base_system_prompt} with the persona of {persona}. Answer the question about recidivism risk assessment by choosing one option (1, 2, or 3) and then providing a brief explanation."
+    else:
+        system_prompt = f"{base_system_prompt}. Answer the question about recidivism risk assessment by choosing one option (1, 2, or 3) and then providing a brief explanation."
+    
+    # Generate the balanced query
+    query_text, option_order, option_mapping = create_balanced_fairness_query(individual1, individual2, randomize_options=True)
+    
+    # Create the prompt list
+    prompt_list = [
+        (LlamaRole.SYSTEM, system_prompt),
+        (LlamaRole.USER, query_text)
+    ]
+    
+    # Make the query
+    response = llama_query(
+        prompt=prompt_list,
+        model_instance=model_instance,
+        tokenizer=tokenizer,
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        persona=persona
+    )
+    
+    # Extract the chosen option and explanation
+    chosen_option, explanation = extract_choice_and_explanation(response.full_text)
+    
+    # Map the chosen option to the original option index
+    if chosen_option is not None and 1 <= chosen_option <= 3:
+        original_option_index = option_order[chosen_option - 1]
+        choice_type = option_mapping[original_option_index]
+    else:
+        choice_type = "unknown"
+    
+    # Create a response object with the results
+    result_response = LlamaResponse(
+        full_text=response.full_text,
+        model=model,
+        prompt=prompt_list,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        persona=persona,
+        choice=choice_type,
+        explanation=explanation,
+        comparison_id=comparison_id,
+        individual1=individual1,
+        individual2=individual2
+    )
+    
+    # Add the query details to the response
+    result_response.query_text = query_text
+    result_response.option_order = option_order
+    result_response.chosen_option = chosen_option
+    
+    return result_response
+
+if __name__ == "__main1__":
+    test_two_query_approach()
 if __name__ == "__main__":
     import argparse
     
