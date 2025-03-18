@@ -1,5 +1,0 @@
-/var/slurmd/spool/slurmd/job5744819/slurm_script: line 27: MODEL_PATH: command not found
-usage: run_llama.py [-h] --model_path MODEL_PATH --option1 OPTION1 --option2
-                    OPTION2 [--max_tokens MAX_TOKENS]
-                    [--temperature TEMPERATURE] --output OUTPUT
-run_llama.py: error: argument --model_path: expected one argument

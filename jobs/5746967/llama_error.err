@@ -1,18 +1,0 @@
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:06<00:20,  6.95s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:14<00:14,  7.04s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:21<00:07,  7.04s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:22<00:00,  4.99s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:22<00:00,  5.73s/it]
-Setting `pad_token_id` to `eos_token_id`:128001 for open-end generation.
-Traceback (most recent call last):
-  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/run_llama.py", line 87, in <module>
-    main()
-  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/run_llama.py", line 84, in main
-    run_inference(args.model_path, "Emily", args.option1, args.option2, args.max_tokens, args.temperature, args.output)
-  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/run_llama.py", line 46, in run_inference
-    output = model.generate(
-             ^^^^^^^^^^^^^^^
-  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/transformers/generation/utils.py", line 2079, in generate
-    self._validate_generated_length(generation_config, input_ids_length, has_default_max_length)
-  File "/n/home04/racharya/my_llama_python/lib/python3.12/site-packages/transformers/generation/utils.py", line 1416, in _validate_generated_length
-    raise ValueError(
-ValueError: Input length of input_ids is 145, but `max_length` is set to 50. This can lead to unexpected behavior. You should consider increasing `max_length` or, better yet, setting `max_new_tokens`.

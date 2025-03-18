@@ -1,0 +1,122 @@
+Creating a grid of 50 persona blocks × 2 comparison blocks = 100 jobs
+Each job will process up to 20 personas and 25 comparisons
+Using model: llama3-8b-instruct
+Maximum concurrent jobs: 5
+Starting wave 1 of job submissions
+Submitted job 1/100 (ID: 7270277) without dependency
+Submitted job 2/100 (ID: 7270278) without dependency
+Submitted job 3/100 (ID: 7270282) without dependency
+Submitted job 4/100 (ID: 7270285) without dependency
+Submitted job 5/100 (ID: 7270287) without dependency
+Starting wave 2 of job submissions
+Submitted job 6/100 (ID: 7270288) with dependency on 7270277
+Submitted job 7/100 (ID: 7270289) with dependency on 7270278
+Submitted job 8/100 (ID: 7270290) with dependency on 7270282
+Submitted job 9/100 (ID: 7270291) with dependency on 7270285
+Submitted job 10/100 (ID: 7270292) with dependency on 7270287
+Starting wave 3 of job submissions
+Submitted job 11/100 (ID: 7270294) with dependency on 7270288
+Submitted job 12/100 (ID: 7270296) with dependency on 7270289
+Submitted job 13/100 (ID: 7270298) with dependency on 7270290
+Submitted job 14/100 (ID: 7270300) with dependency on 7270291
+Submitted job 15/100 (ID: 7270301) with dependency on 7270292
+Starting wave 4 of job submissions
+Submitted job 16/100 (ID: 7270303) with dependency on 7270294
+Submitted job 17/100 (ID: 7270304) with dependency on 7270296
+Submitted job 18/100 (ID: 7270305) with dependency on 7270298
+Submitted job 19/100 (ID: 7270306) with dependency on 7270300
+Submitted job 20/100 (ID: 7270308) with dependency on 7270301
+Starting wave 5 of job submissions
+Submitted job 21/100 (ID: 7270310) with dependency on 7270303
+Submitted job 22/100 (ID: 7270312) with dependency on 7270304
+Submitted job 23/100 (ID: 7270313) with dependency on 7270305
+Submitted job 24/100 (ID: 7270314) with dependency on 7270306
+Submitted job 25/100 (ID: 7270315) with dependency on 7270308
+Starting wave 6 of job submissions
+Submitted job 26/100 (ID: 7270320) with dependency on 7270310
+Submitted job 27/100 (ID: 7270322) with dependency on 7270312
+Submitted job 28/100 (ID: 7270324) with dependency on 7270313
+Submitted job 29/100 (ID: 7270326) with dependency on 7270314
+sbatch: error: QOSMaxSubmitJobPerUserLimit
+sbatch: error: Batch job submission failed: Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)
+Submitted job 30/100 (ID: ) with dependency on 7270315
+Starting wave 7 of job submissions
+sbatch: error: QOSMaxSubmitJobPerUserLimit
+sbatch: error: Batch job submission failed: Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)
+Submitted job 31/100 (ID: ) with dependency on 7270320
+Submitted job 32/100 (ID: 7270329) with dependency on 7270322
+Submitted job 33/100 (ID: 7270331) with dependency on 7270324
+sbatch: error: QOSMaxSubmitJobPerUserLimit
+sbatch: error: Batch job submission failed: Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)
+Submitted job 34/100 (ID: ) with dependency on 7270326
+sbatch: error: QOSMaxSubmitJobPerUserLimit
+sbatch: error: Batch job submission failed: Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)
+Submitted job 35/100 (ID: ) with dependency on 
+Starting wave 8 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 36/100 (ID: ) with dependency on 
+Submitted job 37/100 (ID: 7270334) with dependency on 7270329
+Submitted job 38/100 (ID: 7270338) with dependency on 7270331
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 39/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 40/100 (ID: ) with dependency on 
+Starting wave 9 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 41/100 (ID: ) with dependency on 
+Submitted job 42/100 (ID: 7270347) with dependency on 7270334
+Submitted job 43/100 (ID: 7270352) with dependency on 7270338
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 44/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 45/100 (ID: ) with dependency on 
+Starting wave 10 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 46/100 (ID: ) with dependency on 
+Submitted job 47/100 (ID: 7270357) with dependency on 7270347
+Submitted job 48/100 (ID: 7270359) with dependency on 7270352
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 49/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 50/100 (ID: ) with dependency on 
+Starting wave 11 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 51/100 (ID: ) with dependency on 
+Submitted job 52/100 (ID: 7270366) with dependency on 7270357
+Submitted job 53/100 (ID: 7270367) with dependency on 7270359
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 54/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 55/100 (ID: ) with dependency on 
+Starting wave 12 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 56/100 (ID: ) with dependency on 
+Submitted job 57/100 (ID: 7270375) with dependency on 7270366
+Submitted job 58/100 (ID: 7270376) with dependency on 7270367
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 59/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 60/100 (ID: ) with dependency on 
+Starting wave 13 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 61/100 (ID: ) with dependency on 
+Submitted job 62/100 (ID: 7270380) with dependency on 7270375
+Submitted job 63/100 (ID: 7270383) with dependency on 7270376
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 64/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 65/100 (ID: ) with dependency on 
+Starting wave 14 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 66/100 (ID: ) with dependency on 
+Submitted job 67/100 (ID: 7270388) with dependency on 7270380
+Submitted job 68/100 (ID: 7270390) with dependency on 7270383
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 69/100 (ID: ) with dependency on 
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 70/100 (ID: ) with dependency on 
+Starting wave 15 of job submissions
+sbatch: error: Batch job submission failed: Job dependency problem
+Submitted job 71/100 (ID: ) with dependency on 
+Submitted job 72/100 (ID: 7270396) with dependency on 7270388
+slurmstepd: error: *** JOB 7270250 ON holy7c24503 CANCELLED AT 2025-03-17T22:23:00 ***
