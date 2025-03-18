@@ -1,0 +1,115 @@
+Creating a grid of 100 persona blocks × 1 comparison blocks = 100 jobs
+Each job will process up to 10 personas and 50 comparisons
+Using model: llama3-8b-instruct
+Maximum concurrent jobs: 100
+Starting wave 1 of job submissions
+Submitted job 1/100 (ID: 7281701) without dependency
+Submitted job 2/100 (ID: 7281702) without dependency
+Submitted job 3/100 (ID: 7281703) without dependency
+Submitted job 4/100 (ID: 7281704) without dependency
+Submitted job 5/100 (ID: 7281705) without dependency
+Submitted job 6/100 (ID: 7281711) without dependency
+Submitted job 7/100 (ID: 7281715) without dependency
+Submitted job 8/100 (ID: 7281720) without dependency
+Submitted job 9/100 (ID: 7281725) without dependency
+Submitted job 10/100 (ID: 7281727) without dependency
+Submitted job 11/100 (ID: 7281728) without dependency
+Submitted job 12/100 (ID: 7281730) without dependency
+Submitted job 13/100 (ID: 7281731) without dependency
+Submitted job 14/100 (ID: 7281732) without dependency
+Submitted job 15/100 (ID: 7281733) without dependency
+Submitted job 16/100 (ID: 7281734) without dependency
+Submitted job 17/100 (ID: 7281737) without dependency
+Submitted job 18/100 (ID: 7281738) without dependency
+Submitted job 19/100 (ID: 7281740) without dependency
+Submitted job 20/100 (ID: 7281741) without dependency
+Submitted job 21/100 (ID: 7281742) without dependency
+Submitted job 22/100 (ID: 7281745) without dependency
+Submitted job 23/100 (ID: 7281746) without dependency
+Submitted job 24/100 (ID: 7281747) without dependency
+Submitted job 25/100 (ID: 7281749) without dependency
+Submitted job 26/100 (ID: 7281751) without dependency
+Submitted job 27/100 (ID: 7281752) without dependency
+Submitted job 28/100 (ID: 7281753) without dependency
+Submitted job 29/100 (ID: 7281755) without dependency
+Submitted job 30/100 (ID: 7281758) without dependency
+Submitted job 31/100 (ID: 7281762) without dependency
+Submitted job 32/100 (ID: 7281770) without dependency
+Submitted job 33/100 (ID: 7281795) without dependency
+Submitted job 34/100 (ID: 7281799) without dependency
+Submitted job 35/100 (ID: 7281801) without dependency
+Submitted job 36/100 (ID: 7281804) without dependency
+Submitted job 37/100 (ID: 7281806) without dependency
+Submitted job 38/100 (ID: 7281809) without dependency
+Submitted job 39/100 (ID: 7281811) without dependency
+Submitted job 40/100 (ID: 7281816) without dependency
+Submitted job 41/100 (ID: 7281818) without dependency
+Submitted job 42/100 (ID: 7281820) without dependency
+Submitted job 43/100 (ID: 7281821) without dependency
+Submitted job 44/100 (ID: 7281822) without dependency
+Submitted job 45/100 (ID: 7281825) without dependency
+Submitted job 46/100 (ID: 7281826) without dependency
+Submitted job 47/100 (ID: 7281827) without dependency
+Submitted job 48/100 (ID: 7281828) without dependency
+Submitted job 49/100 (ID: 7281833) without dependency
+Submitted job 50/100 (ID: 7281834) without dependency
+Submitted job 51/100 (ID: 7281836) without dependency
+Submitted job 52/100 (ID: 7281837) without dependency
+Submitted job 53/100 (ID: 7281838) without dependency
+Submitted job 54/100 (ID: 7281840) without dependency
+Submitted job 55/100 (ID: 7281845) without dependency
+Submitted job 56/100 (ID: 7281846) without dependency
+Submitted job 57/100 (ID: 7281847) without dependency
+Submitted job 58/100 (ID: 7281848) without dependency
+Submitted job 59/100 (ID: 7281849) without dependency
+Submitted job 60/100 (ID: 7281850) without dependency
+Submitted job 61/100 (ID: 7281851) without dependency
+Submitted job 62/100 (ID: 7281857) without dependency
+Submitted job 63/100 (ID: 7281858) without dependency
+Submitted job 64/100 (ID: 7281861) without dependency
+Submitted job 65/100 (ID: 7281863) without dependency
+Submitted job 66/100 (ID: 7281867) without dependency
+Submitted job 67/100 (ID: 7281869) without dependency
+Submitted job 68/100 (ID: 7281870) without dependency
+Submitted job 69/100 (ID: 7281871) without dependency
+Submitted job 70/100 (ID: 7281877) without dependency
+Submitted job 71/100 (ID: 7281886) without dependency
+Submitted job 72/100 (ID: 7281909) without dependency
+Submitted job 73/100 (ID: 7281911) without dependency
+Submitted job 74/100 (ID: 7281919) without dependency
+Submitted job 75/100 (ID: 7281925) without dependency
+Submitted job 76/100 (ID: 7281926) without dependency
+Submitted job 77/100 (ID: 7281930) without dependency
+Submitted job 78/100 (ID: 7281932) without dependency
+Submitted job 79/100 (ID: 7281933) without dependency
+Submitted job 80/100 (ID: 7281937) without dependency
+Submitted job 81/100 (ID: 7281942) without dependency
+Submitted job 82/100 (ID: 7281944) without dependency
+Submitted job 83/100 (ID: 7281948) without dependency
+Submitted job 84/100 (ID: 7281951) without dependency
+Submitted job 85/100 (ID: 7281958) without dependency
+Submitted job 86/100 (ID: 7281959) without dependency
+Submitted job 87/100 (ID: 7281965) without dependency
+Submitted job 88/100 (ID: 7281968) without dependency
+Submitted job 89/100 (ID: 7281971) without dependency
+Submitted job 90/100 (ID: 7281972) without dependency
+Submitted job 91/100 (ID: 7281975) without dependency
+Submitted job 92/100 (ID: 7281978) without dependency
+Submitted job 93/100 (ID: 7281984) without dependency
+Submitted job 94/100 (ID: 7281990) without dependency
+Submitted job 95/100 (ID: 7281994) without dependency
+Submitted job 96/100 (ID: 7281998) without dependency
+Submitted job 97/100 (ID: 7281999) without dependency
+Submitted job 98/100 (ID: 7282000) without dependency
+Submitted job 99/100 (ID: 7282002) without dependency
+Submitted job 100/100 (ID: 7282005) without dependency
+Starting wave 2 of job submissions
+All 100 jobs submitted in 2 waves!
+Log file: jobs/core_experiment_requeue/job_manager_fairness_constraints.log
+Created monitor_jobs.sh script in jobs/core_experiment_requeue to check progress
+
+After all jobs complete, combine results with:
+python /combine_fairness_results.py \
+  --input_pattern "results/core_experiment_requeue/chunked_outputs/fairness_constraints_*.csv" \
+  --output_file "results/core_experiment/combined_fairness_judgments.csv" \
+  --constraint_dir "results/core_experiment/fairness_constraints"

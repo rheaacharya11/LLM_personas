@@ -4,7 +4,7 @@
 Generate fairness constraints for Jung et al.'s Algorithmic Fairness Elicitation framework.
 Modified so that each persona gets its own unique set of 50 comparison pairs.
 """
-
+import sys
 import os
 import numpy as np
 import pandas as pd
@@ -132,75 +132,53 @@ class FairnessConstraintGenerator:
                 end_persona_index = total_personas - 1
             
             # Slice the dataframe to get the requested range
-            personas_df = personas_df.iloc[start_persona_index:end_persona_index+1].reset_index(drop=True)
+            personas_df = personas_df.iloc[start_persona_index:end_persona_index+1].reset_index()
+            personas_df.rename(columns={'index': 'original_index'}, inplace=True)
             
             if self.verbose:
                 print(f"Loaded {len(personas_df)} personas (index range: {start_persona_index} to {end_persona_index})")
+                print(f"Original indices: {personas_df['original_index'].tolist()}")
             
             return personas_df
             
         except Exception as e:
             raise RuntimeError(f"Error loading personas: {e}")
     
-    def generate_unique_comparisons(self, train_df, num_personas, pairs_per_persona=50):
-        """
-        Generate unique random pairwise comparisons for each persona.
-        Each persona gets its own different set of pairs.
-        
-        Args:
-            train_df: Training dataframe with individual data
-            num_personas: Number of personas to generate comparisons for
-            pairs_per_persona: Number of comparison pairs per persona
-            
-        Returns:
-            Dictionary mapping persona IDs to lists of comparison pairs
-        """
-        """Generate all unique pairs upfront and distribute them to personas"""
+    def generate_unique_comparisons(self, train_df, personas_df, pairs_per_persona=50):
+        """Generate all unique pairs using original persona indices"""
         all_ids = train_df['id'].values
         n_individuals = len(all_ids)
         
         # Fix the random seed for reproducibility
         master_rng = random.Random(self.random_state)
         
-        # Generate all the pairs we need upfront (num_personas * pairs_per_persona)
-        total_pairs_needed = num_personas * pairs_per_persona
-        all_generated_pairs = []
+        # Get the original persona indices
+        original_indices = personas_df['original_index'].tolist()
         
-        # Make sure we can generate enough pairs
-        max_possible_pairs = n_individuals * (n_individuals - 1) // 2
-        if total_pairs_needed > max_possible_pairs:
-            print(f"Warning: Requested {total_pairs_needed} pairs, but only {max_possible_pairs} unique pairs exist")
-            # In this case we'll have to reuse some pairs
-        
-        # Generate all the pairs we need
-        for _ in range(total_pairs_needed):
-            # Sample two different individuals
-            idx1, idx2 = master_rng.sample(range(n_individuals), 2)
-            individual1_id = int(all_ids[idx1])
-            individual2_id = int(all_ids[idx2])
-            
-            all_generated_pairs.append((individual1_id, individual2_id))
-        
-        # Now distribute pairs to personas
+        # Generate all the pairs we need upfront
         persona_comparisons = {}
-        for persona_id in range(num_personas):
-            start_idx = persona_id * pairs_per_persona
-            end_idx = start_idx + pairs_per_persona
+        
+        for i, persona_id in enumerate(original_indices):
+            # Use persona_id (original index) to seed the RNG to ensure uniqueness
+            persona_rng = random.Random(self.random_state + persona_id)
             
-            # Get this persona's pairs
-            persona_pairs = all_generated_pairs[start_idx:end_idx]
-            
-            # Format them as needed
-            comparisons = []
-            for comparison_id, (id1, id2) in enumerate(persona_pairs):
-                comparisons.append({
+            # Generate pairs for this persona
+            persona_pairs = []
+            for comparison_id in range(pairs_per_persona):
+                # Sample two different individuals
+                idx1, idx2 = persona_rng.sample(range(n_individuals), 2)
+                individual1_id = int(all_ids[idx1])
+                individual2_id = int(all_ids[idx2])
+                
+                persona_pairs.append({
                     "comparison_id": comparison_id,
-                    "individual1_id": id1,
-                    "individual2_id": id2
+                    "individual1_id": individual1_id,
+                    "individual2_id": individual2_id
                 })
             
-            persona_comparisons[persona_id] = comparisons
-    
+            # Store with local index for processing within this batch
+            persona_comparisons[i] = persona_pairs
+        
         return persona_comparisons
 
     def test_pair_uniqueness(self, train_df, num_personas=10, pairs_per_persona=10):
@@ -215,9 +193,16 @@ class FairnessConstraintGenerator:
         Returns:
             True if all personas get different pairs, False otherwise
         """
+        # Create a dummy personas DataFrame for testing
+        test_personas_df = pd.DataFrame({
+            'original_index': list(range(num_personas))
+        })
+        
         # Generate comparisons for testing
         persona_comparisons = self.generate_unique_comparisons(
-            train_df, num_personas, pairs_per_persona
+            train_df, 
+            test_personas_df,
+            pairs_per_persona
         )
         
         # Convert pairs to a hashable format for each persona
@@ -496,7 +481,7 @@ PERSON Y:
         # Generate unique comparisons for each persona
         persona_comparisons = self.generate_unique_comparisons(
             train_df, 
-            len(personas_df), 
+            personas_df,  # Pass entire dataframe instead of just length
             pairs_per_persona
         )
         
@@ -516,7 +501,7 @@ PERSON Y:
         
         # Process each persona
         for persona_idx, (_, persona_row) in enumerate(personas_df.iterrows()):
-            persona_id = args.start_index + persona_idx
+            persona_id = persona_row['original_index']
             
             # Get persona description
             if 'persona' in personas_df.columns:
