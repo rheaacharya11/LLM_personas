@@ -1,0 +1,18 @@
+Creating a grid of 100 persona blocks × 1 comparison blocks = 100 jobs
+Each job will process up to 10 personas and 50 comparisons
+Using model: llama3-8b-instruct
+Maximum concurrent jobs: 100
+Starting wave 1 of job submissions
+Submitted job 1/100 (ID: 7277287) without dependency
+Submitted job 2/100 (ID: 7277289) without dependency
+Submitted job 3/100 (ID: 7277290) without dependency
+Submitted job 4/100 (ID: 7277291) without dependency
+Submitted job 5/100 (ID: 7277292) without dependency
+Submitted job 6/100 (ID: 7277294) without dependency
+Submitted job 7/100 (ID: 7277297) without dependency
+Submitted job 8/100 (ID: 7277298) without dependency
+Submitted job 9/100 (ID: 7277299) without dependency
+Submitted job 10/100 (ID: 7277300) without dependency
+Submitted job 11/100 (ID: 7277301) without dependency
+Submitted job 12/100 (ID: 7277302) without dependency
+slurmstepd: error: *** JOB 7277234 ON holy7c02410 CANCELLED AT 2025-03-18T00:03:48 ***

@@ -155,40 +155,70 @@ class FairnessConstraintGenerator:
         Returns:
             Dictionary mapping persona IDs to lists of comparison pairs
         """
-        if self.verbose:
-            print(f"Generating {pairs_per_persona} unique comparisons for each of {num_personas} personas")
+        all_ids = train_df['id'].values.tolist()
+    n_individuals = len(all_ids)
+    persona_comparisons = {}
+    
+    # Create a single master RNG
+    master_rng = random.Random(self.random_state)
+    
+    # For each persona, generate a unique set of pairs using a different shuffle of IDs
+    for persona_id in range(num_personas):
+        # Create a shuffled copy of all IDs for this persona
+        shuffled_ids = all_ids.copy()
+        # Use a different shuffle seed for each persona
+        shuffle_seed = self.random_state * 10000 + persona_id * 997  # Large prime factor to avoid correlation
+        persona_rng = random.Random(shuffle_seed)
+        persona_rng.shuffle(shuffled_ids)
         
-        # Get the IDs of all individuals in the training set
-        all_ids = train_df['id'].values
-        n_individuals = len(all_ids)
+        # Sample pairs using this uniquely shuffled list
+        comparisons = []
+        comparison_count = 0
         
-        if n_individuals < 2:
-            raise ValueError("Need at least 2 individuals to make comparisons")
+        # Create pairs by taking elements at different offsets to ensure variety
+        offset = persona_id % 10 + 5  # Different offset for each persona (5-14)
         
-        # Generate unique comparisons for each persona
-        persona_comparisons = {}
-        
-        for persona_id in range(num_personas):
-            # For each persona, generate pairs_per_persona random pairs
-            comparisons = []
-            random.seed(persona_id)
-            for comparison_id in range(pairs_per_persona):
-                # Sample two different individuals
-                idx1, idx2 = random.sample(range(n_individuals), 2)
-                individual1_id = int(all_ids[idx1])
-                individual2_id = int(all_ids[idx2])
+        for i in range(n_individuals):
+            j = (i + offset) % n_individuals
+            if i != j and comparison_count < pairs_per_persona:
+                individual1_id = int(shuffled_ids[i])
+                individual2_id = int(shuffled_ids[j])
                 
-                # Store the pair with its ID
                 comparisons.append({
-                    "comparison_id": comparison_id,
+                    "comparison_id": comparison_count,
                     "individual1_id": individual1_id,
                     "individual2_id": individual2_id
                 })
+                comparison_count += 1
+                
+                # If we need more pairs, take another offset
+                if comparison_count < pairs_per_persona and i + offset*2 < n_individuals:
+                    j2 = (i + offset*2) % n_individuals
+                    if i != j2 and j != j2:
+                        individual2_id = int(shuffled_ids[j2])
+                        comparisons.append({
+                            "comparison_id": comparison_count,
+                            "individual1_id": individual1_id,
+                            "individual2_id": individual2_id
+                        })
+                        comparison_count += 1
+        
+        # If we still need more pairs, generate them randomly
+        while comparison_count < pairs_per_persona:
+            i, j = persona_rng.sample(range(n_individuals), 2)
+            individual1_id = int(shuffled_ids[i])
+            individual2_id = int(shuffled_ids[j])
             
-            # Store the comparisons for this persona
-            persona_comparisons[persona_id] = comparisons
-            
-        return persona_comparisons
+            comparisons.append({
+                "comparison_id": comparison_count,
+                "individual1_id": individual1_id,
+                "individual2_id": individual2_id
+            })
+            comparison_count += 1
+        
+        persona_comparisons[persona_id] = comparisons
+    
+    return persona_comparisons
         
     def create_balanced_fairness_query(self, individual1, individual2, randomize_options=True):
         """Create a balanced multiple-choice query about fairness in recidivism prediction."""
