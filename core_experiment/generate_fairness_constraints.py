@@ -155,70 +155,112 @@ class FairnessConstraintGenerator:
         Returns:
             Dictionary mapping persona IDs to lists of comparison pairs
         """
-        all_ids = train_df['id'].values.tolist()
-    n_individuals = len(all_ids)
-    persona_comparisons = {}
-    
-    # Create a single master RNG
-    master_rng = random.Random(self.random_state)
-    
-    # For each persona, generate a unique set of pairs using a different shuffle of IDs
-    for persona_id in range(num_personas):
-        # Create a shuffled copy of all IDs for this persona
-        shuffled_ids = all_ids.copy()
-        # Use a different shuffle seed for each persona
-        shuffle_seed = self.random_state * 10000 + persona_id * 997  # Large prime factor to avoid correlation
-        persona_rng = random.Random(shuffle_seed)
-        persona_rng.shuffle(shuffled_ids)
+        """Generate all unique pairs upfront and distribute them to personas"""
+        all_ids = train_df['id'].values
+        n_individuals = len(all_ids)
         
-        # Sample pairs using this uniquely shuffled list
-        comparisons = []
-        comparison_count = 0
+        # Fix the random seed for reproducibility
+        master_rng = random.Random(self.random_state)
         
-        # Create pairs by taking elements at different offsets to ensure variety
-        offset = persona_id % 10 + 5  # Different offset for each persona (5-14)
+        # Generate all the pairs we need upfront (num_personas * pairs_per_persona)
+        total_pairs_needed = num_personas * pairs_per_persona
+        all_generated_pairs = []
         
-        for i in range(n_individuals):
-            j = (i + offset) % n_individuals
-            if i != j and comparison_count < pairs_per_persona:
-                individual1_id = int(shuffled_ids[i])
-                individual2_id = int(shuffled_ids[j])
-                
-                comparisons.append({
-                    "comparison_id": comparison_count,
-                    "individual1_id": individual1_id,
-                    "individual2_id": individual2_id
-                })
-                comparison_count += 1
-                
-                # If we need more pairs, take another offset
-                if comparison_count < pairs_per_persona and i + offset*2 < n_individuals:
-                    j2 = (i + offset*2) % n_individuals
-                    if i != j2 and j != j2:
-                        individual2_id = int(shuffled_ids[j2])
-                        comparisons.append({
-                            "comparison_id": comparison_count,
-                            "individual1_id": individual1_id,
-                            "individual2_id": individual2_id
-                        })
-                        comparison_count += 1
+        # Make sure we can generate enough pairs
+        max_possible_pairs = n_individuals * (n_individuals - 1) // 2
+        if total_pairs_needed > max_possible_pairs:
+            print(f"Warning: Requested {total_pairs_needed} pairs, but only {max_possible_pairs} unique pairs exist")
+            # In this case we'll have to reuse some pairs
         
-        # If we still need more pairs, generate them randomly
-        while comparison_count < pairs_per_persona:
-            i, j = persona_rng.sample(range(n_individuals), 2)
-            individual1_id = int(shuffled_ids[i])
-            individual2_id = int(shuffled_ids[j])
+        # Generate all the pairs we need
+        for _ in range(total_pairs_needed):
+            # Sample two different individuals
+            idx1, idx2 = master_rng.sample(range(n_individuals), 2)
+            individual1_id = int(all_ids[idx1])
+            individual2_id = int(all_ids[idx2])
             
-            comparisons.append({
-                "comparison_id": comparison_count,
-                "individual1_id": individual1_id,
-                "individual2_id": individual2_id
-            })
-            comparison_count += 1
+            all_generated_pairs.append((individual1_id, individual2_id))
         
-        persona_comparisons[persona_id] = comparisons
+        # Now distribute pairs to personas
+        persona_comparisons = {}
+        for persona_id in range(num_personas):
+            start_idx = persona_id * pairs_per_persona
+            end_idx = start_idx + pairs_per_persona
+            
+            # Get this persona's pairs
+            persona_pairs = all_generated_pairs[start_idx:end_idx]
+            
+            # Format them as needed
+            comparisons = []
+            for comparison_id, (id1, id2) in enumerate(persona_pairs):
+                comparisons.append({
+                    "comparison_id": comparison_id,
+                    "individual1_id": id1,
+                    "individual2_id": id2
+                })
+            
+            persona_comparisons[persona_id] = comparisons
     
-    return persona_comparisons
+        return persona_comparisons
+
+    def test_pair_uniqueness(self, train_df, num_personas=10, pairs_per_persona=10):
+        """
+        Test that the pair generation function gives unique pairs to each persona.
+        
+        Args:
+            train_df: Training data
+            num_personas: Number of personas to test (smaller than your real run)
+            pairs_per_persona: Number of pairs per persona to test
+            
+        Returns:
+            True if all personas get different pairs, False otherwise
+        """
+        # Generate comparisons for testing
+        persona_comparisons = self.generate_unique_comparisons(
+            train_df, num_personas, pairs_per_persona
+        )
+        
+        # Convert pairs to a hashable format for each persona
+        persona_pair_sets = {}
+        for persona_id, comparisons in persona_comparisons.items():
+            # Create a set of pairs (as tuples for hashability)
+            pair_set = set()
+            for comp in comparisons:
+                # Sort the IDs to ensure (A,B) and (B,A) are treated as the same pair
+                ids = sorted([comp["individual1_id"], comp["individual2_id"]])
+                pair_set.add(tuple(ids))
+            persona_pair_sets[persona_id] = pair_set
+        
+        # Check that each persona has the right number of unique pairs
+        for persona_id, pair_set in persona_pair_sets.items():
+            if len(pair_set) != pairs_per_persona:
+                print(f"Persona {persona_id} has {len(pair_set)} unique pairs instead of {pairs_per_persona}")
+                return False
+        
+        # Check for overlaps between personas
+        for i in range(num_personas):
+            for j in range(i+1, num_personas):
+                overlap = persona_pair_sets[i].intersection(persona_pair_sets[j])
+                if len(overlap) > 0:
+                    print(f"Found {len(overlap)} overlapping pairs between persona {i} and persona {j}")
+                    print(f"Overlapping pairs: {overlap}")
+                    return False
+        
+        # Print success message
+        print(f"SUCCESS! All {num_personas} personas have {pairs_per_persona} unique pairs with no overlaps.")
+        
+        # Additional visualization: create a matrix showing pair overlaps
+        overlap_matrix = np.zeros((num_personas, num_personas))
+        for i in range(num_personas):
+            for j in range(num_personas):
+                if i != j:
+                    overlap = len(persona_pair_sets[i].intersection(persona_pair_sets[j]))
+                    overlap_matrix[i, j] = overlap
+        
+        print("\nPair overlap matrix (should be all zeros):")
+        print(overlap_matrix)
+        
+        return True
         
     def create_balanced_fairness_query(self, individual1, individual2, randomize_options=True):
         """Create a balanced multiple-choice query about fairness in recidivism prediction."""
@@ -474,7 +516,7 @@ PERSON Y:
         
         # Process each persona
         for persona_idx, (_, persona_row) in enumerate(personas_df.iterrows()):
-            persona_id = persona_row.name if hasattr(persona_row, 'name') else persona_idx
+            persona_id = args.start_index + persona_idx
             
             # Get persona description
             if 'persona' in personas_df.columns:
@@ -693,15 +735,29 @@ def main():
     start_time = time.time()
     
     # Initialize constraint generator
+    
     generator = FairnessConstraintGenerator(
         model_path_prefix=args.model_path_prefix,
         llama_model=args.model,
         random_state=args.random_seed,
         verbose=True
     )
+
+
+
     
     # Load COMPAS data
     train_df = generator.load_compas_data(args.train_path)
+
+    # Run the uniqueness test before proceeding
+    print("Testing pair uniqueness...")
+    is_unique = generator.test_pair_uniqueness(train_df, num_personas=10, pairs_per_persona=10)
+
+    if not is_unique:
+        print("WARNING: Personas are not getting unique pairs. Aborting experiment.")
+        sys.exit(1)
+    else:
+        print("Uniqueness test passed. Proceeding with experiment.")
     
     # Load personas for the specified range
     personas_df = generator.load_personas(
