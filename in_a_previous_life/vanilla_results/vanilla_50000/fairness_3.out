@@ -1,0 +1,16 @@
+Initializing with llama3-8b-instruct model (will be loaded when needed)
+Loading COMPAS data from ../data/compas_train.parquet
+Loaded 4937 examples from ../data/compas_train.parquet
+Eliciting fairness judgments for chunk 4/50
+Total comparisons: 50000, approx. 1000 per chunk
+Loading LLaMA model from ../../models/llama3-8b-instruct...
+LLaMA model and tokenizer loaded successfully
+Generating chunk 4/50 of 50000 total comparisons
+This chunk will generate 1000 comparisons (indices 3000-3999)
+
+Saved 2000 judgments to ../results/vanilla_experiment/fairness_judgments_chunk3.csv
+Saved 1035 constraints to ../results/vanilla_experiment/fairness_judgments_constraints_chunk3.json
+
+Constraint generation completed in 24291.64 seconds
+Processed chunk 4/50 with ~1000 comparisons
+Average time per comparison: 24.29 seconds

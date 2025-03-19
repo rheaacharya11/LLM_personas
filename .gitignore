@@ -3,3 +3,4 @@ jobs/
 results/
 cleaned_results/
 old_code/
+*.csv

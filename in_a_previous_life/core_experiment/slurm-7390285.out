@@ -1,0 +1,9 @@
+Creating 1 jobs, each processing 10 personas with all 4 comparisons each
+Each persona will be queried twice (X vs Y and Y vs X) for a total of 8 judgments per persona
+Using model: llama3-8b-instruct
+Maximum concurrent jobs: 100
+Starting wave 1 of job submissions
+Submitted job 1/1 (ID: 7390616) without dependency
+All 1 jobs submitted in 1 waves!
+Log file: job_manager_double_query_study.log
+Created monitor_jobs.sh script to check progress
