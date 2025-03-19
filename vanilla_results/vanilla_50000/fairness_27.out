@@ -1,9 +1,0 @@
-Initializing with llama3-8b-instruct model (will be loaded when needed)
-Loading COMPAS data from ../data/compas_train.parquet
-Loaded 4937 examples from ../data/compas_train.parquet
-Eliciting fairness judgments for chunk 28/50
-Total comparisons: 50000, approx. 1000 per chunk
-Loading LLaMA model from ../../models/llama3-8b-instruct...
-LLaMA model and tokenizer loaded successfully
-Generating chunk 28/50 of 50000 total comparisons
-This chunk will generate 1000 comparisons (indices 27000-27999)
