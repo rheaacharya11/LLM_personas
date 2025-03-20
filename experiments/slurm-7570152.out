@@ -1,0 +1,5 @@
+=== SLURM Job Started ===
+Processing personas 1 to 50
+/var/slurmd/spool/slurmd/job7570152/slurm_script: line 54: 3731378 Killed                  python -u ../src/comparison_elicitation.py ${PARAMS} --persona_start ${START} --persona_end ${END} --output ../results/${EXP_NAME}/fairness_judgments_${START}_${END}.csv
+=== Job  finished: personas 1-50 ===
+slurmstepd: error: Detected 1 oom_kill event in StepId=7570152.batch. Some of the step tasks have been OOM Killed.
