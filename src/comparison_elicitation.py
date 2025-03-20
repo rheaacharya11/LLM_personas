@@ -168,8 +168,8 @@ class FairnessConstraintGenerator:
         # Construct the LLM persona prompt
         persona_prompt = (
             f"You are an {age}-year-old {race} {sex} of {ancestry} ancestry from {birthplace}. "
-            f"You are a {job} who leads {lifestyle}. "
-            f"You are passionate about {hobbies} and spend your free time {personal_time}. "
+            f"You are a {job} who leads a {lifestyle}  lifestyle. "
+            f"Hobbies: {hobbies} and {personal_time}. "
             f"You have the following personality traits: {personality}. "
             f"You align politically as {political} and are {religion}."
         )
