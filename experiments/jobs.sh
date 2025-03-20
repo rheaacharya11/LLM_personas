@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=binary_personas
-#SBATCH --output=logs/%A/binary_personas_%A_%a.out
-#SBATCH --error=logs/%A/binary_personas_%A_%a.err
+#SBATCH --job-name=no_personas_binary
+#SBATCH --output=logs/%A/no_personas_binary_%A_%a.out
+#SBATCH --error=logs/%A/no_personas_binary_%A_%a.err
 #SBATCH --time=3:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem=16G
@@ -18,7 +18,7 @@ module load cudnn/9.5.1.17_cuda12-fasrc01
 source ~/my_llama_python/bin/activate
 
 # Parse configuration from the JSON file
-EXP_NAME="binary_personas"
+EXP_NAME="no_personas_binary"
 CONFIG_FILE="configs/experiment_config.json"
 
 # Extract parameters for the specified experiment
