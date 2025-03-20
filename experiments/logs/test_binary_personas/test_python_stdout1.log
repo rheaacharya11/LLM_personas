@@ -1,0 +1,17 @@
+Arguments received: ['../src/comparison_elicitation.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/binary_personas/fairness_judgments_test1.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '5', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--persona_start', '162', '--persona_end', '163']
+Initializing with llama3-8b-instruct model (will be loaded when needed)
+Loading COMPAS data from ../data/processed/compas_train.parquet
+Loaded 4937 examples from ../data/processed/compas_train.parquet
+Loading personas from ../data/unique_personas.parquet
+Loaded 2 personas (index range: 162 to 163)
+Original indices: [162, 163]
+Eliciting fairness judgments for 2 personas
+Each persona will evaluate 5 comparison pairs, each presented twice
+Using personas: True, Prompt type: chain_of_thought
+Loading LLaMA model from ../../models/llama3-8b-instruct...
+LLaMA model and tokenizer loaded successfully
+Generating 5 comparison pairs for each persona
+Each pair will be queried twice (X vs Y and Y vs X)
+Saving 20 judgments to ../results/binary_personas/fairness_judgments_test1.csv
+Successfully saved results to ../results/binary_personas/fairness_judgments_test1.csv
+Elicitation complete. Processed 20 judgments.

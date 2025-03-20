@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=test_binary_personas   # SLURM job name
-#SBATCH --output=logs/test_binary_personas/test_binary_personas_151_155.out
-#SBATCH --error=logs/test_binary_personas/test_binary_personas_151_155.err
+#SBATCH --output=logs/test_binary_personas/test_binary_personas_161_162.out
+#SBATCH --error=logs/test_binary_personas/test_binary_personas_161_162.err
 #SBATCH --time=00:10:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem=8G
@@ -40,20 +40,20 @@ echo "Now calling Python script..."
 python -u ../src/comparison_elicitation.py \
   --train_path ../data/processed/compas_train.parquet \
   --personas_path ../data/unique_personas.parquet \
-  --output ../results/binary_personas/fairness_judgments_test.csv \
+  --output ../results/binary_personas/fairness_judgments_test1.csv \
   --prompt_config ../prompts/binary_config.yaml \
   --pairs_per_persona 5 \
   --use_personas True \
   --prompt_type chain_of_thought \
   --judgment_type binary \
-  --persona_start 151 \
-  --persona_end 152 \
-  > logs/test_binary_personas/test_python_stdout.log 2> logs/test_binary_personas/test_python_stderr.log
+  --persona_start 162 \
+  --persona_end 163 \
+  > logs/test_binary_personas/test_python_stdout1.log 2> logs/test_binary_personas/test_python_stderr1.log
 
 echo "=== Python script finished ==="
 
 # Check if output file was created
-ls -lh ../results/binary_personas/fairness_judgments_test.csv
-cat ../results/binary_personas/fairness_judgments_test.csv || echo "Output file is empty or missing."
+ls -lh ../results/binary_personas/fairness_judgments_test1.csv
+cat ../results/binary_personas/fairness_judgments_test1.csv || echo "Output file is empty or missing."
 
 echo "=== SLURM Job Finished ==="
