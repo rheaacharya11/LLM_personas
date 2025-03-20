@@ -1,0 +1,46 @@
+[
+    {
+      "_name": "binary_personas",
+      "train_path": "../../data/processed/compas_train.parquet",
+      "personas_path": "../../data/unique_personas.parquet",
+      "output": "../results/binary_personas/fairness_judgments.csv",
+      "prompt_config": "../../prompts/binary_config.yaml",
+      "pairs_per_persona": 50,
+      "use_personas": true,
+      "prompt_type": "chain_of_thought",
+      "judgment_type": "binary"
+    },
+    {
+      "_name": "three_option_persona",
+      "train_path": "../../data/processed/compas_train.parquet",
+      "personas_path": "../../data/unique_personas.parquet",
+      "output": "../results/three_option_persona/fairness_judgments.csv",
+      "prompt_config": "../../prompts/three_option_config.yaml",
+      "pairs_per_persona": 50,
+      "use_personas": true,
+      "prompt_type": "chain_of_thought",
+      "judgment_type": "three_option"
+    },
+    {
+      "_name": "no_personas_three",
+      "train_path": "../../data/processed/compas_train.parquet",
+      "personas_path": "../../data/unique_personas.parquet",
+      "output": "../results/no_personas_three/fairness_judgments.csv",
+      "prompt_config": "../../prompts/three_option_config.yaml",
+      "pairs_per_persona": 50,
+      "use_personas": false,
+      "prompt_type": "chain_of_thought",
+      "judgment_type": "three_option"
+    },
+    {
+        "_name": "no_personas_binary",
+        "train_path": "../../data/processed/compas_train.parquet",
+        "personas_path": "../../data/unique_personas.parquet",
+        "output": "../results/no_personas_binary/fairness_judgments.csv",
+        "prompt_config": "../../prompts/binary_config.yaml",
+        "pairs_per_persona": 50,
+        "use_personas": true,
+        "prompt_type": "chain_of_thought",
+        "judgment_type": "binary"
+      }
+  ]

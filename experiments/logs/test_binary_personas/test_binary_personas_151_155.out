@@ -1,0 +1,19 @@
+=== SLURM Job Started ===
+Current directory: /n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments
+Hostname: holygpu7c26201.rc.fas.harvard.edu
+SLURM Job ID: 7524430
+Running as user: racharya
+Listing src directory:
+total 48K
+-rw-r--r--. 1 racharya dwork_lab  29K Mar 19 21:07 comparison_elicitation.py
+drwxr-sr-x. 2 racharya dwork_lab 4.0K Mar 19 19:20 fairness
+-rw-r--r--. 1 racharya dwork_lab 7.2K Mar 19 20:17 prompt_manager.py
+drwxr-sr-x. 2 racharya dwork_lab 4.0K Mar 19 20:20 __pycache__
+Listing data directory:
+total 108K
+-rw-r--r--. 1 racharya dwork_lab 25K Mar 16 19:27 compas_test.parquet
+-rw-r--r--. 1 racharya dwork_lab 77K Mar 16 19:27 compas_train.parquet
+Listing results directory before execution:
+total 100K
+-rw-r--r--. 1 racharya dwork_lab 98K Mar 19 21:01 fairness_judgments_test.csv
+Now calling Python script...
