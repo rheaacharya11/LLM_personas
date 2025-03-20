@@ -4,3 +4,7 @@ cleaned_results/
 old_code/
 *.csv
 in_a_previous_life/
+csc_oracle.py
+csc_first.py
+job_manager_fixed_compas_study.log
+monitor_jobs.sh
