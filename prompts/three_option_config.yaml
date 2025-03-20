@@ -1,0 +1,56 @@
+# Three-option judgment configuration for fairness elicitation
+# This file configures the approach with three choices (X higher, Y higher, similar)
+
+# Specify judgment type explicitly
+judgment_type: "three_option"
+
+# System prompts (used with personas)
+system_prompts:
+  default: |
+    You are a helpful AI assistant. 
+    We want your input for a recidivism prediction task.
+    Explain your reasoning briefly in 10 words, and then state your final choice: 1, 2, or 3.
+  
+  with_persona: |
+    You are a participant in a study with the following traits: {persona}. 
+    When analyzing recidivism risk assessment, carefully reason through your thinking step-by-step.
+    After your analysis, clearly state which option (1, 2, or 3) you choose.
+  
+  chain_of_thought: |
+    {persona_prefix}
+    We want your input for a recidivism prediction task.
+    Trust your intuition and respond without overthinking. 
+    Explain your reasoning briefly in 10 words, and then state your final choice: 1, 2, or 3.
+
+# User prompts (the actual query content)
+user_prompts:
+  standard_query: |
+    {intro}
+
+    {comparison}
+
+    Question: In your personal view, how should the algorithm fairly assign recidivism scores?
+    
+    1. {option1}
+    2. {option2}
+    3. {option3}
+
+    First, independently consider the two individuals, looking at each holistically.
+    Briefly explain your thoughts in 1 sentence.
+    Then, state your final choice: option 1, 2, or 3.
+
+# Context sections
+intro_text: |
+  The criminal justice system uses risk assessment algorithms to predict which defendants are likely to reoffend if released. 
+  These recidivism predictions influence decisions about bail, sentencing, and parole. 
+  Recidivism here is defined as a new arrest within 2 years.
+  I'm going to show you information about two individuals and ask you how their risk should be assessed.
+
+# Options for comparing individuals
+comparison_options:
+  - key: "x_higher_than_y"
+    text: "Person X should have a higher recidivism risk score than Person Y"
+  - key: "y_higher_than_x"
+    text: "Person Y should have a higher recidivism risk score than Person X"  
+  - key: "similar"
+    text: "Both should have approximately equal risk scores"
