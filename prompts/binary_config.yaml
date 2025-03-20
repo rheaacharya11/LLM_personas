@@ -1,0 +1,49 @@
+# Binary judgment configuration for fairness elicitation (similar vs different)
+
+judgment_type: "binary"
+
+system_prompts:
+  default: |
+    You are a helpful AI assistant. 
+    We want your input for a recidivism prediction task.
+    Explain your reasoning briefly in 10 words, and then state your final choice, either 1 or 2.
+  
+  with_persona: |
+    You are a helpful AI assistant with the persona of {persona}. 
+    When analyzing recidivism risk assessment, carefully reason through your thinking step-by-step.
+    Think about how these factors might predict future criminal behavior based on empirical evidence.
+    After your analysis, clearly state which option (1 or 2) you choose.
+  
+  chain_of_thought: |
+    {persona_prefix}
+    We want your input for a recidivism prediction task.
+    Trust your intuition and respond without overthinking. 
+    Explain your reasoning briefly in 10 words, and then state your final choice, either 1 or 2.
+
+# What is included in prompt?
+user_prompts:
+  standard_query: |
+    {intro}
+
+    {comparison}
+
+    Question: In your personal view, how should the algorithm fairly assign recidivism scores?
+    
+    1. These individuals should receive comparable recidivism prediction scores.
+    2. These individuals should receive notably different recidivism prediction scores.
+
+    First, independently consider the two individuals, looking at each holistically.
+    Then, briefly explain your thoughts in 1 sentence.
+    Finally, state your final choice: Option 1 (comparable) or Option 2 (different)
+
+intro_text: |
+  The criminal justice system uses risk assessment algorithms to predict which defendants are likely to reoffend if released. 
+  These recidivism predictions influence decisions about bail, sentencing, and parole. 
+  Recidivism here is defined as a new arrest within 2 years.
+  I'm going to show you information about two individuals and ask you how their risk should be assessed.
+
+comparison_options:
+  - key: "similar"
+    text: "These individuals should receive comparable recidivism prediction scores."
+  - key: "different"
+    text: " These individuals should receive notably different recidivism prediction scores."
