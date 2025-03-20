@@ -1,4 +1,4 @@
-Arguments received: ['../src/comparison_elicitation.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/binary_personas/fairness_judgments_test1.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '5', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--persona_start', '162', '--persona_end', '163']
+Arguments received: ['../src/comparison_elicitation.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/binary_personas/bruh.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '5', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--persona_start', '162', '--persona_end', '163']
 Initializing with llama3-8b-instruct model (will be loaded when needed)
 Loading COMPAS data from ../data/processed/compas_train.parquet
 Loaded 4937 examples from ../data/processed/compas_train.parquet
@@ -12,6 +12,6 @@ Loading LLaMA model from ../../models/llama3-8b-instruct...
 LLaMA model and tokenizer loaded successfully
 Generating 5000 unique comparison pairs
 Each pair will be evaluated by approximately 10 personas
-Saving 20 judgments to ../results/binary_personas/fairness_judgments_test1.csv
-Successfully saved results to ../results/binary_personas/fairness_judgments_test1.csv
+Saving 20 judgments to ../results/binary_personas/bruh.csv
+Successfully saved results to ../results/binary_personas/bruh.csv
 Elicitation complete. Processed 20 judgments.

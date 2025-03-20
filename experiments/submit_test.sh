@@ -27,20 +27,13 @@ source ~/my_llama_python/bin/activate
 mkdir -p ../results/binary_personas/
 mkdir -p logs/test_binary_personas/
 
-# Debug: Check directories before execution
-echo "Listing src directory:"
-ls -lh ../src/
-echo "Listing data directory:"
-ls -lh ../data/processed/
-echo "Listing results directory before execution:"
-ls -lh ../results/binary_personas/
 
 # Run with correct paths
 echo "Now calling Python script..."
 python -u ../src/comparison_elicitation.py \
   --train_path ../data/processed/compas_train.parquet \
   --personas_path ../data/unique_personas.parquet \
-  --output ../results/binary_personas/fairness_judgments_test1.csv \
+  --output ../results/binary_personas/bruh.csv \
   --prompt_config ../prompts/binary_config.yaml \
   --pairs_per_persona 5 \
   --use_personas True \
@@ -53,7 +46,7 @@ python -u ../src/comparison_elicitation.py \
 echo "=== Python script finished ==="
 
 # Check if output file was created
-ls -lh ../results/binary_personas/fairness_judgments_test1.csv
-cat ../results/binary_personas/fairness_judgments_test1.csv || echo "Output file is empty or missing."
+ls -lh ../results/binary_personas/bruh.csv
+cat ../results/binary_personas/bruh.csv || echo "Output file is empty or missing."
 
 echo "=== SLURM Job Finished ==="

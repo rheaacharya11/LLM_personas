@@ -1,0 +1,25 @@
+=== SLURM Job Started ===
+Job ID: 7567793, Task ID: 
+Running on host: holygpu8a22406.rc.fas.harvard.edu
+=== GPU Verification ===
+CUDA_VISIBLE_DEVICES = 0
+SLURM_JOB_GPUS = 1
+Processing personas 1 to 20
+Memory configuration: 16GB
+=== Memory Before Running Python ===
+              total        used        free      shared  buff/cache   available
+Mem:          1.0Ti        18Gi       341Gi       296Mi       647Gi       981Gi
+Swap:            0B          0B          0B
+=== Starting Python Script ===
+/var/slurmd/spool/slurmd/job7567793/slurm_script: line 76: 3711783 Killed                  python -u ../src/comparison_elicitation.py ${PARAMS} --persona_start ${START} --persona_end ${END} --output ../results/${EXP_NAME}/fairness_judgments_${START}_${END}.csv
+
+real	0m3.057s
+user	0m0.343s
+sys	0m0.078s
+Python script exit code: 137
+=== Memory After Job Completed ===
+              total        used        free      shared  buff/cache   available
+Mem:          1.0Ti        18Gi       341Gi       296Mi       647Gi       981Gi
+Swap:            0B          0B          0B
+=== Job  finished: personas 1-20 ===
+slurmstepd: error: Detected 1 oom_kill event in StepId=7567793.batch. Some of the step tasks have been OOM Killed.
