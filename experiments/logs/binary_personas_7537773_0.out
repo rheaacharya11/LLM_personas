@@ -1,0 +1,16 @@
+=== SLURM Job Started ===
+Processing personas 1 to 10
+Arguments received: ['../src/comparison_elicitation.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/binary_personas/fairness_judgments.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '50', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--persona_start', '1', '--persona_end', '10', '--output', '../results/binary_personas/fairness_judgments_1_10.csv']
+Initializing with llama3-8b-instruct model (will be loaded when needed)
+Loading COMPAS data from ../data/processed/compas_train.parquet
+Loaded 4937 examples from ../data/processed/compas_train.parquet
+Loading personas from ../data/unique_personas.parquet
+Loaded 10 personas (index range: 1 to 10)
+Original indices: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Eliciting fairness judgments for 10 personas
+Each persona will evaluate 50 comparison pairs, each presented twice
+Using personas: True, Prompt type: chain_of_thought
+Loading LLaMA model from ../../models/llama3-8b-instruct...
+LLaMA model and tokenizer loaded successfully
+Generating 5000 unique comparison pairs
+Each pair will be evaluated by approximately 10 personas

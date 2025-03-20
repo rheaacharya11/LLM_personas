@@ -10,8 +10,8 @@ Each persona will evaluate 5 comparison pairs, each presented twice
 Using personas: True, Prompt type: chain_of_thought
 Loading LLaMA model from ../../models/llama3-8b-instruct...
 LLaMA model and tokenizer loaded successfully
-Generating 5 comparison pairs for each persona
-Each pair will be queried twice (X vs Y and Y vs X)
+Generating 5000 unique comparison pairs
+Each pair will be evaluated by approximately 10 personas
 Saving 20 judgments to ../results/binary_personas/fairness_judgments_test1.csv
 Successfully saved results to ../results/binary_personas/fairness_judgments_test1.csv
 Elicitation complete. Processed 20 judgments.

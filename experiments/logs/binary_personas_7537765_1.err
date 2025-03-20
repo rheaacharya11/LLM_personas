@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: 'configs/your_config.json'
+usage: comparison_elicitation.py [-h] --train_path TRAIN_PATH --personas_path
+                                 PERSONAS_PATH --output OUTPUT --prompt_config
+                                 PROMPT_CONFIG
+                                 [--pairs_per_persona PAIRS_PER_PERSONA]
+                                 [--use_personas USE_PERSONAS]
+                                 [--prompt_type PROMPT_TYPE]
+                                 [--judgment_type JUDGMENT_TYPE]
+                                 [--persona_start PERSONA_START]
+                                 [--persona_end PERSONA_END]
+                                 [--comparison_start COMPARISON_START]
+                                 [--comparison_end COMPARISON_END]
+                                 [--verbose VERBOSE]
+comparison_elicitation.py: error: the following arguments are required: --train_path, --personas_path, --prompt_config

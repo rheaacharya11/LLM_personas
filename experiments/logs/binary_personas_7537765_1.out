@@ -1,0 +1,4 @@
+=== SLURM Job Started ===
+Processing personas 11 to 20
+Arguments received: ['../src/comparison_elicitation.py', '--persona_start', '11', '--persona_end', '20', '--output', '../results/binary_personas/fairness_judgments_11_20.csv']
+=== Job 1 finished: personas 11-20 ===
