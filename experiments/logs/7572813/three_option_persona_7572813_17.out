@@ -1,0 +1,20 @@
+=== SLURM Job Started ===
+Processing personas 851 to 900
+Arguments received: ['../src/comparison_elicitation.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/three_option_persona/fairness_judgments.csv', '--prompt_config', '../prompts/three_option_config.yaml', '--pairs_per_persona', '50', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'three_option', '--persona_start', '851', '--persona_end', '900', '--output', '../results/three_option_persona/fairness_judgments_851_900.csv']
+Initializing with llama3-8b-instruct model (will be loaded when needed)
+Loading COMPAS data from ../data/processed/compas_train.parquet
+Loaded 4937 examples from ../data/processed/compas_train.parquet
+Loading personas from ../data/unique_personas.parquet
+Loaded 50 personas (index range: 851 to 900)
+Original indices: [851, 852, 853, 854, 855, 856, 857, 858, 859, 860, 861, 862, 863, 864, 865, 866, 867, 868, 869, 870, 871, 872, 873, 874, 875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885, 886, 887, 888, 889, 890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900]
+Eliciting fairness judgments for 50 personas
+Each persona will evaluate 50 comparison pairs, each presented twice
+Using personas: True, Prompt type: chain_of_thought
+Loading LLaMA model from ../../models/llama3-8b-instruct...
+LLaMA model and tokenizer loaded successfully
+Generating 5000 unique comparison pairs
+Each pair will be evaluated by approximately 10 personas
+Saving 5000 judgments to ../results/three_option_persona/fairness_judgments_851_900.csv
+Successfully saved results to ../results/three_option_persona/fairness_judgments_851_900.csv
+Elicitation complete. Processed 5000 judgments.
+=== Job 17 finished: personas 851-900 ===

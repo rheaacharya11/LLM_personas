@@ -4,7 +4,7 @@ import csv
 import tempfile
 
 # Define the path to the directory containing the CSV files
-folder_path = '../binary_personas/'
+folder_path = '../three_option_persona/'
 
 # Ensure the folder exists
 if not os.path.exists(folder_path):
@@ -51,9 +51,9 @@ if not dfs:
 complete_df = pd.concat(dfs, ignore_index=True)
 
 # Save the concatenated dataframe to a new CSV file
-output_directory = "../combined_results/binary_personas"
+output_directory = "../combined_results/three_option_persona"
 os.makedirs(output_directory, exist_ok=True)  # Avoids error if the directory already exists
-output_file_path = os.path.join(output_directory, 'COMPLETE_binary_personas.csv')
+output_file_path = os.path.join(output_directory, 'COMPLETE_three_option_persona.csv')
 
 try:
     complete_df.to_csv(output_file_path, index=False)

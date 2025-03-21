@@ -30,7 +30,7 @@ def main():
             row2 = df.iloc[i+1]
 
             # Check if both judgments are 'similar'
-            if row1['judgment'] == 'similar' and row2['judgment'] == 'similar':
+            if row1['judgment'] == 'similar' or row2['judgment'] == 'similar':
                 pair = (int(row1['individual1_id']), int(row2['individual2_id']))
                 
                 # Add to constraint set of 'persona_id'
@@ -51,7 +51,7 @@ def main():
         constraining_people[key] = list(constraining_people[key])
 
     # Specify the directory path
-    output_directory = "../../constraint_sets/binary_personas/"
+    output_directory = "../../constraint_sets/lenient/binary_personas/"
     # Ensure the directory exists
     os.makedirs(output_directory, exist_ok=True)
 
@@ -59,16 +59,35 @@ def main():
     save_to_json(constraint_sets, os.path.join(output_directory, 'constraint_sets.json'))
     save_to_json(constraining_people, os.path.join(output_directory, 'constraining_people.json'))
 
+
     # Convert to DataFrame for easier manipulation
     persons_df = pd.DataFrame([(k, len(v)) for k, v in constraint_sets.items()], columns=['PersonID', 'NumPairs'])
     pairs_df = pd.DataFrame([(k, len(v)) for k, v in constraining_people.items()], columns=['Pair', 'NumPeople'])
 
     # Setting up directories for saving histograms
-    output_directory = "../../constraint_sets/binary_personas/"
     viz_directory = os.path.join(output_directory, "viz")
     os.makedirs(viz_directory, exist_ok=True)
 
-    # Creating histograms
+    # Add this code before the histograms section
+    print(f"Total number of people: {len(constraint_sets)}")
+    print(f"Total number of unique pairs selected: {len(constraining_people)}")
+
+    # Count total pairs selected across all personas
+    total_pairs_selected = sum(len(pairs) for pairs in constraint_sets.values())
+    print(f"Total pairs selected: {total_pairs_selected}")
+    print(f"Average pairs selected per person: {total_pairs_selected/len(constraint_sets):.2f}")
+
+    # Distribution summary for blue histogram (pairs per person)
+    pairs_per_person = [len(pairs) for pairs in constraint_sets.values()]
+    print(f"Min pairs selected by a person: {min(pairs_per_person)}")
+    print(f"Max pairs selected by a person: {max(pairs_per_person)}")
+
+    # Distribution summary for green histogram (people per pair)
+    people_per_pair = [len(people) for people in constraining_people.values()]
+    print(f"Min people selecting a pair: {min(people_per_pair)}")
+    print(f"Max people selecting a pair: {max(people_per_pair)}")
+    print(f"Most common: {max(set(people_per_pair), key=people_per_pair.count)} people selecting a pair")
+        # Creating histograms
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(14, 6))
 
     # Histogram for Number of Pairs Each Person Picks

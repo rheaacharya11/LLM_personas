@@ -14,3 +14,7 @@ Loading LLaMA model from ../../models/llama3-8b-instruct...
 LLaMA model and tokenizer loaded successfully
 Generating 5000 unique comparison pairs
 Each pair will be evaluated by approximately 10 personas
+Saving 5000 judgments to ../results/no_personas_binary/fairness_judgments_351_400.csv
+Successfully saved results to ../results/no_personas_binary/fairness_judgments_351_400.csv
+Elicitation complete. Processed 5000 judgments.
+=== Job 7 finished: personas 351-400 ===
