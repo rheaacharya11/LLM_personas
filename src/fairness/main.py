@@ -83,8 +83,66 @@ def plot_pareto_curve(results, output_path=None):
     else:
         plt.show()
 
+def debug_constraints_and_data(constraints_path, data_path, test_data_path):
+    """
+    Comprehensive debug function to inspect constraints and data
+    """
+    # Load data
+    try:
+        if test_data_path:
+            X_train, y_train, X_test, y_test, id_to_index = load_training_data(data_path, test_data_path)
+        else:
+            X_train, y_train, id_to_index = load_training_data(data_path)
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return
+
+    # Load constraints
+    try:
+        constraints = load_constraints(args.constraints_path)
+    except Exception as e:
+        print(f"Error loading constraints: {e}")
+        return
+
+    # Detailed constraint analysis
+    print("\n--- Data and Constraint Analysis ---")
+    print(f"Training data shape: {X_train.shape}")
+    print(f"Training labels shape: {y_train.shape}")
+    print(f"Training label distribution: {np.bincount(y_train)}")
+    print(f"Total constraints loaded: {len(constraints)}")
+
+    # Examine constraint indices
+    valid_constraints = {}
+    invalid_indices = 0
+    conflicting_labels = 0
+
+    for (i, j), judges in list(constraints.items()):
+        if i >= len(y_train) or j >= len(y_train):
+            invalid_indices += 1
+            continue
+        
+        if y_train[i] != y_train[j]:
+            conflicting_labels += 1
+        
+        valid_constraints[(i,j)] = judges
+
+    print(f"\nConstraint Analysis:")
+    print(f"  Total constraints: {len(constraints)}")
+    print(f"  Constraints with out-of-bounds indices: {invalid_indices}")
+    print(f"  Constraints with conflicting labels: {conflicting_labels}")
+    print(f"  Remaining valid constraints: {len(valid_constraints)}")
+
+    # Sample constraint details
+    print("\nSample Constraints:")
+    for (i, j), judges in list(valid_constraints.items())[:10]:
+        print(f"  Pair ({i}, {j}): Label1 = {y_train[i]}, Label2 = {y_train[j]}, Judges = {len(judges)}")
+
+
 def main(args):
+    debug_constraints_and_data(args.constraints_path, args.data_path, args.test_data_path)
+    
     data_result = load_training_data(args.data_path, args.test_data_path)
+
     
     if args.test_data_path:
         X_train, y_train, X_test, y_test, id_to_index = data_result
@@ -175,6 +233,8 @@ def main(args):
             results,
             os.path.join(args.output_dir, "pareto_curve.png") if args.output_dir else None
         )
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run No-Regret Fairness Algorithm')

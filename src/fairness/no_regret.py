@@ -127,50 +127,20 @@ class NoRegretFairness:
         
         return alpha
     
-    def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float], X=None) -> float:
-        if X is None:
-            X = self.X
-            
+    def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float]) -> float:
+        """Compute the fairness violation for a classifier and alpha values"""
         total_violation = 0.0
         
         # Get predictions for all samples
-        preds = classifier.predict_proba(X)[:, 1]
-        
-        # Debugging counts
-        violation_count = 0
-        constraint_count = 0
+        preds = classifier.predict_proba(self.X)[:, 1]
         
         for (i, j), weight in self.constraint_weights.items():
-            # Ensure indices are valid for the dataset
-            if i < len(preds) and j < len(preds):
-                constraint_count += 1
-                # Calculate E[h(x_i) - h(x_j)] - alpha_{ij} - gamma
-                diff = preds[i] - preds[j]
-                violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
-                
-                if violation > 0:
-                    violation_count += 1
-                    
-                total_violation += weight * violation
+            # Calculate E[h(x_i) - h(x_j)] - alpha_{ij} - gamma
+            diff = preds[i] - preds[j]
+            violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
+            total_violation += weight * violation
         
-        # Debug info
-        if constraint_count > 0 and violation_count == 0:
-            # Sample a few constraints to see differences
-            sample_constraints = list(self.constraint_weights.items())[:5]
-            # print("FAIRNESS DEBUG - No violations found. Sample constraints:")
-            for (i, j), weight in sample_constraints:
-                if i < len(preds) and j < len(preds):
-                    diff = preds[i] - preds[j]
-                    threshold = alpha.get((i, j), 0) + self.gamma
-                    # print(f"  Pair ({i},{j}): diff={diff:.4f}, threshold={threshold:.4f}, violation={max(0, diff-threshold):.4f}")
-            
-        result = total_violation / len(self.constraint_pairs) if self.constraint_pairs else 0
-        
-        # More debug info
-        # if X is self.X:  # Only for training data
-            # print(f"FAIRNESS CALC - Constraints checked: {constraint_count}, Violations found: {violation_count}, Total violation: {result:.6f}")
-        
-        return result
+        return total_violation / len(self.constraint_weights) if self.constraint_weights else 0
     
     def compute_error(self, classifier, X=None, y=None) -> float:
         """

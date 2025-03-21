@@ -3,39 +3,20 @@ import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Set, Optional, Union
 
-def load_constraints(filepath: str) -> Dict[Tuple[int, int], List[int]]:
-    """
-    Load constraints from JSON file, outputting a dictionary!
-    
-    Returns:
-        Dictionary mapping (i, j) pair tuples to list of judge IDs who said these individuals
-        should be treated equally
-    """
+def load_constraints(filepath):
     with open(filepath, 'r') as f:
         data = json.load(f)
     
-    # Convert string tuple keys to actual tuples
     constraints = {}
     for key, judges in data.items():
-        # Parse the key format - handle multiple possible formats
+        # Handle various string formats for tuple keys
         if key.startswith('(') and key.endswith(')'):
-            clean_key = key.strip('(').strip(')').split(',')
-        elif key.startswith('"(') and key.endswith(')"'):
-            clean_key = key.strip('"(').strip(')"').split(', ')
-        else:
-            # Try to handle any other format
-            key = key.replace('(', '').replace(')', '').replace('"', '')
-            clean_key = key.split(',')
-        
-        # Convert to integers
-        try:
-            i = int(clean_key[0].strip())
-            j = int(clean_key[1].strip())
+            key = key.strip('(').strip(')')
+            parts = key.split(',')
+            i = int(parts[0].strip())
+            j = int(parts[1].strip())
             constraints[(i, j)] = judges
-        except (ValueError, IndexError) as e:
-            print(f"Error parsing key {key}: {e}")
     
-    print(f"Loaded {len(constraints)} constraint pairs")
     return constraints
 
 def compute_constraint_weights(constraints: Dict[Tuple[int, int], List[int]], 
