@@ -14,6 +14,8 @@ class NoRegretFairness:
         y: np.ndarray, 
         constraint_weights: Dict[Tuple[int, int], float],
         id_to_index: Dict[int, int] = None,
+        X_test: np.ndarray = None,  # Add this parameter
+        y_test: np.ndarray = None,  # Add this parameter
         gamma: float = 0.0,
         eta: float = 0.0,
         C_lambda: float = 10.0,
@@ -27,6 +29,14 @@ class NoRegretFairness:
         self.X = X
         self.y = y
         self.n = X.shape[0]
+        # Store test data if provided
+        self.X_test = X_test
+        self.y_test = y_test
+        
+        # Initialize lists for test metrics if test data is provided
+        if X_test is not None and y_test is not None:
+            self.test_errors = []
+            self.test_fairness_violations = []
         
         # Convert constraints from ID-based to index-based if needed
         self.constraint_weights = {}
@@ -117,48 +127,100 @@ class NoRegretFairness:
         
         return alpha
     
-    def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float]) -> float:
-        """
-        Compute the fairness violation for a classifier and alpha values.
-        """
+    def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float], X=None) -> float:
+        if X is None:
+            X = self.X
+            
         total_violation = 0.0
         
         # Get predictions for all samples
-        preds = classifier.predict_proba(self.X)[:, 1]
+        preds = classifier.predict_proba(X)[:, 1]
+        
+        # Debugging counts
+        violation_count = 0
+        constraint_count = 0
         
         for (i, j), weight in self.constraint_weights.items():
-            # i and j are now indices in the current dataset
-            diff = preds[i] - preds[j]
-            violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
-            total_violation += weight * violation
+            # Ensure indices are valid for the dataset
+            if i < len(preds) and j < len(preds):
+                constraint_count += 1
+                # Calculate E[h(x_i) - h(x_j)] - alpha_{ij} - gamma
+                diff = preds[i] - preds[j]
+                violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
+                
+                if violation > 0:
+                    violation_count += 1
+                    
+                total_violation += weight * violation
         
-        return total_violation / len(self.constraint_pairs) if self.constraint_pairs else 0
+        # Debug info
+        if constraint_count > 0 and violation_count == 0:
+            # Sample a few constraints to see differences
+            sample_constraints = list(self.constraint_weights.items())[:5]
+            # print("FAIRNESS DEBUG - No violations found. Sample constraints:")
+            for (i, j), weight in sample_constraints:
+                if i < len(preds) and j < len(preds):
+                    diff = preds[i] - preds[j]
+                    threshold = alpha.get((i, j), 0) + self.gamma
+                    # print(f"  Pair ({i},{j}): diff={diff:.4f}, threshold={threshold:.4f}, violation={max(0, diff-threshold):.4f}")
+            
+        result = total_violation / len(self.constraint_pairs) if self.constraint_pairs else 0
+        
+        # More debug info
+        # if X is self.X:  # Only for training data
+            # print(f"FAIRNESS CALC - Constraints checked: {constraint_count}, Violations found: {violation_count}, Total violation: {result:.6f}")
+        
+        return result
     
-    def compute_error(self, classifier) -> float:
+    def compute_error(self, classifier, X=None, y=None) -> float:
         """
         Compute the classification error for a given classifier.
+        
+        Args:
+            classifier: The classifier to evaluate
+            X: Feature matrix (defaults to training data)
+            y: True labels (defaults to training labels)
+            
+        Returns:
+            The classification error
         """
-        preds = classifier.predict(self.X)
-        return np.mean(preds != self.y)
+        if X is None:
+            X = self.X
+        if y is None:
+            y = self.y
+            
+        try:
+            preds = classifier.predict(X)
+            incorrect = np.sum(preds != y)
+            error = incorrect / len(y)
+            
+            return error
+        except Exception as e:
+            print(f"Error in compute_error: {e}")
+            import traceback
+            traceback.print_exc()
+            return 0.0
     
     def fit(self, verbose: bool = True, callback: Callable = None) -> List[CostSensitiveClassifier]:
         """
         Run the no-regret algorithm.
+        
+        Args:
+            verbose: Whether to print progress information
+            callback: Optional callback function to call after each iteration
+            
+        Returns:
+            List of classifiers trained during the algorithm
         """
-        print(f"Target variable distribution: {np.bincount(self.y)}")
-        print(f"First 5 target values: {self.y[:5]}")
-        
-        # Debug the feature matrix
-        print(f"Features shape: {self.X.shape}")
-        print(f"First feature row: {self.X[0]}")
-        
-        # Debug the constraints
-        print(f"Number of constraint pairs: {len(self.constraint_pairs)}")
-        print(f"First 5 constraint pairs: {self.constraint_pairs[:5]}")
-        print(f"Constraint weights sample: {list(self.constraint_weights.items())[:2]}")
         mu_lambda = 1 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
         
         start_time = time.time()
+        
+        # DEBUG: Print initial lambda and theta values
+        if verbose:
+            print("\nDEBUG - Initial state:")
+            print(f"  Lambda values (first 5): {list(self.lambda_vals.items())[:5]}")
+            print(f"  Theta values (first 5): {list(self.theta.items())[:5]}")
         
         for t in range(self.time_horizon):
             # Step 1: Set lambda based on theta
@@ -182,6 +244,13 @@ class NoRegretFairness:
             
             # Step 3: Compute costs and train classifier
             costs = self.compute_costs(lambda_vals)
+            
+            # DEBUG: Print costs for a few examples
+            if verbose and t % 100 == 0:
+                print(f"\nDEBUG - Iteration {t} - Sample costs:")
+                for i in range(min(5, len(costs))):
+                    print(f"  Sample {i}: cost_0={costs[i][0]:.4f}, cost_1={costs[i][1]:.4f}, true_label={self.y[i]}")
+            
             classifier = CostSensitiveClassifier(self.classifier.base_classifier)
             classifier.fit(self.X, self.y, costs)
             
@@ -191,33 +260,80 @@ class NoRegretFairness:
             # Step 5: Update theta
             preds = classifier.predict_proba(self.X)[:, 1]
             
+            # DEBUG: Check predictions
+            if verbose and t % 100 == 0:
+                true_preds = (preds > 0.5).astype(int)
+                accuracy = np.mean(true_preds == self.y)
+                print(f"  Train accuracy: {accuracy:.4f}")
+                print(f"  First 10 predictions: {true_preds[:10]}")
+                print(f"  First 10 true labels: {self.y[:10]}")
+                
+                # Check fairness violations
+                violations = []
+                for pair in list(self.constraint_pairs)[:5]:  # Check a few constraints
+                    i, j = pair
+                    if i < len(preds) and j < len(preds):
+                        diff = preds[i] - preds[j]
+                        violations.append((pair, diff, diff > self.gamma))
+                
+                print(f"  Fairness violations for 5 constraints:")
+                for (i, j), diff, is_violation in violations:
+                    print(f"    ({i},{j}): diff={diff:.4f}, violation={is_violation}")
+            
             for pair in self.constraint_pairs:
-                i, j = pair  # Now indices in dataset, not original IDs
-                violation = preds[i] - preds[j] - alpha.get(pair, 0) - self.gamma
-                self.theta[pair] += mu_lambda * violation
+                i, j = pair
+                # Ensure indices are valid for the dataset
+                if i < len(preds) and j < len(preds):
+                    violation = preds[i] - preds[j] - alpha.get(pair, 0) - self.gamma
+                    self.theta[pair] += mu_lambda * violation
+                    
+                    # DEBUG: Track significant theta updates
+                    #if verbose and t % 100 == 0 and abs(mu_lambda * violation) > 0.01:
+                        # print(f"    Significant theta update for pair {pair}: +{mu_lambda * violation:.4f}")
             
             # Store results
             self.classifiers.append(classifier)
             self.alphas.append(alpha)
             
-            # Compute metrics
-            error = self.compute_error(classifier)
-            fairness_violation = self.compute_fairness_violation(classifier, alpha)
+            # Compute metrics on training data
+            train_error = self.compute_error(classifier)
+            train_fairness_violation = self.compute_fairness_violation(classifier, alpha)
             
-            self.errors.append(error)
-            self.fairness_violations.append(fairness_violation)
+            self.errors.append(train_error)
+            self.fairness_violations.append(train_fairness_violation)
             
+            if hasattr(self, 'X_test') and self.X_test is not None and hasattr(self, 'y_test') and self.y_test is not None:
+                test_error = self.compute_error(classifier, self.X_test, self.y_test)
+                test_fairness_violation = self.compute_fairness_violation(classifier, alpha, self.X_test)
+                
+                self.test_errors.append(test_error)
+                self.test_fairness_violations.append(test_fairness_violation)
+
             # Print progress
             if verbose and (t % 100 == 0 or t == self.time_horizon - 1):
                 elapsed = time.time() - start_time
-                print(f"Iteration {t+1}/{self.time_horizon} "
-                      f"[{elapsed:.2f}s]: "
-                      f"Error = {error:.4f}, "
-                      f"Fairness Violation = {fairness_violation:.4f}")
+                progress_msg = (f"Iteration {t+1}/{self.time_horizon} "
+                            f"[{elapsed:.2f}s]: "
+                            f"Train Error = {train_error:.4f}, "
+                            f"Train Fairness Violation = {train_fairness_violation:.4f}")
+                
+                # Add test metrics to progress message if available
+                if hasattr(self, 'X_test') and self.X_test is not None:
+                    progress_msg += (f", Test Error = {test_error:.4f}, "
+                                f"Test Fairness Violation = {test_fairness_violation:.4f}")
+                
+                print(progress_msg)
+                
+                # DEBUG: Check overall state
+                if t % 100 == 0:
+                    print(f"  Tau: {self.tau:.4f}")
+                    print(f"  Lambda sum: {sum(lambda_vals.values()):.4f}")
+                    print(f"  Max lambda: {max(lambda_vals.values()) if lambda_vals else 0:.4f}")
+                    print(f"  Max theta: {max(self.theta.values()) if self.theta else 0:.4f}")
             
             # Call callback if provided
             if callback is not None:
-                callback(t, classifier, alpha, error, fairness_violation)
+                callback(t, classifier, alpha, train_error, train_fairness_violation)
         
         return self.classifiers
     

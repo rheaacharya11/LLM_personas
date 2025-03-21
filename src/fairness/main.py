@@ -84,22 +84,57 @@ def plot_pareto_curve(results, output_path=None):
         plt.show()
 
 def main(args):
-    # Load training data with ID mapping
-    X, y, id_to_index = load_training_data(args.data_path)
+    data_result = load_training_data(args.data_path, args.test_data_path)
+    
+    if args.test_data_path:
+        X_train, y_train, X_test, y_test, id_to_index = data_result
+    else:
+        X_train, y_train, id_to_index = data_result
+        X_test, y_test = None, None
     
     # Load constraints
     constraints = load_constraints(args.constraints_path)
+    print(f"Loaded {len(constraints)} fairness constraints")
+    
+    # DEBUG: Check constraint structure and potential conflicts
+    print("\nChecking constraint pairs and their labels:")
+    conflict_count = 0
+    for idx, ((i, j), judges) in enumerate(list(constraints.items())[:10]):  # Check first 10 constraints
+        # Ensure indices are within bounds
+        if i < len(y_train) and j < len(y_train):
+            # Check if the constraint requires different labels to be treated the same
+            if y_train[i] != y_train[j]:
+                conflict_type = "CONFLICTING"
+                conflict_count += 1
+            else:
+                conflict_type = "ALIGNED"
+            
+            print(f"Constraint {idx+1}: ({i}, {j}) - Labels: {y_train[i]}, {y_train[j]} - {conflict_type}")
+            print(f"  Weight: {len(judges)} judges")
+        else:
+            print(f"Constraint {idx+1}: ({i}, {j}) - OUT OF BOUNDS - indices exceed dataset size")
+    
+    # Show summary of constraints
+    conflict_total = sum(1 for (i, j) in constraints.keys() 
+                        if i < len(y_train) and j < len(y_train) and y_train[i] != y_train[j])
+    print(f"\nSummary: {conflict_total} out of {len(constraints)} constraints ({conflict_total/len(constraints)*100:.1f}%) "
+          f"have conflicting labels")
     
     # Compute constraint weights
     weights = compute_constraint_weights(constraints)
+    print(f"Computed constraint weights")
+
+    
     
     if args.mode == 'single':
         # Run no-regret algorithm with a single gamma value
         algorithm = NoRegretFairness(
-            X=X,
-            y=y,
+            X=X_train,
+            y=y_train,
             constraint_weights=weights,
-            id_to_index=id_to_index,  # Add this parameter
+            id_to_index=id_to_index,
+            X_test=X_test,  # Pass test data
+            y_test=y_test,   # Pass test data
             gamma=args.gamma,
             eta=args.eta,
             C_lambda=args.c_lambda,
@@ -146,6 +181,8 @@ if __name__ == "__main__":
     
     parser.add_argument('--data_path', type=str, required=True,
                         help='Path to training data (parquet file)')
+    parser.add_argument('--test_data_path', type=str, required=True,
+                        help='Path to testing data (parquet file)')
     parser.add_argument('--constraints_path', type=str, required=True,
                         help='Path to constraints JSON file')
     parser.add_argument('--mode', type=str, choices=['single', 'pareto'], default='single',
@@ -156,13 +193,13 @@ if __name__ == "__main__":
                         help='Number of iterations for no-regret algorithm')
     parser.add_argument('--c_lambda', type=float, default=10.0,
                         help='C_lambda parameter')
-    parser.add_argument('--c_tau', type=float, default=10.0,
+    parser.add_argument('--c_tau', type=float, default=1.0,
                         help='C_tau parameter')
     parser.add_argument('--output_dir', type=str, default=None,
                         help='Directory to save output plots')
     
     # Parameters for single mode
-    parser.add_argument('--gamma', type=float, default=0.1,
+    parser.add_argument('--gamma', type=float, default=0.3,
                         help='Gamma parameter (used in single mode)')
     parser.add_argument('--eta', type=float, default=0.0,
                         help='Eta parameter (used in single mode)')

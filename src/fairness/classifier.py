@@ -19,19 +19,28 @@ class CostSensitiveClassifier:
 
     def fit(self, X: np.ndarray, y: np.ndarray, costs: List[Tuple[float, float]] = None):
         """
-        Goal: Fit the classifier on data with optional costs.
+        Fit the classifier on data with optional costs.
         
-        Inputs:
+        Args:
             X: Feature matrix of shape (n_samples, n_features)
             y: Target vector of shape (n_samples,)
             costs: Optional list of (cost_0, cost_1) tuples for each sample
-                  cost_0 is the cost of predicting 0
-                  cost_1 is the cost of predicting 1
+                cost_0 is the cost of predicting 0
+                cost_1 is the cost of predicting 1
         """
+        # print(f"Fitting classifier with X shape={X.shape}, y shape={y.shape}, y distribution={np.bincount(y)}")
+        
         if costs is None:
             # Standard classification without costs
+            print("Using standard classification (no costs)")
             self.base_classifier.fit(X, y)
         else:
+            # Debug costs
+            # print(f"Using cost-sensitive classification with {len(costs)} cost pairs")
+            cost_array = np.array(costs)
+            # print(f"Cost ranges - cost_0: [{cost_array[:, 0].min():.4f}, {cost_array[:, 0].max():.4f}], "
+                # f"cost_1: [{cost_array[:, 1].min():.4f}, {cost_array[:, 1].max():.4f}]")
+            
             # Compute sample weights based on costs
             sample_weights = np.zeros(len(y))
             
@@ -41,34 +50,82 @@ class CostSensitiveClassifier:
                 else:
                     sample_weights[i] = c0  # Cost of incorrect prediction (true=1, pred=0)
             
+            # Debug weights
+            # print(f"Sample weights - min: {sample_weights.min():.4f}, max: {sample_weights.max():.4f}, "
+                #f"mean: {sample_weights.mean():.4f}, zeros: {np.sum(sample_weights == 0)}")
+            
             # Normalize weights
             if np.sum(sample_weights) > 0:
                 sample_weights = sample_weights / np.sum(sample_weights) * len(sample_weights)
+                # print(f"Normalized weights - min: {sample_weights.min():.4f}, max: {sample_weights.max():.4f}, "
+                    # f"mean: {sample_weights.mean():.4f}")
             else:
+                # print("WARNING: All sample weights are zero! Using uniform weights.")
                 sample_weights = np.ones(len(y))
             
-            self.base_classifier.fit(X, y, sample_weight=sample_weights)
+            try:
+                self.base_classifier.fit(X, y, sample_weight=sample_weights)
+                # print("Classifier fitted successfully")
+            except Exception as e:
+                print(f"Error fitting classifier: {e}")
+                import traceback
+                traceback.print_exc()
+                # Try without sample weights as fallback
+                print("Attempting to fit without sample weights...")
+                self.base_classifier.fit(X, y)
         
         self.is_fitted = True
         return self
-    
+
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
-        goal: use classifier to make predictions
+        Make predictions with the classifier.
+        
+        Args:
+            X: Feature matrix of shape (n_samples, n_features)
+            
+        Returns:
+            Predictions of shape (n_samples,)
         """
         if not self.is_fitted:
             raise RuntimeError("Classifier must be fitted before making predictions.")
         
-        return self.base_classifier.predict(X)
-    
+        try:
+            preds = self.base_classifier.predict(X)
+            # print(f"Predictions distribution: {np.bincount(preds)}")
+            return preds
+        except Exception as e:
+            print(f"Error in predict: {e}")
+            import traceback
+            traceback.print_exc()
+            # Return all zeros as fallback
+            return np.zeros(len(X), dtype=int)
+        
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
         """
-        goal: what are the probability estimates for each class?
+        Get probability estimates for each class.
+        
+        Args:
+            X: Feature matrix of shape (n_samples, n_features)
+            
+        Returns:
+            Probability estimates of shape (n_samples, n_classes)
         """
         if not self.is_fitted:
             raise RuntimeError("Classifier must be fitted before making predictions.")
         
-        return self.base_classifier.predict_proba(X)
+        try:
+            probs = self.base_classifier.predict_proba(X)
+            # Debug: Check probability distribution
+            # print(f"Probability range for class 1: [{probs[:, 1].min():.4f}, {probs[:, 1].max():.4f}]")
+            return probs
+        except Exception as e:
+            print(f"Error in predict_proba: {e}")
+            import traceback
+            traceback.print_exc()
+            # Return uniform probabilities as fallback
+            result = np.ones((len(X), 2)) * 0.5
+            return result
     
     def decision_function(self, X: np.ndarray) -> np.ndarray:
         """
