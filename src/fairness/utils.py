@@ -82,7 +82,20 @@ def load_training_data(filepath: str) -> Tuple[np.ndarray, np.ndarray]:
     
     # Assume last column is the target
     X_df = feature_df.iloc[:, :-1]
-    y = feature_df.iloc[:, -1].values
+    if "two_year_recid" in df.columns:
+        y = df["two_year_recid"].values
+        
+        # Keep all columns except the target as features (preserves one-hot encoding and id)
+        feature_cols = [col for col in df.columns if col != "two_year_recid"]
+        X = df[feature_cols].values
+    else:
+        # Fallback to last column if specific column not found
+        print("Warning: 'two_year_recid' column not found, using last column as target")
+        X = df.iloc[:, :-1].values
+        y = df.iloc[:, -1].values
+    
+    # Explicitly convert y to integer type
+    y = y.astype(int)
     
     # Handle categorical features
     categorical_columns = X_df.select_dtypes(include=['object', 'category']).columns

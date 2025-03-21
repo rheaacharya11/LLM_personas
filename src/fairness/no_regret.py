@@ -4,6 +4,10 @@ from .classifier import CostSensitiveClassifier
 import time
 
 class NoRegretFairness:
+    """
+    Implementation of the No-Regret Dynamics algorithm for fairness elicitation
+    """
+    
     def __init__(
         self, 
         X: np.ndarray, 
@@ -17,34 +21,25 @@ class NoRegretFairness:
         time_horizon: int = 1000,
         base_classifier=None
     ):
-
         """
-        quick explanation of variables:
-            X: Feature matrix of shape (n_samples, n_features)
-            y: Target vector of shape (n_samples,)
-            constraint_weights: Dictionary mapping (i, j) constraint pairs to weights
-            gamma: The gamma parameter controlling the ℓ∞ fairness relaxation
-            eta: The eta parameter controlling the ℓ1 fairness relaxation
-            C_lambda: The bound for lambda dual variables
-            C_tau: The bound for tau dual variable
-            time_horizon: Number of iterations for the algorithm
-            base_classifier: The base classifier to use. If None, uses LogisticRegression.
+        Initialize the no-regret fairness algorithm.
         """
-
-        
-
         self.X = X
         self.y = y
         self.n = X.shape[0]
-
+        
+        # Convert constraints from ID-based to index-based if needed
+        self.constraint_weights = {}
+        
         if id_to_index:
-            self.constraint_weights = {}
             skipped = 0
             for (id_i, id_j), weight in constraint_weights.items():
                 if id_i in id_to_index and id_j in id_to_index:
                     idx_i, idx_j = id_to_index[id_i], id_to_index[id_j]
                     if idx_i < self.n and idx_j < self.n:
                         self.constraint_weights[(idx_i, idx_j)] = weight
+                    else:
+                        skipped += 1
                 else:
                     skipped += 1
             print(f"Mapped constraints: {len(self.constraint_weights)}, Skipped: {skipped}")
@@ -57,19 +52,17 @@ class NoRegretFairness:
             if len(self.constraint_weights) != len(constraint_weights):
                 print(f"Filtered {len(constraint_weights) - len(self.constraint_weights)} constraints with invalid indices")
                 
-
-        self.constraint_weights = constraint_weights
-        self.constraint_pairs = list(constraint_weights.keys())
+        self.constraint_pairs = list(self.constraint_weights.keys())
         self.gamma = gamma
         self.eta = eta
         self.C_lambda = C_lambda
         self.C_tau = C_tau
         self.time_horizon = time_horizon
-
-        # initialize classifier
+        
+        # Initialize classifier
         self.classifier = CostSensitiveClassifier(base_classifier)
-
-        # initialize algorithm state
+        
+        # Initialize algorithm state
         self.lambda_vals = {}
         self.theta = {}
         for i, j in self.constraint_pairs:
@@ -78,15 +71,15 @@ class NoRegretFairness:
         
         self.tau = 0.0
         
-        # storage for history and results
+        # Storage for history and results
         self.classifiers = []
         self.alphas = []
         self.errors = []
         self.fairness_violations = []
-
+        
     def compute_costs(self, lambda_vals: Dict[Tuple[int, int], float]) -> List[Tuple[float, float]]:
         """
-        Compute the costs (c_0, c_1) for each sample based on current lambda values.
+        Compute the costs for each sample based on current lambda values.
         """
         costs = []
         
@@ -108,10 +101,10 @@ class NoRegretFairness:
             costs.append((cost_0, cost_1))
         
         return costs
-
+    
     def compute_alpha(self, tau: float, lambda_vals: Dict[Tuple[int, int], float]) -> Dict[Tuple[int, int], float]:
         """
-        compute alpha values (excess fairness violations) based on current tau and lambda.
+        Compute alpha values (excess fairness violations) based on current tau and lambda.
         """
         alpha = {}
         
@@ -123,11 +116,10 @@ class NoRegretFairness:
                 alpha[pair] = 0.0
         
         return alpha
-
+    
     def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float]) -> float:
         """
-        compute the fairness violation for a classifier and alpha values.
-        (it's only a total value)
+        Compute the fairness violation for a classifier and alpha values.
         """
         total_violation = 0.0
         
@@ -135,34 +127,37 @@ class NoRegretFairness:
         preds = classifier.predict_proba(self.X)[:, 1]
         
         for (i, j), weight in self.constraint_weights.items():
-            # Calculate E[h(x_i) - h(x_j)] - alpha_{ij} - gamma
+            # i and j are now indices in the current dataset
             diff = preds[i] - preds[j]
             violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
             total_violation += weight * violation
         
-        return total_violation / len(self.constraint_pairs)
-
+        return total_violation / len(self.constraint_pairs) if self.constraint_pairs else 0
+    
     def compute_error(self, classifier) -> float:
         """
         Compute the classification error for a given classifier.
         """
         preds = classifier.predict(self.X)
         return np.mean(preds != self.y)
-
-    def my_callback(t, classifier, alpha, error, fairness_violation):
-        with open('logs.txt', 'a') as f:
-            f.write(f"Iteration {t}: Error={error:.4f}, Violation={fairness_violation:.4f}\n")
-        
-        # Early stopping example
-        if error < 0.2 and fairness_violation < 0.05:
-            return False  # Could be used to stop training
     
     def fit(self, verbose: bool = True, callback: Callable = None) -> List[CostSensitiveClassifier]:
         """
-        run the no regret algorithm
+        Run the no-regret algorithm.
         """
+        print(f"Target variable distribution: {np.bincount(self.y)}")
+        print(f"First 5 target values: {self.y[:5]}")
+        
+        # Debug the feature matrix
+        print(f"Features shape: {self.X.shape}")
+        print(f"First feature row: {self.X[0]}")
+        
+        # Debug the constraints
+        print(f"Number of constraint pairs: {len(self.constraint_pairs)}")
+        print(f"First 5 constraint pairs: {self.constraint_pairs[:5]}")
+        print(f"Constraint weights sample: {list(self.constraint_weights.items())[:2]}")
         mu_lambda = 1 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
-    
+        
         start_time = time.time()
         
         for t in range(self.time_horizon):
@@ -197,7 +192,7 @@ class NoRegretFairness:
             preds = classifier.predict_proba(self.X)[:, 1]
             
             for pair in self.constraint_pairs:
-                i, j = pair  # These are now indices in our dataset, not original IDs
+                i, j = pair  # Now indices in dataset, not original IDs
                 violation = preds[i] - preds[j] - alpha.get(pair, 0) - self.gamma
                 self.theta[pair] += mu_lambda * violation
             
@@ -216,19 +211,19 @@ class NoRegretFairness:
             if verbose and (t % 100 == 0 or t == self.time_horizon - 1):
                 elapsed = time.time() - start_time
                 print(f"Iteration {t+1}/{self.time_horizon} "
-                    f"[{elapsed:.2f}s]: "
-                    f"Error = {error:.4f}, "
-                    f"Fairness Violation = {fairness_violation:.4f}")
+                      f"[{elapsed:.2f}s]: "
+                      f"Error = {error:.4f}, "
+                      f"Fairness Violation = {fairness_violation:.4f}")
             
             # Call callback if provided
             if callback is not None:
                 callback(t, classifier, alpha, error, fairness_violation)
         
         return self.classifiers
-
-    def get_final_classifier(self) -> CostSensitiveClassifier:
+    
+    def get_final_classifier(self) -> Any:
         """
-        return final classifier, average of prev. ones
+        Get the final classifier by averaging all classifiers.
         """
         if not self.classifiers:
             raise RuntimeError("Algorithm has not been run yet.")
@@ -253,9 +248,7 @@ class NoRegretFairness:
     def get_pareto_curve(self, gammas: List[float]) -> Dict[str, List[float]]:
         """
         Generate the Pareto curve for different gamma values.
-        return dictionary with errors and fairness violations for each gamma
         """
-
         results = {
             'gamma': [],
             'error': [],
@@ -265,8 +258,19 @@ class NoRegretFairness:
         original_gamma = self.gamma
         
         for gamma in gammas:
-            # Update gamma
+            # Reset algorithm state
             self.gamma = gamma
+            self.lambda_vals = {}
+            self.theta = {}
+            for i, j in self.constraint_pairs:
+                self.lambda_vals[(i, j)] = 0.0
+                self.theta[(i, j)] = 0.0
+            
+            self.tau = 0.0
+            self.classifiers = []
+            self.alphas = []
+            self.errors = []
+            self.fairness_violations = []
             
             # Run algorithm
             self.fit(verbose=False)
@@ -282,6 +286,8 @@ class NoRegretFairness:
             results['gamma'].append(gamma)
             results['error'].append(error)
             results['fairness_violation'].append(fairness_violation)
+            
+            print(f"Gamma = {gamma:.2f}: Error = {error:.4f}, Fairness Violation = {fairness_violation:.4f}")
         
         # Restore original gamma
         self.gamma = original_gamma

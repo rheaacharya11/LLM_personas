@@ -30,8 +30,8 @@ def main():
             row2 = df.iloc[i+1]
 
             # Check if both judgments are 'similar'
-            if row1['judgment'] == 'similar' or row2['judgment'] == 'similar':
-                pair = (int(row1['individual1_id']), int(row2['individual2_id']))
+            if row1['judgment'] == 'similar' and row2['judgment'] == 'similar':
+                pair = (int(row1['individual1_id']), int(row1['individual2_id']))
                 
                 # Add to constraint set of 'persona_id'
                 persona_id = int(row1['persona_id'])
@@ -51,7 +51,7 @@ def main():
         constraining_people[key] = list(constraining_people[key])
 
     # Specify the directory path
-    output_directory = "../../constraint_sets/lenient/binary_personas/"
+    output_directory = "../../constraint_sets/binary_personas/"
     # Ensure the directory exists
     os.makedirs(output_directory, exist_ok=True)
 

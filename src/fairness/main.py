@@ -120,7 +120,9 @@ def main(args):
     elif args.mode == 'pareto':
         # Generate Pareto curve for multiple gamma values
         gammas = np.linspace(args.min_gamma, args.max_gamma, args.num_gammas)
-        
+        print(f"Data shape: {X.shape}, Target shape: {y.shape}")
+        print(f"Target class distribution: {np.bincount(y)}")
+        print(f"Constraints loaded: {len(constraints)}")
         algorithm = NoRegretFairness(
             X=X,
             y=y,
@@ -138,7 +140,7 @@ def main(args):
             results,
             os.path.join(args.output_dir, "pareto_curve.png") if args.output_dir else None
         )
-        
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run No-Regret Fairness Algorithm')
     
