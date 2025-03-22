@@ -41,6 +41,7 @@ class FairnessElicitationAlgorithm:
         self.time_horizon = time_horizon
         self.C_lambda = C_lambda
         self.C_tau = C_tau
+        self.avg_lambda = {}
         
         # Load and preprocess data
         self.load_data()
@@ -319,7 +320,7 @@ class FairnessElicitationAlgorithm:
         probs = self.compute_prediction_probs(D_t)
         
         # Use a much smaller step size to slow convergence
-        mu_lambda = 0.01 / (self.C_lambda * np.sqrt(np.log(self.n) * t))
+        mu_lambda = 0.001 / (self.C_lambda * np.sqrt(np.log(self.n) * t))
         
         # Simply update lambda directly
         lambda_new = {}
@@ -331,7 +332,7 @@ class FairnessElicitationAlgorithm:
         for (i, j) in self.constraints:
             # Calculate gradient for this pair
             gradient = probs[i] - probs[j] - alpha_t.get((i, j), 0) - gamma
-            
+            step_scale = min(1.0, abs(gradient))
             # Count positive gradients (violations)
             if gradient > 0:
                 violation_count += 1
@@ -342,7 +343,7 @@ class FairnessElicitationAlgorithm:
                 # Increase lambda when constraint is violated
                 lambda_new[(i, j)] = min(
                     self.C_lambda,
-                    lambda_t.get((i, j), 0) + mu_lambda * gradient
+                    lambda_t.get((i, j), 0) + mu_lambda * gradient * step_scale
                 )
             else:
                 # Decrease lambda when constraint is satisfied
@@ -352,7 +353,7 @@ class FairnessElicitationAlgorithm:
                 )
         
         # Update tau using online gradient descent
-        mu_tau = self.C_tau / np.sqrt(t)
+        mu_tau = self.C_tau / (1 + np.sqrt(t))
         
         # Compute gradient for tau (sum of w_ij * alpha_ij / |A| - eta)
         tau_gradient = 0.0
@@ -364,10 +365,26 @@ class FairnessElicitationAlgorithm:
         # Update tau with projection (eta = 0 for simplicity)
         tau_new = max(0.0, min(self.C_tau, tau_t + mu_tau * tau_gradient))
         
+        for pair in self.constraints:
+            if pair not in self.avg_lambda:
+                self.avg_lambda[pair] = lambda_new.get(pair, 0)
+            else:
+                self.avg_lambda[pair] = (t * self.avg_lambda[pair] + lambda_new.get(pair, 0)) / (t + 1)
+
         # Debug information
         if t % 1 == 0 and violation_count > 0:
             print(f"  Found {violation_count} constraint violations, max gradient: {max_gradient:.6f}")
         
+        # Every 100 iterations, use the averaged values to stabilize
+        if t % 100 == 0 and t > 0:
+            print("  Using averaged lambda values to stabilize")
+            lambda_new = self.avg_lambda.copy()
+        
+        # Add extensive logging in update_dual_variables
+        print("Constraint Diagnostics:")
+        for (i, j) in self.constraints:
+            feature_diff = np.abs(self.X[i] - self.X[j])
+            print(f"Pair ({i},{j}): Max Feature Diff = {feature_diff.max()}, Mean Diff = {feature_diff.mean()}")
         return lambda_new, tau_new
         
     def average_models(self, models, weights=None):
@@ -439,7 +456,7 @@ class FairnessElicitationAlgorithm:
             
             # Initialize lambda and tau
             # Start with small random values to break symmetry
-            lambda_t = {pair: np.random.uniform(0, 0.01) for pair in self.constraints}
+            lambda_t = {pair: self.w_ij.get(pair, 0) * 0.1 for pair in self.constraints}            
             tau_t = 0.01
             
             # Run the algorithm for T iterations
