@@ -2,6 +2,7 @@ import numpy as np
 from typing import Dict, List, Tuple, Callable, Any
 from .classifier import CostSensitiveClassifier
 import time
+from sklearn.ensemble import RandomForestClassifier
 
 class NoRegretFairness:
     """
@@ -18,7 +19,7 @@ class NoRegretFairness:
         y_test: np.ndarray = None,  # Add this parameter
         gamma: float = 0.0,
         eta: float = 0.0,
-        C_lambda: float = 10.0,
+        C_lambda: float = 50.0,
         C_tau: float = 10.0,
         time_horizon: int = 1000,
         base_classifier=None
@@ -32,6 +33,7 @@ class NoRegretFairness:
         # Store test data if provided
         self.X_test = X_test
         self.y_test = y_test
+        self.max_violations = []
         
         # Initialize lists for test metrics if test data is provided
         if X_test is not None and y_test is not None:
@@ -49,8 +51,10 @@ class NoRegretFairness:
         self.time_horizon = time_horizon
         
         # Initialize classifier
-        self.classifier = CostSensitiveClassifier(base_classifier)
-        
+        #self.classifier = CostSensitiveClassifier(base_classifier)
+        self.classifier = CostSensitiveClassifier(
+            RandomForestClassifier(n_estimators=100, class_weight='balanced')
+        )
         # Initialize algorithm state
         self.lambda_vals = {}
         self.theta = {}
@@ -82,30 +86,48 @@ class NoRegretFairness:
             print(f"Pair ({i},{j}): weight={weight}, labels={self.y[i]},{self.y[j]}")
         
     def compute_costs(self, lambda_vals: Dict[Tuple[int, int], float]) -> List[Tuple[float, float]]:
-        """
-        Compute the costs for each sample based on current lambda values.
-        """
-        costs = []
+        sample_in_constraint = set()
+        for i, j in lambda_vals.keys():
+            sample_in_constraint.add(i)
+            sample_in_constraint.add(j)
         
+        costs = []
         for i in range(self.n):
             # Base classification cost from error term
             cost_0 = 1/self.n if self.y[i] == 1 else 0
             cost_1 = 1/self.n if self.y[i] == 0 else 0
             
-            # Add costs from lambda terms
+            # Add fairness constraints
             for (x_i, x_j), lambda_val in lambda_vals.items():
                 if i == x_i:
-                    # Cost for predicting x_i as 1
                     cost_1 += lambda_val
-                
                 if i == x_j:
-                    # Cost for predicting x_j as 0
                     cost_0 += lambda_val
+            
+            # Clip costs to reasonable range
+            cost_0 = np.clip(cost_0, 1e-6, 10.0)
+            cost_1 = np.clip(cost_1, 1e-6, 10.0)
             
             costs.append((cost_0, cost_1))
         
-        return costs
-    
+        # Print ratio distribution (avoiding division by zero)
+        ratios = [c0/c1 if c1 > 0 else 1.0 for c0, c1 in costs]
+        # print(f"Cost ratio (cost0/cost1): min={min(ratios):.4f}, max={max(ratios):.4f}, median={np.median(ratios):.4f}")
+        
+        # Calculate average costs by class
+        class0_costs = [(c0, c1) for (c0, c1), y in zip(costs, self.y) if y == 0]
+        class1_costs = [(c0, c1) for (c0, c1), y in zip(costs, self.y) if y == 1]
+        
+        #if class0_costs:
+            #print(f"Class 0 samples - Cost0: {np.mean([c[0] for c in class0_costs]):.4f}, Cost1: {np.mean([c[1] for c in class0_costs]):.4f}")
+        #if class1_costs:
+            #print(f"Class 1 samples - Cost0: {np.mean([c[0] for c in class1_costs]):.4f}, Cost1: {np.mean([c[1] for c in class1_costs]):.4f}")
+        
+        # Scale costs if needed to make fairness more impactful
+        scaling_factor = 5.0  # Try different values
+        scaled_costs = [(c0 * scaling_factor, c1 * scaling_factor) for c0, c1 in costs]
+        
+        return scaled_costs
     def compute_alpha(self, tau: float, lambda_vals: Dict[Tuple[int, int], float]) -> Dict[Tuple[int, int], float]:
         """
         Compute alpha values (excess fairness violations) based on current tau and lambda.
@@ -121,23 +143,41 @@ class NoRegretFairness:
         
         return alpha
     
-    def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float], X=None) -> float:
-        """Compute the fairness violation for a classifier and alpha values"""
+    def compute_fairness_violation(self, classifier, alpha: Dict[Tuple[int, int], float], X=None) -> dict:
+        """Enhanced fairness violation tracking"""
         if X is None:
             X = self.X
         
         # Get predictions for all samples
         preds = classifier.predict_proba(X)[:, 1]
         total_violation = 0.0
+        max_violation = 0.0
+        raw_violations = []
+        violated_count = 0
         
         for (i, j), weight in self.constraint_weights.items():
-            # Calculate E[h(x_i) - h(x_j)] - alpha_{ij} - gamma
+            # Raw difference in predictions
             diff = preds[i] - preds[j]
-            violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
-            total_violation += weight * violation
+            
+            # Calculate violation after accounting for alpha and gamma
+            adjusted_violation = max(0, diff - alpha.get((i, j), 0) - self.gamma)
+            
+            # Track various metrics
+            if diff > self.gamma:
+                violated_count += 1
+            
+            max_violation = max(max_violation, diff)
+            total_violation += weight * adjusted_violation
+            raw_violations.append((i, j, diff, adjusted_violation))
         
-        return total_violation / len(self.constraint_weights) if self.constraint_weights else 0
-    
+        total_constraints = len(self.constraint_weights) if self.constraint_weights else 1
+        
+        return {
+            "avg_violation": total_violation / total_constraints,
+            "max_violation": max_violation,
+            "percent_violated": 100 * violated_count / total_constraints,
+            "raw_violations": sorted(raw_violations, key=lambda x: -x[2])[:10]  # Top 10 by raw difference
+        }
     def compute_error(self, classifier, X=None, y=None) -> float:
         """
         Compute the classification error for a given classifier.
@@ -174,12 +214,12 @@ class NoRegretFairness:
         mu_lambda = 1 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
         
         start_time = time.time()
-        
+        """
         if verbose:
             print("\nDEBUG - Initial state:")
             print(f"  Lambda values (first 5): {list(self.lambda_vals.items())[:5]}")
             print(f"  Theta values (first 5): {list(self.theta.items())[:5]}")
-            
+        """
         
         for t in range(self.time_horizon):
             
@@ -204,14 +244,16 @@ class NoRegretFairness:
             
             # Step 3: Compute costs and train classifier
             costs = self.compute_costs(lambda_vals)
-            
-            if verbose and t % 100 == 0:
-                print(f"\nDEBUG - Iteration {t} - Sample costs:")
-                for i in range(min(5, len(costs))):
-                    print(f"  Sample {i}: cost_0={costs[i][0]:.4f}, cost_1={costs[i][1]:.4f}, true_label={self.y[i]}")
-            
+            if verbose and (t % 100 == 0 or t == 0):
+                self.analyze_costs(costs, lambda_vals, t)
+            if verbose and (t % 100 == 0 or t == 0):
+                self.debug_costs(costs, t)
+
             classifier = CostSensitiveClassifier(self.classifier.base_classifier)
             classifier.fit(self.X, self.y, costs)
+
+            if verbose and (t % 100 == 0 or t == 0):
+                self.debug_classifier(classifier, t)
             
             # Step 4: Compute alpha
             alpha = self.compute_alpha(self.tau, lambda_vals)
@@ -240,7 +282,7 @@ class NoRegretFairness:
                 print(f"  Fairness violations for 5 constraints:")
                 for (i, j), diff, is_violation in violations:
                     print(f"    ({i},{j}): diff={diff:.4f}, violation={is_violation}")
-                
+                """
                 if t % 10 == 0 or t in [0, 1, 100, 200, 500, 999]:
                     print(f"\n--- Detailed Debug at Iteration {t} ---")
                     
@@ -265,7 +307,7 @@ class NoRegretFairness:
                     print(f"  Min: {min(theta_values):.4f}")
                     print(f"  Max: {max(theta_values):.4f}")
                     print(f"  Mean: {np.mean(theta_values):.4f}")
-                            
+                    """
             for pair in self.constraint_pairs:
                 i, j = pair
                 if i < len(preds) and j < len(preds):
@@ -278,18 +320,27 @@ class NoRegretFairness:
             
             # Compute metrics on training data only
             train_error = self.compute_error(classifier)
-            train_fairness_violation = self.compute_fairness_violation(classifier, alpha)
+            #train_fairness_violation = self.compute_fairness_violation(classifier, alpha)
             
             self.errors.append(train_error)
-            self.fairness_violations.append(train_fairness_violation)
+            #self.fairness_violations.append(train_fairness_violation)
+            violation_metrics = self.compute_fairness_violation(classifier, alpha)
+            self.fairness_violations.append(violation_metrics["avg_violation"])
+            self.max_violations.append(violation_metrics["max_violation"])
+
             
             # Print progress
             if verbose and (t % 100 == 0 or t == self.time_horizon - 1):
                 elapsed = time.time() - start_time
+                #print(f"Iteration {t+1}/{self.time_horizon} [{elapsed:.2f}s]: "
+                    #f"Train Error = {train_error:.4f}, "
+                    #f"Train Fairness Violation = {train_fairness_violation:.4f}")
                 print(f"Iteration {t+1}/{self.time_horizon} [{elapsed:.2f}s]: "
                     f"Train Error = {train_error:.4f}, "
-                    f"Train Fairness Violation = {train_fairness_violation:.4f}")
-                
+                    f"Avg Fairness Violation = {violation_metrics['avg_violation']:.4f}, "
+                    f"Max Violation = {violation_metrics['max_violation']:.4f}, "
+                    f"Constraints Violated = {violation_metrics['percent_violated']:.2f}%")
+                                
                 if t % 100 == 0:
                     print(f"  Tau: {self.tau:.4f}")
                     print(f"  Lambda sum: {sum(lambda_vals.values()):.4f}")
@@ -386,3 +437,149 @@ class NoRegretFairness:
         self.gamma = original_gamma
         
         return results
+
+    def validate_constraints_application(self, costs):
+        """Validate that constraints are correctly applied in costs"""
+        sample_indices = np.random.choice(self.n, min(10, self.n), replace=False)
+        
+        for i in sample_indices:
+            cost_0, cost_1 = costs[i]
+            print(f"Validating sample {i}:")
+            
+            # Manually recalculate costs
+            expected_cost_0 = 1/self.n if self.y[i] == 1 else 0
+            expected_cost_1 = 1/self.n if self.y[i] == 0 else 0
+            
+            for (x_i, x_j), lambda_val in self.lambda_vals.items():
+                if i == x_i:
+                    expected_cost_1 += lambda_val
+                if i == x_j:
+                    expected_cost_0 += lambda_val
+            
+            print(f"  Expected: cost_0={expected_cost_0:.6f}, cost_1={expected_cost_1:.6f}")
+            print(f"  Actual: cost_0={cost_0:.6f}, cost_1={cost_1:.6f}")
+            
+            if abs(expected_cost_0 - cost_0) > 1e-6 or abs(expected_cost_1 - cost_1) > 1e-6:
+                print("  ERROR: Costs don't match expected values!")
+
+    def visualize_costs(self, costs, iteration):
+        import matplotlib.pyplot as plt
+        
+        cost_0_values = [c[0] for c in costs]
+        cost_1_values = [c[1] for c in costs]
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        
+        ax1.hist(cost_0_values, bins=20)
+        ax1.set_title('Cost_0 Distribution')
+        ax1.set_xlabel('Cost Value')
+        ax1.set_ylabel('Frequency')
+        
+        ax2.hist(cost_1_values, bins=20)
+        ax2.set_title('Cost_1 Distribution')
+        ax2.set_xlabel('Cost Value')
+        
+        plt.suptitle(f'Cost Distributions at Iteration {iteration}')
+        plt.tight_layout()
+        plt.savefig(f'cost_distribution_iter_{iteration}.png')
+        plt.close()
+
+    def debug_costs(self, costs, iteration_num):
+        """Debug cost computation"""
+        # Summarize cost distribution
+        cost_0_values = [c[0] for c in costs]
+        cost_1_values = [c[1] for c in costs]
+        
+        print(f"\nIteration {iteration_num} - Cost Analysis:")
+        print(f"  Cost 0: min={min(cost_0_values):.4f}, max={max(cost_0_values):.4f}, mean={np.mean(cost_0_values):.4f}")
+        print(f"  Cost 1: min={min(cost_1_values):.4f}, max={max(cost_1_values):.4f}, mean={np.mean(cost_1_values):.4f}")
+        
+        # Check for extreme or suspicious values
+        zero_costs = sum(1 for c0, c1 in costs if c0 == 0 and c1 == 0)
+        very_high_costs = sum(1 for c0, c1 in costs if c0 > 10 or c1 > 10)
+        
+        print(f"  Samples with zero costs: {zero_costs}/{len(costs)}")
+        print(f"  Samples with very high costs: {very_high_costs}/{len(costs)}")
+        
+        # Show sample costs
+        print("\n  Sample costs:")
+        for i in range(min(5, len(costs))):
+            print(f"    Sample {i}: Label={self.y[i]}, Cost0={costs[i][0]:.4f}, Cost1={costs[i][1]:.4f}")
+
+    def debug_classifier(self, classifier, iteration_num):
+        """Debug classifier performance after training"""
+        try:
+            # Get predictions on training data
+            preds = classifier.predict(self.X)
+            probs = classifier.predict_proba(self.X)
+            
+            # Analyze prediction distribution
+            accuracy = np.mean(preds == self.y)
+            class_distribution = np.bincount(preds, minlength=2)
+            
+            print(f"\nIteration {iteration_num} - Classifier Analysis:")
+            print(f"  Accuracy: {accuracy:.4f}")
+            print(f"  Prediction distribution: {class_distribution}")
+            print(f"  True label distribution: {np.bincount(self.y, minlength=2)}")
+            
+            # Check prediction probabilities
+            prob_bins = [0.0, 0.25, 0.5, 0.75, 1.0]
+            prob_counts = np.histogram(probs[:, 1], bins=prob_bins)[0]
+            print(f"  Probability distribution: {prob_counts}")
+            
+            # Check specific samples
+            print("\n  Sample predictions:")
+            for i in range(min(5, len(preds))):
+                print(f"    Sample {i}: True={self.y[i]}, Pred={preds[i]}, Prob={probs[i][1]:.4f}")
+                
+        except Exception as e:
+            print(f"Error in debug_classifier: {e}")
+
+    def analyze_costs(self, costs, lambda_vals=None, iteration=None):
+        """Analyze cost distribution to identify biases or issues"""
+        cost_0_values = [c[0] for c in costs]
+        cost_1_values = [c[1] for c in costs]
+        
+        print(f"\n{'Iteration '+str(iteration)+' - ' if iteration is not None else ''}Cost Analysis:")
+        print(f"  Cost 0: min={min(cost_0_values):.4f}, max={max(cost_0_values):.4f}, mean={np.mean(cost_0_values):.4f}")
+        print(f"  Cost 1: min={min(cost_1_values):.4f}, max={max(cost_1_values):.4f}, mean={np.mean(cost_1_values):.4f}")
+        
+        # Cost ratios analysis
+        ratios = []
+        for c0, c1 in costs:
+            if c1 > 0:
+                ratios.append(c0/c1)
+            else:
+                ratios.append(float('inf'))
+        
+        finite_ratios = [r for r in ratios if r != float('inf')]
+        if finite_ratios:
+            print(f"  Cost0/Cost1 ratio: min={min(finite_ratios):.4f}, max={max(finite_ratios):.4f}, mean={np.mean(finite_ratios):.4f}")
+        
+        # Analyze cost by true label
+        cost_0_by_class = [costs[i][0] for i in range(len(costs)) if self.y[i] == 0]
+        cost_1_by_class = [costs[i][1] for i in range(len(costs)) if self.y[i] == 1]
+        
+        if cost_0_by_class:
+            print(f"  Class 0 samples - Cost0: {np.mean(cost_0_by_class):.4f}, Cost1: {np.mean([costs[i][1] for i in range(len(costs)) if self.y[i] == 0]):.4f}")
+        if cost_1_by_class:
+            print(f"  Class 1 samples - Cost0: {np.mean([costs[i][0] for i in range(len(costs)) if self.y[i] == 1]):.4f}, Cost1: {np.mean(cost_1_by_class):.4f}")
+        
+        # Look at extreme cost samples
+        print("\n  Samples with extreme costs:")
+        extreme_indices = []
+        for i, (c0, c1) in enumerate(costs):
+            if c0 > 10 or c1 > 10 or (c0 == 0 and c1 == 0):
+                extreme_indices.append(i)
+        
+        for i in extreme_indices[:5]:
+            print(f"    Sample {i}: Label={self.y[i]}, Cost0={costs[i][0]:.4f}, Cost1={costs[i][1]:.4f}")
+        
+        # Check lambda influence if provided
+        if lambda_vals:
+            affected_samples = set()
+            for (i, j), val in lambda_vals.items():
+                if val > 0:
+                    affected_samples.add(i)
+                    affected_samples.add(j)
+            print(f"\n  Lambda affects {len(affected_samples)}/{self.n} samples")

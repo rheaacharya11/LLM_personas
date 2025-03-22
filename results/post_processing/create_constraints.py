@@ -121,7 +121,7 @@ def main():
         constraining_people[key] = list(constraining_people[key])
 
     # Specify the directory path
-    output_directory = "../../constraint_sets/binary_personas/"
+    output_directory = "../../constraint_sets/no_personas_binary/"
     # Ensure the directory exists
     os.makedirs(output_directory, exist_ok=True)
 

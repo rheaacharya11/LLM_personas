@@ -124,9 +124,9 @@ def debug_constraints_and_data(constraints_path, data_path, test_data_path):
         
         if y_train[i] != y_train[j]:
             conflicting_labels += 1
-        if should_print < 5:
-            print(i, j)
-            should_print += 1
+            if should_print < 5:
+                print(i, j)
+                should_print += 1
         
         valid_constraints[(i,j)] = judges
 
@@ -143,7 +143,6 @@ def debug_constraints_and_data(constraints_path, data_path, test_data_path):
 
 
 def main(args):
-    debug_constraints_and_data(args.constraints_path, args.data_path, args.test_data_path)
     
     data_result = load_training_data(args.data_path, args.test_data_path)
 
@@ -153,48 +152,10 @@ def main(args):
     else:
         X_train, y_train, id_to_index = data_result
         X_test, y_test = None, None
-    print("Checking ID mapping:")
-    for i in range(5):
-        orig_id = list(id_to_index.keys())[i]
-        mapped_idx = id_to_index[orig_id]
-        print(f"Original ID {orig_id} maps to index {mapped_idx}")
 
-    print(f"X shape: {X_train.shape}, y shape: {y_train.shape}")
-    print("Sample data:")
-    for i in range(5):
-        print(f"Row {i}: X={X_train[i]}, y={y_train[i]}")
     
     # Load constraints
     constraints = load_constraints(args.constraints_path)
-    print(f"Loaded {len(constraints)} constraints")
-    print("Example constraints:")
-    for i, ((a, b), judges) in enumerate(list(constraints.items())[:5], 1):
-        print(f"{i}. ({a}, {b}): {len(judges)} judges")
-    print(f"Loaded {len(constraints)} fairness constraints")
-    
-    # DEBUG: Check constraint structure and potential conflicts
-    print("\nChecking constraint pairs and their labels:")
-    conflict_count = 0
-    for idx, ((i, j), judges) in enumerate(list(constraints.items())[:10]):  # Check first 10 constraints
-        # Ensure indices are within bounds
-        if i < len(y_train) and j < len(y_train):
-            # Check if the constraint requires different labels to be treated the same
-            if y_train[i] != y_train[j]:
-                conflict_type = "CONFLICTING"
-                conflict_count += 1
-            else:
-                conflict_type = "ALIGNED"
-            
-            print(f"Constraint {idx+1}: ({i}, {j}) - Labels: {y_train[i]}, {y_train[j]} - {conflict_type}")
-            print(f"  Weight: {len(judges)} judges")
-        else:
-            print(f"Constraint {idx+1}: ({i}, {j}) - OUT OF BOUNDS - indices exceed dataset size")
-    
-    # Show summary of constraints
-    # conflict_total = sum(1 for (i, j) in constraints.keys() 
-                        # if i < len(y_train) and j < len(y_train) and y_train[i] != y_train[j])
-    # print(f"\nSummary: {conflict_total} out of {len(constraints)} constraints ({conflict_total/len(constraints)*100:.1f}%) "
-          # f"have conflicting labels")
     
     # Compute constraint weights
     weights = compute_constraint_weights(constraints)
@@ -256,7 +217,39 @@ def main(args):
             results,
             os.path.join(args.output_dir, "pareto_curve.png") if args.output_dir else None
         )
-
+def test_cost_computation():
+    # Create minimal test dataset
+    X_test = np.array([[1, 2], [3, 4], [5, 6]])
+    y_test = np.array([0, 1, 0])
+    
+    # Create a constraint between sample 0 and 1
+    constraint_weights = {(0, 1): 0.5}
+    
+    # Initialize algorithm with test data
+    alg = NoRegretFairness(X_test, y_test, constraint_weights, gamma=0.1)
+    
+    # Set some lambda values
+    lambda_vals = {(0, 1): 0.2}
+    
+    # Compute costs
+    costs = alg.compute_costs(lambda_vals)
+    
+    # Expected costs:
+    # Sample 0: y=0, cost_0=0, cost_1=1/3 + 0.2 (lambda) = 0.533
+    # Sample 1: y=1, cost_0=1/3 + 0 (lambda) = 0.333, cost_1=0
+    # Sample 2: y=0, cost_0=0, cost_1=1/3 = 0.333
+    
+    print("Test Data Costs:")
+    for i, (cost_0, cost_1) in enumerate(costs):
+        print(f"Sample {i}: cost_0={cost_0:.6f}, cost_1={cost_1:.6f}")
+    
+    # Verify results
+    expected = [(0.0, 0.533333), (0.333333, 0.0), (0.0, 0.333333)]
+    for i in range(len(costs)):
+        assert abs(costs[i][0] - expected[i][0]) < 1e-5, f"Cost_0 for sample {i} doesn't match"
+        assert abs(costs[i][1] - expected[i][1]) < 1e-5, f"Cost_1 for sample {i} doesn't match"
+    
+    print("Test passed!")
 
 
 if __name__ == "__main__":
@@ -284,7 +277,7 @@ if __name__ == "__main__":
     # Parameters for single mode
     parser.add_argument('--gamma', type=float, default=0.3,
                         help='Gamma parameter (used in single mode)')
-    parser.add_argument('--eta', type=float, default=0.0,
+    parser.add_argument('--eta', type=float, default=0.1,
                         help='Eta parameter (used in single mode)')
     
     # Parameters for Pareto mode
@@ -300,5 +293,5 @@ if __name__ == "__main__":
     # Create output directory if specified
     if args.output_dir and not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
-    
+    #test_cost_computation()
     main(args)

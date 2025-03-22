@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from typing import List, Tuple, Dict, Any
+from sklearn.ensemble import RandomForestClassifier
 
 class CostSensitiveClassifier:
     """
@@ -15,6 +16,11 @@ class CostSensitiveClassifier:
         base_classifier: If None, default to LogisticRegression.
         """
         self.base_classifier = base_classifier if base_classifier is not None else LogisticRegression(max_iter=1000)
+        # self.base_classifier = LogisticRegression(
+            #max_iter=1000, 
+            #C=0.1,  # Stronger regularization
+            #class_weight='balanced'  # Handle class imbalance
+        #)
         self.is_fitted = False
 
     def fit(self, X: np.ndarray, y: np.ndarray, costs: List[Tuple[float, float]] = None):
@@ -35,6 +41,7 @@ class CostSensitiveClassifier:
             print("Using standard classification (no costs)")
             self.base_classifier.fit(X, y)
         else:
+            self.sample_costs = costs
             # Debug costs
             # print(f"Using cost-sensitive classification with {len(costs)} cost pairs")
             cost_array = np.array(costs)
@@ -77,29 +84,26 @@ class CostSensitiveClassifier:
         self.is_fitted = True
         return self
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
-        """
-        Make predictions with the classifier.
-        
-        Args:
-            X: Feature matrix of shape (n_samples, n_features)
-            
-        Returns:
-            Predictions of shape (n_samples,)
-        """
+    def predict(self, X):
         if not self.is_fitted:
-            raise RuntimeError("Classifier must be fitted before making predictions.")
+            raise RuntimeError("Classifier must be fitted before predicting")
         
-        try:
-            preds = self.base_classifier.predict(X)
-            # print(f"Predictions distribution: {np.bincount(preds)}")
-            return preds
-        except Exception as e:
-            print(f"Error in predict: {e}")
-            import traceback
-            traceback.print_exc()
-            # Return all zeros as fallback
-            return np.zeros(len(X), dtype=int)
+        # Get probabilities
+        probs = self.predict_proba(X)
+        
+        # Compare costs directly rather than relying on classifier's decision boundary
+        preds = np.zeros(len(X), dtype=int)
+        for i in range(len(X)):
+            # If cost of predicting 0 > cost of predicting 1, then predict 1
+            if getattr(self, 'sample_costs', None) is not None and i < len(self.sample_costs):
+                cost0, cost1 = self.sample_costs[i]
+                if cost0 > cost1:
+                    preds[i] = 1
+            else:
+                # Fall back to probability if costs not available
+                preds[i] = 1 if probs[i, 1] > 0.5 else 0
+        
+        return preds
         
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
         """

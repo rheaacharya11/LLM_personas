@@ -65,7 +65,6 @@ def load_training_data(filepath: str,
                 # Handle non-integer IDs
                 id_to_index[id_val] = idx
         # Keep ID column for processing but will remove before final feature matrix
-        feature_df = df_train.copy()
     else:
         # Use row index as ID if no ID column exists
         for idx in range(len(df_train)):
