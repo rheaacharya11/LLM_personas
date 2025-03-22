@@ -116,6 +116,7 @@ def debug_constraints_and_data(constraints_path, data_path, test_data_path):
     invalid_indices = 0
     conflicting_labels = 0
 
+    should_print = 0
     for (i, j), judges in list(constraints.items()):
         if i >= len(y_train) or j >= len(y_train):
             invalid_indices += 1
@@ -123,6 +124,9 @@ def debug_constraints_and_data(constraints_path, data_path, test_data_path):
         
         if y_train[i] != y_train[j]:
             conflicting_labels += 1
+        if should_print < 5:
+            print(i, j)
+            should_print += 1
         
         valid_constraints[(i,j)] = judges
 
@@ -149,9 +153,23 @@ def main(args):
     else:
         X_train, y_train, id_to_index = data_result
         X_test, y_test = None, None
+    print("Checking ID mapping:")
+    for i in range(5):
+        orig_id = list(id_to_index.keys())[i]
+        mapped_idx = id_to_index[orig_id]
+        print(f"Original ID {orig_id} maps to index {mapped_idx}")
+
+    print(f"X shape: {X_train.shape}, y shape: {y_train.shape}")
+    print("Sample data:")
+    for i in range(5):
+        print(f"Row {i}: X={X_train[i]}, y={y_train[i]}")
     
     # Load constraints
     constraints = load_constraints(args.constraints_path)
+    print(f"Loaded {len(constraints)} constraints")
+    print("Example constraints:")
+    for i, ((a, b), judges) in enumerate(list(constraints.items())[:5], 1):
+        print(f"{i}. ({a}, {b}): {len(judges)} judges")
     print(f"Loaded {len(constraints)} fairness constraints")
     
     # DEBUG: Check constraint structure and potential conflicts
@@ -173,10 +191,10 @@ def main(args):
             print(f"Constraint {idx+1}: ({i}, {j}) - OUT OF BOUNDS - indices exceed dataset size")
     
     # Show summary of constraints
-    conflict_total = sum(1 for (i, j) in constraints.keys() 
-                        if i < len(y_train) and j < len(y_train) and y_train[i] != y_train[j])
-    print(f"\nSummary: {conflict_total} out of {len(constraints)} constraints ({conflict_total/len(constraints)*100:.1f}%) "
-          f"have conflicting labels")
+    # conflict_total = sum(1 for (i, j) in constraints.keys() 
+                        # if i < len(y_train) and j < len(y_train) and y_train[i] != y_train[j])
+    # print(f"\nSummary: {conflict_total} out of {len(constraints)} constraints ({conflict_total/len(constraints)*100:.1f}%) "
+          # f"have conflicting labels")
     
     # Compute constraint weights
     weights = compute_constraint_weights(constraints)
@@ -201,6 +219,11 @@ def main(args):
         )
         
         algorithm.fit(verbose=True)
+        test_results = algorithm.evaluate_on_test(X_test, y_test)
+        print(f"\nFinal evaluation on test data:")
+        print(f"  Test error: {test_results['test_error']:.4f}")
+
+        print(f"  Test accuracy: {test_results['test_accuracy']:.4f}")
         
         # Plot convergence
         plot_convergence(
@@ -253,7 +276,7 @@ if __name__ == "__main__":
                         help='Number of iterations for no-regret algorithm')
     parser.add_argument('--c_lambda', type=float, default=10.0,
                         help='C_lambda parameter')
-    parser.add_argument('--c_tau', type=float, default=1.0,
+    parser.add_argument('--c_tau', type=float, default=10.0,
                         help='C_tau parameter')
     parser.add_argument('--output_dir', type=str, default=None,
                         help='Directory to save output plots')

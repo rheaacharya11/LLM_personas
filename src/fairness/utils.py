@@ -53,7 +53,7 @@ def load_training_data(filepath: str,
     # Load the data
   # Load training data
     df_train = pd.read_parquet(filepath)
-    
+    print(df_train.columns)
     # Create ID to index mapping
     id_to_index = {}
     if id_column and id_column in df_train.columns:
@@ -70,7 +70,7 @@ def load_training_data(filepath: str,
         # Use row index as ID if no ID column exists
         for idx in range(len(df_train)):
             id_to_index[idx] = idx
-        feature_df = df_train.copy()
+    feature_df = df_train.copy()
     
     # Extract target vector
     if target_column and target_column in df_train.columns:
@@ -86,10 +86,18 @@ def load_training_data(filepath: str,
     
     # Explicitly convert y to integer type
     y_train = y_train.astype(int)
-    
+    features_df.drop(columns="c_charge_degree_full")
+
     # Handle categorical features with one-hot encoding
     categorical_columns = features_df.select_dtypes(include=['object', 'category']).columns
     numerical_columns = features_df.select_dtypes(include=['number']).columns
+    print("categorical" + categorical_columns)
+    print("numerical" + numerical_columns)
+    print(feature_df['c_charge_degree'].unique())
+    desired_order = numerical_columns.tolist() + \
+                        ['c_charge_degree_M'] + \
+                        ['race_Asian', 'race_Caucasian', 'race_Hispanic', 'race_Native American', 'race_Other'] + \
+                        ['sex_Male']
     
     # Process test data if provided
     if test_filepath:
@@ -100,6 +108,7 @@ def load_training_data(filepath: str,
             y_test = df_test[target_column].values
             # Keep all columns except the target as potential features for consistency
             test_features_df = df_test[[col for col in feature_cols if col in df_test.columns]]
+            test_features_df.drop(columns="c_charge_degree_full")
         else:
             print(f"Warning: '{target_column}' column not found in test data, using last column as target")
             y_test = df_test.iloc[:, -1].values
@@ -112,7 +121,7 @@ def load_training_data(filepath: str,
             # For categorical features, we need to ensure consistent encoding
             combined_df = pd.concat([features_df, test_features_df], axis=0)
             combined_dummies = pd.get_dummies(combined_df[categorical_columns], drop_first=True)
-            
+            print(combined_dummies.columns)
             # Split back into train and test
             X_train_cat = combined_dummies.iloc[:len(features_df)]
             X_test_cat = combined_dummies.iloc[len(features_df):]
@@ -137,7 +146,13 @@ def load_training_data(filepath: str,
             X_train_processed = X_train_processed.drop(columns=[id_column])
         if id_column and id_column in X_test_processed.columns:
             X_test_processed = X_test_processed.drop(columns=[id_column])
+        # Manually define the desired column order
         
+        # Reorder the processed feature matrix
+        print("Desired order:", desired_order[1:])
+        print("X_train_processed columns:", X_train_processed.columns)
+        X_train_processed = X_train_processed[desired_order[1:]]
+        X_test_processed = X_test_processed[desired_order[1:]]  # if test data is provided
         # Convert to numpy arrays
         X_train = X_train_processed.values
         X_test = X_test_processed.values
@@ -163,7 +178,8 @@ def load_training_data(filepath: str,
     # Remove ID column if it's in the feature matrix
     if id_column and id_column in X_processed.columns:
         X_processed = X_processed.drop(columns=[id_column])
-    
+    X_train_processed = X_train_processed[desired_order]
+
     # Convert to numpy array
     X_train = X_processed.values
     
@@ -183,23 +199,3 @@ def get_constraint_pairs(constraints: Dict[Tuple[int, int], List[int]], subset_s
     
     return pairs
 
-def map_constraints_to_indices(constraints: Dict[Tuple[int, int], List[int]], 
-                              id_to_index: Dict[int, int]) -> Dict[Tuple[int, int], List[int]]:
-    """
-    Map constraint pairs from original IDs to array indices.
-    
-    Args:
-        constraints: Dictionary mapping (original_id_i, original_id_j) pairs to list of judge IDs
-        id_to_index: Mapping from original IDs to array indices
-        
-    Returns:
-        Dictionary mapping (index_i, index_j) pairs to list of judge IDs
-    """
-    mapped_constraints = {}
-    for (id_i, id_j), judges in constraints.items():
-        if id_i in id_to_index and id_j in id_to_index:
-            mapped_constraints[(id_to_index[id_i], id_to_index[id_j])] = judges
-        else:
-            print(f"Warning: Could not map constraint ({id_i}, {id_j}) to indices")
-    
-    return mapped_constraints
