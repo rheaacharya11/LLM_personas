@@ -62,53 +62,58 @@ class FairnessElicitationAlgorithm:
         self.models = []
     
     def load_data(self):
-        """Load and preprocess the COMPAS dataset"""
         # Load data
         df = pd.read_parquet(self.data_path)
         
-        # Extract target
+        # Extract target BEFORE any processing
         self.y = df[self.target_column].values
         
-        # One-hot encode categorical features
-        categorical_indices = [i for i, col in enumerate(df.columns) 
-                             if col in self.categorical_features]
+        # Save original indices
+        self.original_df = df.copy()
         
-        # Create a copy of the dataframe for preprocessing
+        # Create a copy for processing
         df_processed = df.copy()
         
-        # One-hot encode categorical features
-        encoder = OneHotEncoder(sparse_output=False, drop='first')
-        categorical_data = df_processed[self.categorical_features].copy()
-        encoded_data = encoder.fit_transform(categorical_data)
+        # Identify categorical columns
+        categorical_columns = df_processed.select_dtypes(include=['object']).columns.tolist()
+        print(f"Categorical columns to encode: {categorical_columns}")
         
-        # Get the feature names after one-hot encoding
-        encoded_feature_names = []
-        for i, feature in enumerate(self.categorical_features):
-            categories = encoder.categories_[i][1:]  # Skip the first category (dropped)
-            encoded_feature_names.extend([f"{feature}_{category}" for category in categories])
-        
-        # Create DataFrame with encoded features
-        encoded_df = pd.DataFrame(encoded_data, columns=encoded_feature_names)
-        
-        # Drop original categorical columns
-        df_processed = df_processed.drop(self.categorical_features, axis=1)
-        
-        # Concatenate the one-hot encoded features
-        df_processed = pd.concat([df_processed, encoded_df], axis=1)
-        
-        # Drop the target column from features
+        # Drop target column from features
         if self.target_column in df_processed.columns:
             df_processed = df_processed.drop(self.target_column, axis=1)
+        
+        # One-hot encode categorical features
+        if categorical_columns:
+            encoder = OneHotEncoder(sparse_output=False, drop='first')
+            categorical_data = df_processed[categorical_columns].fillna('Unknown')
+            encoded_data = encoder.fit_transform(categorical_data)
             
-        # Save original dataframe and indices for reference
-        self.original_df = df
-        self.sample_indices = df.index.tolist()
+            # Get feature names
+            encoded_feature_names = []
+            for i, feature in enumerate(categorical_columns):
+                categories = encoder.categories_[i][1:]
+                encoded_feature_names.extend([f"{feature}_{category}" for category in categories])
             
-        # Convert to numpy array for features
+            # Drop original categorical columns
+            df_processed = df_processed.drop(categorical_columns, axis=1)
+            
+            # Add encoded columns
+            encoded_df = pd.DataFrame(encoded_data, columns=encoded_feature_names, index=df_processed.index)
+            df_processed = pd.concat([df_processed, encoded_df], axis=1)
+        
+        # Ensure all columns are numeric
+        for col in df_processed.columns:
+            if not pd.api.types.is_numeric_dtype(df_processed[col]):
+                df_processed[col] = pd.to_numeric(df_processed[col], errors='coerce')
+        
+        # Fill NaN values
+        df_processed = df_processed.fillna(0)
+        
+        # Convert to numpy array
         self.X = df_processed.values
         
         print(f"Loaded data with {self.X.shape[0]} samples and {self.X.shape[1]} features")
-    
+        print(f"Label array shape: {self.y.shape}")
     def load_constraint_sets(self):
         """Load fairness constraint sets from JSON file"""
         with open(self.constraint_sets_path, 'r') as f:
@@ -266,60 +271,38 @@ class FairnessElicitationAlgorithm:
         return D_t, alpha_t
     
     def update_dual_variables(self, lambda_t, tau_t, D_t, alpha_t, gamma, t):
-        """
-        Update the dual variables using exponentiated gradient descent and online gradient descent.
-        
-        Args:
-            lambda_t: Current lambda values.
-            tau_t: Current tau value.
-            D_t: Current model.
-            alpha_t: Current alpha values.
-            gamma: Fairness violation buffer.
-            t: Current iteration.
-            
-        Returns:
-            Updated lambda and tau values.
-        """
         # Get prediction probabilities
         probs = self.compute_prediction_probs(D_t)
         
-        # Update theta (for lambda updates)
+        # Use smaller step size for lambda updates
         mu_lambda = 1 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
         
-        # Initialize new lambda
-        lambda_new = {}
+        # Update only for actual constraints (not all pairs)
+        lambda_new = lambda_t.copy()
         
-        # Update theta for each constraint
+        # Sparse update - only update existing constraints
         for (i, j) in self.constraints:
-            # Get actual indices
-            idx_i = self.sample_indices.index(i) if hasattr(self, 'sample_indices') else i
-            idx_j = self.sample_indices.index(j) if hasattr(self, 'sample_indices') else j
-            
             # Calculate gradient for this pair
-            gradient = probs[idx_i] - probs[idx_j] - alpha_t.get((i, j), 0) - gamma
+            gradient = probs[i] - probs[j] - alpha_t.get((i, j), 0) - gamma
             
-            # Update theta
-            self.theta[idx_i, idx_j] += mu_lambda * gradient
-            
-            # Compute lambda using softmax (exponentiated gradient)
-            lambda_new[(i, j)] = self.C_lambda * np.exp(self.theta[idx_i, idx_j]) / (1 + np.sum(np.exp(self.theta)))
+            # Simple multiplicative update instead of full softmax
+            lambda_new[(i, j)] = min(
+                self.C_lambda, 
+                lambda_t.get((i, j), 0) * np.exp(mu_lambda * gradient)
+            )
         
         # Update tau using online gradient descent
         mu_tau = self.C_tau / np.sqrt(self.time_horizon)
         
-        # Compute gradient for tau
-        tau_gradient = 0
-        for (i, j) in self.constraints:
-            weight = self.w_ij.get((i, j), 0)
-            tau_gradient += weight * alpha_t.get((i, j), 0) / self.A
-            
-        tau_gradient -= gamma  # Subtract the allowable violation threshold
+        # Compute gradient for tau (simplified)
+        tau_gradient = sum(self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) 
+                        for (i, j) in self.constraints) / self.A - gamma
         
-        # Update tau with projection to [0, C_tau]
+        # Update tau with projection
         tau_new = max(0, min(self.C_tau, tau_t + mu_tau * tau_gradient))
         
         return lambda_new, tau_new
-    
+        
     def run(self, gamma_values=None):
         """
         Run the algorithm for multiple gamma values.
@@ -353,25 +336,29 @@ class FairnessElicitationAlgorithm:
             
             # Run the algorithm for T iterations
             for t in range(1, self.time_horizon + 1):
-                # Best response of primal player
-                D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
+                print(f"Starting iteration {t}")  # Add this line
                 
-                # Compute metrics
-                error = self.compute_error(D_t)
-                probs = self.compute_prediction_probs(D_t)
-                fairness_violation = self.compute_fairness_violation(probs, alpha_t, gamma)
-                
-                # Store metrics
-                errors.append(error)
-                fairness_violations.append(fairness_violation)
-                
-                # Update dual variables
-                lambda_t, tau_t = self.update_dual_variables(lambda_t, tau_t, D_t, alpha_t, gamma, t)
-                
-                # Periodic reporting
-                if t % 100 == 0 or t == self.time_horizon:
-                    print(f"  Iteration {t}: Error = {error:.4f}, Fairness Violation = {fairness_violation:.4f}")
-            
+                try:
+                    # Best response of primal player
+                    print(f"  Computing best response for iteration {t}")
+                    D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
+                    
+                    # Compute metrics
+                    print(f"  Computing metrics for iteration {t}")
+                    error = self.compute_error(D_t)
+                    probs = self.compute_prediction_probs(D_t)
+                    fairness_violation = self.compute_fairness_violation(probs, alpha_t, gamma)
+                    
+                    # Update dual variables
+                    print(f"  Updating dual variables for iteration {t}")
+                    lambda_t, tau_t = self.update_dual_variables(lambda_t, tau_t, D_t, alpha_t, gamma, t)
+                    
+                    print(f"  Completed iteration {t}: Error = {error:.4f}, Violation = {fairness_violation:.4f}")
+                except Exception as e:
+                    print(f"Error in iteration {t}: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    break
             # Store results for this gamma
             results[gamma] = {
                 'errors': errors,
