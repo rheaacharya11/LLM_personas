@@ -75,7 +75,7 @@ class FairnessElicitationAlgorithm:
         df_processed = df.copy()
         
         # Identify categorical columns
-        categorical_columns = df_processed.select_dtypes(include=['object']).columns.tolist()
+        categorical_columns = [col for col in self.categorical_features if col in df_processed.columns]
         print(f"Categorical columns to encode: {categorical_columns}")
         
         # Drop target column from features
@@ -114,6 +114,7 @@ class FairnessElicitationAlgorithm:
         
         print(f"Loaded data with {self.X.shape[0]} samples and {self.X.shape[1]} features")
         print(f"Label array shape: {self.y.shape}")
+
     def load_constraint_sets(self):
         """Load fairness constraint sets from JSON file"""
         with open(self.constraint_sets_path, 'r') as f:
@@ -129,6 +130,7 @@ class FairnessElicitationAlgorithm:
         
         # Each judge was presented 50 pairs but only selected a few
         pairs_per_judge = 50  # Number of pairs presented to each judge
+        num_judges = 1000  # Override to match your scale
         total_pairs_presented = pairs_per_judge * num_judges
         self.A = total_pairs_presented  # A is the total number of pairs presented
         
@@ -192,9 +194,11 @@ class FairnessElicitationAlgorithm:
             gamma: Allowed fairness violation buffer.
             
         Returns:
-            The maximum weighted fairness violation across all constraints.
+            The total weighted fairness violation across all constraints.
         """
-        violations = []
+        # Calculate total weighted violation
+        total_violation = 0.0
+        individual_violations = {}
         
         for (i, j) in self.constraints:
             try:
@@ -203,23 +207,47 @@ class FairnessElicitationAlgorithm:
                 
                 # Make sure indices are within range
                 if idx_i >= len(probs) or idx_j >= len(probs):
-                    print(f"Warning: Constraint indices ({i}, {j}) out of range, skipping")
                     continue
                 
                 # Calculate violation for this pair
                 diff = probs[idx_i] - probs[idx_j]
                 
+                # As per the paper, violation occurs when E[h(xi) - h(xj)] > gamma + alpha_ij
                 # Only count violations where i is predicted more positively than j
-                if diff > (alpha_ij.get((i, j), 0) + gamma):
-                    violation = diff - alpha_ij.get((i, j), 0) - gamma
-                    weight = self.w_ij.get((i, j), 0)
-                    violations.append(weight * violation)
+                violation = max(0, diff - gamma - alpha_ij.get((i, j), 0))
+                
+                # Always store the raw violation for each constraint
+                weight = self.w_ij.get((i, j), 0)
+                weighted_violation = weight * violation
+                total_violation += weighted_violation
+                
+                # Store even small violations for debugging
+                if diff > 0:
+                    individual_violations[(i, j)] = (diff, violation, weighted_violation)
             except Exception as e:
                 print(f"Error processing constraint ({i}, {j}): {e}")
                 continue
-       
-        # Return the maximum violation (if any), otherwise 0
-        return max(violations) if violations else 0.0
+        
+        # For tracking maximum individual constraint violation
+        if individual_violations:
+            # Get the max raw violation 
+            max_violation_pair = max(individual_violations.items(), 
+                                    key=lambda x: x[1][1])
+            max_violation = max_violation_pair[1][1]
+            
+            # Debug info if violations are low
+            if max_violation < 0.001:
+                print(f"Max violation very small: {max_violation:.6f}")
+                # Find constraints with largest differences
+                top_diffs = sorted(individual_violations.items(), 
+                                key=lambda x: x[1][0], reverse=True)[:5]
+                print("Top 5 probability differences:")
+                for pair, (diff, viol, _) in top_diffs:
+                    print(f"  Pair {pair}: diff={diff:.6f}, violation={viol:.6f}")
+        else:
+            max_violation = 0.0
+        
+        return total_violation / self.A, max_violation
     
     def best_response_primal(self, lambda_t, tau_t, gamma):
         """
@@ -262,46 +290,124 @@ class FairnessElicitationAlgorithm:
         for (i, j) in self.constraints:
             # If tau * w_ij/|A| - lambda_ij ≤ 0 then alpha_ij = 1, otherwise 0
             weight = self.w_ij.get((i, j), 0)
+            lambda_ij = lambda_t.get((i, j), 0)
             
-            if tau_t * weight / self.A <= lambda_t.get((i, j), 0):
-                alpha_t[(i, j)] = 1
+            if tau_t * weight / self.A <= lambda_ij:
+                alpha_t[(i, j)] = 1.0
             else:
-                alpha_t[(i, j)] = 0
+                alpha_t[(i, j)] = 0.0
                 
         return D_t, alpha_t
-    
+
     def update_dual_variables(self, lambda_t, tau_t, D_t, alpha_t, gamma, t):
+        """
+        Update the dual variables lambda and tau.
+        
+        Args:
+            lambda_t: Current lambda values.
+            tau_t: Current tau value.
+            D_t: Current model.
+            alpha_t: Current alpha values.
+            gamma: Fairness violation buffer.
+            t: Current iteration.
+            
+        Returns:
+            lambda_new: Updated lambda values.
+            tau_new: Updated tau value.
+        """
         # Get prediction probabilities
         probs = self.compute_prediction_probs(D_t)
         
-        # Use smaller step size for lambda updates
-        mu_lambda = 1 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
+        # Use a much smaller step size to slow convergence
+        mu_lambda = 0.01 / (self.C_lambda * np.sqrt(np.log(self.n) * t))
         
-        # Update only for actual constraints (not all pairs)
-        lambda_new = lambda_t.copy()
+        # Simply update lambda directly
+        lambda_new = {}
         
-        # Sparse update - only update existing constraints
+        # Track violations for debugging
+        violation_count = 0
+        max_gradient = 0.0
+        
         for (i, j) in self.constraints:
             # Calculate gradient for this pair
             gradient = probs[i] - probs[j] - alpha_t.get((i, j), 0) - gamma
             
-            # Simple multiplicative update instead of full softmax
-            lambda_new[(i, j)] = min(
-                self.C_lambda, 
-                lambda_t.get((i, j), 0) * np.exp(mu_lambda * gradient)
-            )
+            # Count positive gradients (violations)
+            if gradient > 0:
+                violation_count += 1
+                max_gradient = max(max_gradient, gradient)
+            
+            # Simple additive update with clipping
+            if gradient > 0:
+                # Increase lambda when constraint is violated
+                lambda_new[(i, j)] = min(
+                    self.C_lambda,
+                    lambda_t.get((i, j), 0) + mu_lambda * gradient
+                )
+            else:
+                # Decrease lambda when constraint is satisfied
+                lambda_new[(i, j)] = max(
+                    0.0,
+                    lambda_t.get((i, j), 0) + mu_lambda * gradient
+                )
         
         # Update tau using online gradient descent
-        mu_tau = self.C_tau / np.sqrt(self.time_horizon)
+        mu_tau = self.C_tau / np.sqrt(t)
         
-        # Compute gradient for tau (simplified)
-        tau_gradient = sum(self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) 
-                        for (i, j) in self.constraints) / self.A - gamma
+        # Compute gradient for tau (sum of w_ij * alpha_ij / |A| - eta)
+        tau_gradient = 0.0
+        for (i, j) in self.constraints:
+            weight = self.w_ij.get((i, j), 0)
+            alpha_ij = alpha_t.get((i, j), 0)
+            tau_gradient += weight * alpha_ij / self.A
         
-        # Update tau with projection
-        tau_new = max(0, min(self.C_tau, tau_t + mu_tau * tau_gradient))
+        # Update tau with projection (eta = 0 for simplicity)
+        tau_new = max(0.0, min(self.C_tau, tau_t + mu_tau * tau_gradient))
+        
+        # Debug information
+        if t % 1 == 0 and violation_count > 0:
+            print(f"  Found {violation_count} constraint violations, max gradient: {max_gradient:.6f}")
         
         return lambda_new, tau_new
+        
+    def average_models(self, models, weights=None):
+        """
+        Average multiple models into a single model.
+        
+        For logistic regression, we average the coefficients and intercepts.
+        
+        Args:
+            models: List of models to average.
+            weights: Optional weights for averaging (default: equal weights).
+            
+        Returns:
+            An averaged model.
+        """
+        if not models:
+            return None
+        
+        if weights is None:
+            weights = np.ones(len(models)) / len(models)
+        
+        # Create a new model
+        avg_model = LogisticRegression()
+        
+        # Average coefficients
+        avg_coef = np.zeros_like(models[0].coef_)
+        avg_intercept = 0.0
+        
+        for i, model in enumerate(models):
+            avg_coef += weights[i] * model.coef_
+            avg_intercept += weights[i] * model.intercept_
+        
+        # Set the averaged coefficients
+        avg_model.coef_ = avg_coef
+        avg_model.intercept_ = np.array([avg_intercept])
+        
+        # Set necessary attributes
+        avg_model.classes_ = np.array([0, 1])
+        
+        return avg_model
         
     def run(self, gamma_values=None):
         """
@@ -322,50 +428,124 @@ class FairnessElicitationAlgorithm:
             print(f"Running algorithm with gamma = {gamma}")
             
             # Reset algorithm state
-            self.theta = np.zeros((self.n, self.n))
-            self.tau = 0
+            self.theta = {}
+            self.tau = 0.0
             
             # Initialize storages for this gamma
             errors = []
             fairness_violations = []
-            D_avg = None
+            max_violations = []
+            models = []
             
             # Initialize lambda and tau
-            lambda_t = {pair: 0.0 for pair in self.constraints}
-            tau_t = 0.0
+            # Start with small random values to break symmetry
+            lambda_t = {pair: np.random.uniform(0, 0.01) for pair in self.constraints}
+            tau_t = 0.01
             
             # Run the algorithm for T iterations
+            stalled_iterations = 0
+            prev_violation = float('inf')
+            prev_error = float('inf')
+            
             for t in range(1, self.time_horizon + 1):
-                print(f"Starting iteration {t}")  # Add this line
+                if t % 50 == 0:
+                    print(f"Starting iteration {t}")
                 
                 try:
                     # Best response of primal player
-                    print(f"  Computing best response for iteration {t}")
                     D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
                     
                     # Compute metrics
-                    print(f"  Computing metrics for iteration {t}")
                     error = self.compute_error(D_t)
                     probs = self.compute_prediction_probs(D_t)
-                    fairness_violation = self.compute_fairness_violation(probs, alpha_t, gamma)
+                    total_violation, max_violation = self.compute_fairness_violation(probs, alpha_t, gamma)
+                    
+                    # Track this model and its performance
+                    models.append(D_t)
+                    errors.append(error)
+                    fairness_violations.append(total_violation)
+                    max_violations.append(max_violation)
+                    
+                    # Check if we're making progress
+                    if t > 1:
+                        error_change = abs(error - prev_error)
+                        violation_change = abs(max_violation - prev_violation)
+                        
+                        if error_change < 1e-5 and violation_change < 1e-5:
+                            stalled_iterations += 1
+                        else:
+                            stalled_iterations = 0
+                            
+                        # If we've stalled for too many iterations, try to shake things up
+                        if stalled_iterations > 20 and t % 50 == 0:
+                            print(f"  Algorithm stalled for {stalled_iterations} iterations, adding noise")
+                            # Add noise to lambda values
+                            for pair in self.constraints:
+                                lambda_t[pair] = max(0, lambda_t[pair] + np.random.normal(0, 0.01))
+                            stalled_iterations = 0
+                    
+                    prev_error = error
+                    prev_violation = max_violation
                     
                     # Update dual variables
-                    print(f"  Updating dual variables for iteration {t}")
                     lambda_t, tau_t = self.update_dual_variables(lambda_t, tau_t, D_t, alpha_t, gamma, t)
                     
-                    print(f"  Completed iteration {t}: Error = {error:.4f}, Violation = {fairness_violation:.4f}")
+                    if t % 50 == 0:
+                        # Find the constraint with the largest violation
+                        largest_violation = 0
+                        largest_pair = None
+                        
+                        for (i, j) in self.constraints:
+                            violation = max(0, probs[i] - probs[j] - gamma)
+                            if violation > largest_violation:
+                                largest_violation = violation
+                                largest_pair = (i, j)
+                        
+                        if largest_pair:
+                            lambda_val = lambda_t.get(largest_pair, 0)
+                            print(f"  Iteration {t}: Error = {error:.4f}, Max Violation = {max_violation:.4f}")
+                            print(f"  Largest violation at {largest_pair}: {largest_violation:.6f}, lambda = {lambda_val:.6f}")
+                        else:
+                            print(f"  Iteration {t}: Error = {error:.4f}, Max Violation = {max_violation:.4f}")
+                    
+                    # Early stopping if we've made no progress
+                    if stalled_iterations > 100:
+                        print(f"Early stopping after {t} iterations due to lack of progress")
+                        break
+                        
                 except Exception as e:
                     print(f"Error in iteration {t}: {e}")
                     import traceback
                     traceback.print_exc()
                     break
+            
+            # Calculate averaged model
+            final_model = self.average_models(models)
+            final_error = self.compute_error(final_model)
+            final_probs = self.compute_prediction_probs(final_model)
+            
+            # Create dummy alpha_t for the final model (we don't need it for violation calculation)
+            dummy_alpha = {pair: 0.0 for pair in self.constraints}
+            
+            final_violation, final_max_violation = self.compute_fairness_violation(
+                final_probs, dummy_alpha, gamma
+            )
+            
             # Store results for this gamma
             results[gamma] = {
+                'models': models,
                 'errors': errors,
                 'fairness_violations': fairness_violations,
-                'final_error': errors[-1],
-                'final_fairness_violation': fairness_violations[-1]
+                'max_violations': max_violations,
+                'final_model': final_model,
+                'final_error': final_error,
+                'final_fairness_violation': final_violation,
+                'final_max_violation': final_max_violation,
+                'lambda_final': lambda_t,
+                'tau_final': tau_t
             }
+            
+            print(f"Completed gamma = {gamma}: Final Error = {final_error:.4f}, Final Max Violation = {final_max_violation:.4f}")
         
         return results
     
@@ -381,9 +561,9 @@ class FairnessElicitationAlgorithm:
             gamma_values = list(results.keys())
         
         plt.figure(figsize=(12, 8))
-        plt.title("Single-Subject Trajectory for Various γ's")
-        plt.xlabel("error(t)")
-        plt.ylabel("max violation(t)")
+        plt.title("Algorithm Trajectory for Various γ Values")
+        plt.xlabel("Error")
+        plt.ylabel("Maximum Fairness Violation")
         
         # Add horizontal lines at 0.1 intervals
         for y in np.arange(0, 1.1, 0.1):
@@ -393,12 +573,12 @@ class FairnessElicitationAlgorithm:
         for gamma in gamma_values:
             if gamma in results:
                 errors = results[gamma]['errors']
-                violations = results[gamma]['fairness_violations']
+                violations = results[gamma]['max_violations']
                 plt.plot(errors, violations, label=f"γ = {gamma}")
         
         plt.legend()
         plt.grid(True)
-        plt.savefig("single_subject_trajectory.png")
+        plt.savefig("trajectory_plot.png")
         plt.show()
     
     def plot_pareto_curves(self, results):
@@ -409,20 +589,28 @@ class FairnessElicitationAlgorithm:
             results: Results from running the algorithm.
         """
         plt.figure(figsize=(12, 8))
-        plt.title("Variability of Subject Pareto Curves")
-        plt.xlabel("error")
-        plt.ylabel("max violation")
+        plt.title("Pareto Curve: Error vs. Fairness Violation")
+        plt.xlabel("Error")
+        plt.ylabel("Maximum Fairness Violation")
         
         # Extract final errors and violations for each gamma
-        gammas = list(results.keys())
+        gammas = sorted(list(results.keys()))
         errors = [results[gamma]['final_error'] for gamma in gammas]
-        violations = [results[gamma]['final_fairness_violation'] for gamma in gammas]
+        violations = [results[gamma]['final_max_violation'] for gamma in gammas]
         
-        # Plot the Pareto curve
-        plt.plot(errors, violations)
+        # Plot the Pareto curve with points
+        plt.plot(errors, violations, 'o-', markersize=8)
+        
+        # Add gamma labels to points
+        for i, gamma in enumerate(gammas):
+            plt.annotate(f"γ={gamma}", 
+                        (errors[i], violations[i]),
+                        textcoords="offset points", 
+                        xytext=(0,10), 
+                        ha='center')
         
         plt.grid(True)
-        plt.savefig("pareto_curves.png")
+        plt.savefig("pareto_curve.png")
         plt.show()
 
 # Usage example:
@@ -430,9 +618,9 @@ def main():
     algorithm = FairnessElicitationAlgorithm(
         data_path="data/processed/compas_train.parquet",
         constraint_sets_path="constraint_sets/binary_personas/constraint_sets.json",
-        time_horizon=1000,
-        C_lambda=10.0,
-        C_tau=10.0
+        time_horizon=500,  # Reduced iterations 
+        C_lambda=1.0,      # Reduced from 5.0
+        C_tau=1.0          # Reduced from 5.0
     )
     
     # Run the algorithm for different gamma values
