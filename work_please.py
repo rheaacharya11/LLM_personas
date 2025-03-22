@@ -125,9 +125,13 @@ class FairnessElicitationAlgorithm:
         self.constraints = set()
         self.w_ij = {}  # Weight for each constraint (proportion of judges)
         
-        # Count total number of judges
+        import random
         judge_ids = list(constraint_data.keys())
-        num_judges = len(judge_ids)
+        selected_judges = random.sample(judge_ids, min(100, len(judge_ids)))
+
+        # Filter constraint_data to only include selected judges
+        constraint_data = {judge: constraint_data[judge] for judge in selected_judges}
+        num_judges = len(selected_judges)
         
         # Each judge was presented 50 pairs but only selected a few
         pairs_per_judge = 50  # Number of pairs presented to each judge
@@ -186,35 +190,13 @@ class FairnessElicitationAlgorithm:
         return 1 - accuracy_score(self.y, y_pred)
     
     def compute_fairness_violation(self, probs, alpha_ij, gamma):
-        """
-        Compute the fairness violation for given probabilities and parameters.
-        
-        Args:
-            probs: Prediction probabilities for all samples.
-            alpha_ij: Excess fairness violation terms.
-            gamma: Allowed fairness violation buffer.
-            
-        Returns:
-            The total weighted fairness violation across all constraints.
-        """
-        # Calculate total weighted violation
         total_violation = 0.0
         individual_violations = {}
         
         for (i, j) in self.constraints:
             try:
-                # Use indices directly as row numbers
-                idx_i, idx_j = i, j
-                
-                # Make sure indices are within range
-                if idx_i >= len(probs) or idx_j >= len(probs):
-                    continue
-                
                 # Calculate violation for this pair
-                diff = probs[idx_i] - probs[idx_j]
-                
-                # As per the paper, violation occurs when E[h(xi) - h(xj)] > gamma + alpha_ij
-                # Only count violations where i is predicted more positively than j
+                diff = probs[i] - probs[j]
                 violation = max(0, diff - gamma - alpha_ij.get((i, j), 0))
                 
                 # Always store the raw violation for each constraint
@@ -229,22 +211,23 @@ class FairnessElicitationAlgorithm:
                 print(f"Error processing constraint ({i}, {j}): {e}")
                 continue
         
-        # For tracking maximum individual constraint violation
+        # Debug information about violations
         if individual_violations:
             # Get the max raw violation 
             max_violation_pair = max(individual_violations.items(), 
                                     key=lambda x: x[1][1])
             max_violation = max_violation_pair[1][1]
             
-            # Debug info if violations are low
-            if max_violation < 0.001:
-                print(f"Max violation very small: {max_violation:.6f}")
-                # Find constraints with largest differences
-                top_diffs = sorted(individual_violations.items(), 
-                                key=lambda x: x[1][0], reverse=True)[:5]
-                print("Top 5 probability differences:")
-                for pair, (diff, viol, _) in top_diffs:
-                    print(f"  Pair {pair}: diff={diff:.6f}, violation={viol:.6f}")
+            # print("Violation Diagnostics:")
+            top_violations = sorted(individual_violations.items(), 
+                                key=lambda x: x[1][1], reverse=True)[:5]
+            # print("Top 5 Violations:")
+            for (i, j), (diff, violation, weighted_violation) in top_violations:
+                feature_diff = np.abs(self.X[i] - self.X[j])
+                # print(f"  Pair ({i},{j}): "
+                    # f"Prob Diff = {diff:.4f}, "
+                    # f"Violation = {violation:.4f}, "
+                    # f"Max Feature Diff = {feature_diff.max():.2f}")
         else:
             max_violation = 0.0
         
@@ -381,10 +364,10 @@ class FairnessElicitationAlgorithm:
             lambda_new = self.avg_lambda.copy()
         
         # Add extensive logging in update_dual_variables
-        print("Constraint Diagnostics:")
+        # print("Constraint Diagnostics:")
         for (i, j) in self.constraints:
             feature_diff = np.abs(self.X[i] - self.X[j])
-            print(f"Pair ({i},{j}): Max Feature Diff = {feature_diff.max()}, Mean Diff = {feature_diff.mean()}")
+            # print(f"Pair ({i},{j}): Max Feature Diff = {feature_diff.max()}, Mean Diff = {feature_diff.mean()}")
         return lambda_new, tau_new
         
     def average_models(self, models, weights=None):
