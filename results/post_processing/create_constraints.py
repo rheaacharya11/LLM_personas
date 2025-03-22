@@ -83,7 +83,7 @@ def main():
         row2 = judgments_df.iloc[j]
 
         # Check if both judgments are 'similar'
-        if row1['judgment'] == 'similar' and row2['judgment'] == 'similar':
+        if row1['judgment'] == 'similar' or row2['judgment'] == 'similar':
             # Get original IDs
             id1 = int(row1['individual1_id'])
             id2 = int(row1['individual2_id'])
@@ -121,7 +121,7 @@ def main():
         constraining_people[key] = list(constraining_people[key])
 
     # Specify the directory path
-    output_directory = "../../constraint_sets/no_personas_binary/"
+    output_directory = "../../constraint_sets/lenient/binary_personas/"
     # Ensure the directory exists
     os.makedirs(output_directory, exist_ok=True)
 

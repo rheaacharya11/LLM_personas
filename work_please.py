@@ -284,90 +284,43 @@ class FairnessElicitationAlgorithm:
         return D_t, alpha_t
 
     def update_dual_variables(self, lambda_t, tau_t, D_t, alpha_t, gamma, t):
-        """
-        Update the dual variables lambda and tau.
-        
-        Args:
-            lambda_t: Current lambda values.
-            tau_t: Current tau value.
-            D_t: Current model.
-            alpha_t: Current alpha values.
-            gamma: Fairness violation buffer.
-            t: Current iteration.
-            
-        Returns:
-            lambda_new: Updated lambda values.
-            tau_new: Updated tau value.
-        """
-        # Get prediction probabilities
         probs = self.compute_prediction_probs(D_t)
         
-        # Use a much smaller step size to slow convergence
-        mu_lambda = 0.001 / (self.C_lambda * np.sqrt(np.log(self.n) * t))
+        # More aggressive, adaptive learning rate
+        mu_lambda = 0.1 / (1 + np.sqrt(t))
         
-        # Simply update lambda directly
         lambda_new = {}
-        
-        # Track violations for debugging
         violation_count = 0
         max_gradient = 0.0
         
         for (i, j) in self.constraints:
-            # Calculate gradient for this pair
             gradient = probs[i] - probs[j] - alpha_t.get((i, j), 0) - gamma
-            step_scale = min(1.0, abs(gradient))
-            # Count positive gradients (violations)
-            if gradient > 0:
-                violation_count += 1
-                max_gradient = max(max_gradient, gradient)
             
-            # Simple additive update with clipping
-            if gradient > 0:
-                # Increase lambda when constraint is violated
-                lambda_new[(i, j)] = min(
-                    self.C_lambda,
-                    lambda_t.get((i, j), 0) + mu_lambda * gradient * step_scale
-                )
-            else:
-                # Decrease lambda when constraint is satisfied
-                lambda_new[(i, j)] = max(
-                    0.0,
-                    lambda_t.get((i, j), 0) + mu_lambda * gradient
-                )
+            if abs(gradient) > 1e-3:
+                violation_count += 1
+                max_gradient = max(max_gradient, abs(gradient))
+                
+                # Add exploration noise
+                noise = np.random.normal(0, 0.01) if t % 10 == 0 else 0
+                
+                update = mu_lambda * gradient + noise
+                lambda_new[(i, j)] = max(0, min(self.C_lambda, 
+                    lambda_t.get((i, j), 0) + update))
+            
+            # Periodic aggressive reset for stuck constraints
+            if t % 50 == 0 and abs(gradient) > 0.5:
+                lambda_new[(i, j)] = np.random.uniform(0, self.C_lambda)
         
-        # Update tau using online gradient descent
-        mu_tau = self.C_tau / (1 + np.sqrt(t))
+        # Tau update with more exploration
+        tau_gradient = sum(
+            self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) / self.A 
+            for (i, j) in self.constraints
+        )
+        tau_new = max(0.0, min(self.C_tau, tau_t + mu_lambda * tau_gradient))
         
-        # Compute gradient for tau (sum of w_ij * alpha_ij / |A| - eta)
-        tau_gradient = 0.0
-        for (i, j) in self.constraints:
-            weight = self.w_ij.get((i, j), 0)
-            alpha_ij = alpha_t.get((i, j), 0)
-            tau_gradient += weight * alpha_ij / self.A
+        if violation_count > 0:
+            print(f"Iteration {t}: Violations = {violation_count}, Max Gradient = {max_gradient:.6f}")
         
-        # Update tau with projection (eta = 0 for simplicity)
-        tau_new = max(0.0, min(self.C_tau, tau_t + mu_tau * tau_gradient))
-        
-        for pair in self.constraints:
-            if pair not in self.avg_lambda:
-                self.avg_lambda[pair] = lambda_new.get(pair, 0)
-            else:
-                self.avg_lambda[pair] = (t * self.avg_lambda[pair] + lambda_new.get(pair, 0)) / (t + 1)
-
-        # Debug information
-        if t % 1 == 0 and violation_count > 0:
-            print(f"  Found {violation_count} constraint violations, max gradient: {max_gradient:.6f}")
-        
-        # Every 100 iterations, use the averaged values to stabilize
-        if t % 100 == 0 and t > 0:
-            print("  Using averaged lambda values to stabilize")
-            lambda_new = self.avg_lambda.copy()
-        
-        # Add extensive logging in update_dual_variables
-        # print("Constraint Diagnostics:")
-        for (i, j) in self.constraints:
-            feature_diff = np.abs(self.X[i] - self.X[j])
-            # print(f"Pair ({i},{j}): Max Feature Diff = {feature_diff.max()}, Mean Diff = {feature_diff.mean()}")
         return lambda_new, tau_new
         
     def average_models(self, models, weights=None):
@@ -624,7 +577,8 @@ def main():
     )
     
     # Run the algorithm for different gamma values
-    gamma_values = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    gamma_values = [0.3]
+    #gamma_values = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     results = algorithm.run(gamma_values)
     
     # Plot the results
