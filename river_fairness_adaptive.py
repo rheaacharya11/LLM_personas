@@ -48,7 +48,6 @@ class FairnessElicitationAlgorithm:
         self.time_horizon = time_horizon
         self.C_lambda = C_lambda
         self.C_tau = C_tau
-        self.eta = 0
         
         # Load and preprocess data
         self.load_data()
@@ -158,16 +157,17 @@ class FairnessElicitationAlgorithm:
             if str(judge_id) not in constraint_data:
                 raise ValueError(f"Judge ID {judge_id} not found in constraint data")
             focused_constraints = constraint_data[judge_id]
-            for constraint in focused_constraints:  # directly iterate over the list
-                pair = tuple(constraint['pair'])  # Extract the pair and convert to tuple
-                self.constraints.add(pair)
-                self.w_ij[pair] = constraint['weight']
+            for j_id, constraints in focused_constraints.items():
+                for constraint in constraints:
+                    pair = tuple(constraint['pair'])  # Extract the pair and convert to tuple
+                    self.constraints.add(pair)
+                    self.w_ij[pair] = constraint['weight']
 
             pairs_per_judge = 50  # Assuming 50 pairs were presented
             self.A = pairs_per_judge  # A is the total number of pairs presented
                 
             print(f"Loaded {len(self.constraints)} constraints from judge {judge_id}")
-            print(f"Judge selected {len(focused_constraints)} pairs out of {pairs_per_judge} presented")
+            print(f"Judge selected {len(pairs)} pairs out of {pairs_per_judge} presented")
         
         else:
             # Multiple judges case (original code)
@@ -374,10 +374,6 @@ class FairnessElicitationAlgorithm:
         # Track violations for reporting
         violation_count = 0
         max_gradient = 0.0
-
-        # Calculate learning rates as specified in the paper
-        mu_lambda = 1.0 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
-        mu_tau = self.C_tau / np.sqrt(self.time_horizon)
         
         # Update lambda values with more aggressive learning and exploration
         lambda_new = {}
@@ -387,22 +383,114 @@ class FairnessElicitationAlgorithm:
         violations = []
         for (i, j) in self.constraints:
             diff = probs[i] - probs[j]
-            gradient = diff - gamma
-            curr_lambda = lambda_values.get((i, j), 0.0)
-            lambda_new[(i, j)] = max(0.0, min(self.C_lambda, curr_lambda + mu_lambda * gradient))
-        
-            if gradient > 0: # gradient = violation
-                violations.append(((i, j), gradient, diff))
+            violation = max(0, diff - gamma)
+            if violation > 0:
+                violations.append(((i, j), violation, diff))
                 violation_count += 1
-                total_gradient_norm += gradient**2
+                total_gradient_norm += violation**2
         
-        tau_gradient = sum(self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) 
-                       for (i, j) in self.constraints) / self.A - self.eta  # eta is often 0
-        tau_new = max(0.0, min(self.C_tau, tau_value + mu_tau * tau_gradient))
-    
+        # Print detailed information about violations
         if violation_count > 0:
-            print(f"Iteration {t}: Violations = {violation_count}")
-       
+            print(f"\nIteration {t}: Found {violation_count} constraint violations")
+            print(f"Constraint violation details:")
+            
+            # Sort violations by magnitude (descending)
+            violations.sort(key=lambda x: x[1], reverse=True)
+            
+            # Print top 5 violations
+            for (i, j), violation, diff in violations[:5]:
+                print(f"  Pair ({i}, {j}): prob_diff={diff:.6f}, violation={violation:.6f}")
+                
+                # Look at the feature differences for these individuals
+                if hasattr(self, 'X') and len(self.X) > max(i, j):
+                    feature_diff = np.linalg.norm(self.X[i] - self.X[j])
+                    print(f"    Feature difference: {feature_diff:.4f}")
+                    
+                    # If we have labels, check if they're the same
+                    if hasattr(self, 'y') and len(self.y) > max(i, j):
+                        print(f"    Labels: {self.y[i]} vs {self.y[j]}")
+        
+        # Step 2: Apply more aggressive updates
+        learning_rate_base = 0.1  # Higher base learning rate
+        
+        # Add stronger exploration to escape local optima
+        exploration_rate = 0.02 * (1.0 / (1.0 + 0.01 * t))  # Decaying exploration
+        
+        for (i, j) in self.constraints:
+            # Calculate gradient
+            diff = probs[i] - probs[j]
+            gradient = diff - gamma
+            
+            # Current lambda value
+            curr_lambda = lambda_values.get((i, j), 0.0)
+            
+            # Adaptive learning rate - higher for violated constraints
+            if diff > gamma:
+                # Violation - use higher learning rate
+                lr = learning_rate_base * (1.0 / (1.0 + 0.005 * t))
+            else:
+                # No violation - use lower learning rate
+                lr = 0.01 * learning_rate_base * (1.0 / (1.0 + 0.01 * t))
+            
+            # Update lambda with exploration noise
+            noise = np.random.normal(0, exploration_rate) if t % 5 == 0 else 0
+            lambda_new[(i, j)] = max(0.0, min(self.C_lambda, curr_lambda + lr * gradient + noise))
+            
+            # Periodically inject more randomness to escape plateaus
+            if t % 20 == 0 and diff > gamma:
+                lambda_new[(i, j)] = max(0.0, min(self.C_lambda, 
+                                                lambda_new[(i, j)] + np.random.uniform(0, 0.1)))
+        
+        # Step 3: Update tau more aggressively
+        tau_gradient = sum(self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) 
+                        for (i, j) in self.constraints) / self.A
+        tau_lr = 0.1 * (1.0 / (1.0 + 0.01 * t))
+        tau_new = max(0.0, min(self.C_tau, tau_value + tau_lr * tau_gradient))
+        
+        # If no progress after many iterations, inject random reset
+        if t > 50 and t % 20 == 0 and max_gradient < 0.01:
+            print("Algorithm potentially stuck - resetting some variables randomly")
+            
+            # Reset a subset of lambda values
+            if violations:
+                sample_size = min(10, len(violations))
+                if t > 50 and t % 20 == 0 and max_gradient < 0.01:
+                    print("Algorithm potentially stuck - resetting some variables randomly")
+                    
+                    # Reset a subset of lambda values
+                    if violations:
+                        # Get random indices instead of trying to sample the tuples directly
+                        sample_size = min(10, len(violations))
+                        random_indices = np.random.choice(range(len(violations)), sample_size, replace=False)
+                        
+                        for idx in random_indices:
+                            pair = violations[idx][0]  # Get the (i,j) pair
+                            lambda_new[pair] = np.random.uniform(0, self.C_lambda/2)
+                    
+                    # Occasionally reset tau
+                    if np.random.random() < 0.2:
+                        tau_new = np.random.uniform(0, self.C_tau/2)
+            
+            # Occasionally reset tau
+            if np.random.random() < 0.2:
+                tau_new = np.random.uniform(0, self.C_tau/2)
+        
+        # Detailed stats about violations and lambda values
+        if violations:
+            # Count non-zero lambdas
+            non_zero_lambdas = sum(1 for v in lambda_new.values() if v > 0.001)
+            print(f"Non-zero lambda values: {non_zero_lambdas}/{len(lambda_new)}")
+            
+            # Mean/max lambda values
+            lambda_values = list(lambda_new.values())
+            print(f"Lambda statistics: mean={np.mean(lambda_values):.6f}, max={np.max(lambda_values):.6f}")
+            
+            # Print constraint statistics 
+            all_diffs = [probs[i] - probs[j] for (i, j) in self.constraints]
+            print(f"Mean probability diff: {np.mean(all_diffs):.6f}")
+            print(f"Max probability diff: {np.max(all_diffs):.6f}")
+            print(f"Violations exceeding γ={gamma}: {sum(1 for d in all_diffs if d > gamma)}/{len(all_diffs)}")
+        
         return lambda_new, tau_new
                 
     def average_models(self, models, weights=None):
@@ -462,6 +550,9 @@ class FairnessElicitationAlgorithm:
         for gamma in gamma_values:
             print(f"\nRunning algorithm with gamma = {gamma}")
             
+            # Reset algorithm state
+            self.lambda_optimizers = {}
+            self.tau_optimizer = None
             
             # Initialize storages for this gamma
             errors = []
@@ -507,7 +598,7 @@ class FairnessElicitationAlgorithm:
                 prev_violation = max_violation
                 
                 # Update dual variables using River's no-regret optimizers
-                lambda_t, tau_t = self.update_dual_variables(lambda_t, tau_t, D_t, alpha_t, gamma, t)
+                lambda_t, tau_t = self.update_dual_variables_river(lambda_t, tau_t, D_t, alpha_t, gamma, t)
                 
                 # Early stopping if we've made no progress
                 if stalled_iterations > 50:
@@ -644,18 +735,18 @@ def main():
         algorithm.load_constraint_sets(judge_id=args.judge_id)
     
     # Run the algorithm with specified gamma value
-    gamma_values = [args.gamma]
-    results = algorithm.run(gamma_values)
+    #gamma_values = [args.gamma]
+    #results = algorithm.run(gamma_values)
     
     # Plot the results
-    algorithm.plot_trajectory(results)
-    algorithm.plot_pareto_curves(results)
+    #algorithm.plot_trajectory(results)
+    #algorithm.plot_pareto_curves(results)
     
     # Save results to file
-    import pickle
-    with open(f"results_gamma_{args.gamma}.pkl", "wb") as f:
-        pickle.dump(results, f)
-    print(f"Results saved to results_gamma_{args.gamma}.pkl")
+    #import pickle
+    #with open(f"results_gamma_{args.gamma}.pkl", "wb") as f:
+        #pickle.dump(results, f)
+    #print(f"Results saved to results_gamma_{args.gamma}.pkl")
 
 if __name__ == "__main__":
     main()

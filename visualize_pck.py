@@ -5,7 +5,7 @@ Pickle Visualizer for Fairness Algorithm Results
 ------------------------------------------------
 This script loads and visualizes the results saved by the fairness algorithm.
 
-Usage: python visualize_results.py results_gamma_0.3.pkl
+Usage: python visualize_pck.py results_gamma_0.3.pkl
 """
 
 import pickle
