@@ -242,7 +242,7 @@ class FairnessElicitationAlgorithm:
         
         # Create target values based on the sign of cost difference
         # If c₀ > c₁, then we want to predict 1, otherwise 0
-        target_values = (cost_difference < 0).astype(int)
+        target_values = (cost_difference > 0).astype(int)
         
         # Use a standard classifier with sample weights
         model = LogisticRegression(
@@ -272,46 +272,39 @@ class FairnessElicitationAlgorithm:
         # accuracy_score is the proportion of correctly predicted instances
     
     def compute_fairness_violation(self, probs, alpha_ij, gamma):
-        """Compute fairness violations across all constraints"""
         total_violation = 0.0
         individual_violations = {}
+        max_violation = 0.0
+        processed_pairs = set()
+        violation_count = 0
         
         for (i, j) in self.constraints:
+            pair_key = tuple(sorted([i, j]))
+            if pair_key in processed_pairs:
+                continue
+            processed_pairs.add(pair_key)
+            
             try:
-                # Calculate violation for this pair
-                diff = probs[i] - probs[j]
-                violation = max(0, diff - gamma)
-                # violation = max(0, diff - gamma - alpha_ij.get((i, j), 0))
+                abs_diff = abs(probs[i] - probs[j])
+                alpha_ij_value = max(alpha_ij.get((i, j), 0), alpha_ij.get((j, i), 0))
+                violation = max(0, abs_diff - gamma - alpha_ij_value)
                 
-                # Always store the raw violation for each constraint
-                weight = self.w_ij.get((i, j), 0)
+                if violation > 0:
+                    violation_count += 1
+                    individual_violations[pair_key] = (abs_diff, violation)
+                    max_violation = max(max_violation, violation)
+                
+                weight = self.w_ij.get((i, j), 0) + self.w_ij.get((j, i), 0)
                 weighted_violation = weight * violation
                 total_violation += weighted_violation
-                
-                # Store even small violations for debugging
-                if diff > 0:
-                    individual_violations[(i, j)] = (diff, violation, weighted_violation)
+                    
             except Exception as e:
-                print(f"Error processing constraint ({i}, {j}): {e}")
-                continue
+                print(f"Error processing constraint {pair_key}: {e}")
         
-        # Debug information about violations
-        if individual_violations:
-            # Get the max raw violation 
-            max_violation_pair = max(individual_violations.items(), 
-                                    key=lambda x: x[1][1])
-            max_violation = max_violation_pair[1][1]
-            
-            top_violations = sorted(individual_violations.items(), 
-                                key=lambda x: x[1][1], reverse=True)[:5]
-            # Optional debugging for top violations
-            for (i, j), (diff, violation, weighted_violation) in top_violations[:3]:
-                print(f"Pair ({i}, {j}): Prob diff = {diff:.6f}, Violation beyond γ = {violation:.6f}")
-        else:
-            max_violation = 0.0
+        print(f"Violations exceeding γ={gamma}: {violation_count}/{len(processed_pairs)}")
         
         return total_violation / self.A, max_violation
-    
+        
     def best_response_primal(self, lambda_values, tau_value, gamma):
         """
         Computes the best response for the primal player (D_t, alpha_t).
@@ -376,8 +369,9 @@ class FairnessElicitationAlgorithm:
         max_gradient = 0.0
 
         # Calculate learning rates as specified in the paper
-        mu_lambda = 1.0 / (self.C_lambda * np.sqrt(np.log(self.n) / self.time_horizon))
-        mu_tau = self.C_tau / np.sqrt(self.time_horizon)
+        mu_lambda = 1.0 / (self.C_lambda * np.sqrt(np.log(self.n) * t))  # Add t to denominator
+        mu_tau = self.C_tau / np.sqrt(self.time_horizon * t)  # Add t to denominator
+    
         
         # Update lambda values with more aggressive learning and exploration
         lambda_new = {}
@@ -388,9 +382,10 @@ class FairnessElicitationAlgorithm:
         for (i, j) in self.constraints:
             diff = probs[i] - probs[j]
             gradient = diff - gamma
-            curr_lambda = lambda_values.get((i, j), 0.0)
-            lambda_new[(i, j)] = max(0.0, min(self.C_lambda, curr_lambda + mu_lambda * gradient))
-        
+            curr_lambda = lambda_values.get((i, j), 0)
+            beta = 0.9
+            new_val = beta * curr_lambda + (1-beta) * max(0.0, min(self.C_lambda, curr_lambda + mu_lambda * gradient))
+            lambda_new[(i, j)] = new_val
             if gradient > 0: # gradient = violation
                 violations.append(((i, j), gradient, diff))
                 violation_count += 1
@@ -470,16 +465,18 @@ class FairnessElicitationAlgorithm:
             models = []
             
             # Initialize lambda and tau
-            lambda_t = {pair: 0.0 for pair in self.constraints}
+            lambda_t = {pair: 0 for pair in self.constraints}
             tau_t = 0.0
             
             # Run the algorithm for T iterations
             stalled_iterations = 0
             prev_violation = float('inf')
             prev_error = float('inf')
-            
+            prev_lambda = {}
             for t in range(1, self.time_horizon + 1):
                 # Best response of primal player
+                print(f"Iteration {t}: lambda_t sum: {sum(lambda_t.values())}, tau_t: {tau_t}")
+                
                 D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
                 
                 # Compute metrics
@@ -509,6 +506,15 @@ class FairnessElicitationAlgorithm:
                 # Update dual variables using River's no-regret optimizers
                 lambda_t, tau_t = self.update_dual_variables(lambda_t, tau_t, D_t, alpha_t, gamma, t)
                 
+                # After updating dual variables
+                print(f"Iteration {t}: Error: {error}, Max violation: {max_violation}")
+                lambda_changes = [(k, lambda_t[k] - prev_lambda.get(k, 0)) 
+                     for k in lambda_t 
+                     if abs(lambda_t[k] - prev_lambda.get(k, 0)) > 0.01]
+                print(f"Largest lambda changes: {sorted(lambda_changes, key=lambda x: abs(x[1]), reverse=True)[:5]}")
+                
+                # Store current lambda for next iteration comparison
+                prev_lambda = dict(lambda_t)
                 # Early stopping if we've made no progress
                 if stalled_iterations > 50:
                     print(f"Early stopping after {t} iterations due to lack of progress")
@@ -635,7 +641,7 @@ def main():
         data_path=args.data_path,
         constraint_sets_path=args.constraints_path,
         time_horizon=args.iterations,
-        C_lambda=1.0, 
+        C_lambda=10.0, 
         C_tau=1.0
     )
     

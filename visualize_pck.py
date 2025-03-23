@@ -94,8 +94,8 @@ def visualize_results(results, output_dir='visualizations'):
                    alpha=0.7, s=30)
         
         # Mark start and end points
-        plt.scatter(result['errors'][0], result['max_violations'][0], color='green', s=100, 
-                   marker='o', label='Start')
+        #plt.scatter(result['errors'][0], result['max_violations'][0], color='green', s=100, 
+                   #marker='o', label='Start')
         plt.scatter(result['errors'][-1], result['max_violations'][-1], color='red', s=100, 
                    marker='x', label='End')
         
