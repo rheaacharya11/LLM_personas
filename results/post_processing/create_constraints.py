@@ -13,6 +13,11 @@ def main():
 
     csv_file_path = sys.argv[1]
 
+    output_directory = "../../constraint_sets/lenient/binary_personas/"
+    # Ensure the directory exists
+    os.makedirs(output_directory, exist_ok=True)
+
+
     # Load the CSV file with the fairness judgments
     try:
         judgments_df = pd.read_csv(csv_file_path)
@@ -40,7 +45,7 @@ def main():
             row1 = judgments_df.iloc[i]
             row2 = judgments_df.iloc[i+1]
             judgment_ids.add(int(row1['individual1_id']))
-            judgment_ids.add(int(row2['individual2_id']))
+            judgment_ids.add(int(row1['individual2_id']))
     
     print(f"Fairness judgments contain {len(judgment_ids)} unique IDs")
     
@@ -57,7 +62,7 @@ def main():
             row1 = judgments_df.iloc[i]
             row2 = judgments_df.iloc[i+1]
             id1 = int(row1['individual1_id'])
-            id2 = int(row2['individual2_id'])
+            id2 = int(row1['individual2_id'])
             
             if id1 in train_ids and id2 in train_ids:
                 valid_judgments.append((i, i+1))
@@ -69,65 +74,86 @@ def main():
         print("\nWARNING: Very few valid judgment pairs found!")
         print("This might not be enough for meaningful fairness constraints.")
     
-    # Dictionaries to store the constraints and the constrained by data
+    # Modified version for single-direction constraints
+
+    # Initialize constraint sets
     constraint_sets = {}     # Maps persona IDs to sets of constrained pairs
     constraining_people = {} # Maps constrained pairs to personas who chose them
 
     # Process fairness judgments
     skipped = 0
     processed = 0
-    
-    # Process only the valid judgment pairs
+
+    # Process the valid judgment pairs
     for i, j in valid_judgments:
         row1 = judgments_df.iloc[i]
         row2 = judgments_df.iloc[j]
 
-        # Check if both judgments are 'similar'
-        if row1['judgment'] == 'similar' or row2['judgment'] == 'similar':
-            # Get original IDs
-            id1 = int(row1['individual1_id'])
-            id2 = int(row1['individual2_id'])
+        # Get original IDs
+        id1 = int(row1['individual1_id'])
+        id2 = int(row1['individual2_id'])
+        
+        # Map to indices in the COMPAS training dataset
+        try:
+            idx1 = train_id_to_index[id1]
+            idx2 = train_id_to_index[id2]
             
-            # Map to indices in the COMPAS training dataset
-            try:
-                idx1 = train_id_to_index[id1]
-                idx2 = train_id_to_index[id2]
-                
-                # Create the pair using indices (not original IDs)
-                pair = (idx1, idx2)
-                
+            # Create a single pair using indices (not original IDs)
+            # If either direction is marked similar, include the constraint
+            forward_similar = row1['judgment'] == 'similar'
+            backward_similar = row2['judgment'] == 'similar'
+            
+            # Calculate weight based on directionality
+            # 1.0 if both directions are similar, 0.5 if only one direction
+            weight = 1.0 if (forward_similar and backward_similar) else 0.5
+            
+            # Only include if at least one direction is similar
+            if forward_similar or backward_similar:
                 # Add to constraint set of 'persona_id'
                 persona_id = int(row1['persona_id'])
                 if persona_id not in constraint_sets:
-                    constraint_sets[persona_id] = set()
-                constraint_sets[persona_id].add(pair)
-
-                # Add 'persona_id' to constraining people of the pair
+                    constraint_sets[persona_id] = []
+                
+                # Always use forward direction (idx1, idx2) with appropriate weight
+                constraint_sets[persona_id].append({
+                    "pair": [idx1, idx2],
+                    "weight": weight
+                })
+                
+                # Update constraining people data
+                pair = tuple([idx1, idx2])
                 if pair not in constraining_people:
-                    constraining_people[pair] = set()
-                constraining_people[pair].add(persona_id)
+                    constraining_people[pair] = {"personas": [], "weight": weight}
+                constraining_people[pair]["personas"].append(persona_id)
                 
                 processed += 1
-            except KeyError:
-                skipped += 1
-                continue
+        except KeyError:
+            skipped += 1
+            continue
 
     print(f"Processed {processed} constraint pairs, skipped {skipped} pairs due to ID mapping issues")
 
-    # Convert sets to list for JSON serialization
-    for key in constraint_sets:
-        constraint_sets[key] = list(map(tuple, constraint_sets[key]))
-    for key in constraining_people:
-        constraining_people[key] = list(constraining_people[key])
+    # Count similarity types
+    bidir_count = 0
+    unidir_count = 0
+    for pair_str, data in constraining_people.items():
+        if data["weight"] >= 0.9:  # Use threshold to account for floating point comparisons
+            bidir_count += 1
+        else:
+            unidir_count += 1
 
-    # Specify the directory path
-    output_directory = "../../constraint_sets/lenient/binary_personas/"
-    # Ensure the directory exists
-    os.makedirs(output_directory, exist_ok=True)
+    print(f"Bidirectional constraint pairs (weight=1.0): {bidir_count}")
+    print(f"Unidirectional constraint pairs (weight=0.5): {unidir_count}")
+
+    # Convert for JSON serialization
+    json_constraint_sets = {}
+    for persona_id, pairs in constraint_sets.items():
+        json_constraint_sets[str(persona_id)] = pairs
 
     # Save the dictionaries to JSON files
-    save_to_json(constraint_sets, os.path.join(output_directory, 'constraint_sets.json'))
+    save_to_json(json_constraint_sets, os.path.join(output_directory, 'constraint_sets.json'))
     save_to_json(constraining_people, os.path.join(output_directory, 'constraining_people.json'))
+
 
     # Create a file mapping original IDs to indices for reference
     id_mapping = {
