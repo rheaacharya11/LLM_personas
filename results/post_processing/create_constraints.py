@@ -13,7 +13,7 @@ def main():
 
     csv_file_path = sys.argv[1]
 
-    output_directory = "../../constraint_sets/lenient/binary_personas/"
+    output_directory = "../../constraint_sets/lenient/no_personas_binary/"
     # Ensure the directory exists
     os.makedirs(output_directory, exist_ok=True)
 
