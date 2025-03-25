@@ -15,7 +15,7 @@ from river import utils
 # exponentiated gradient descent
 class Hedge:
     def __init__(self, lr=0.1, weight_bound=(0, float('inf'))):
-        self.learning_rate = learning_rate
+        self.learning_rate = lr  # Fix variable name
         self.min_bound, self.max_bound = weight_bound
     
     def step(self, weight, gradient):
@@ -272,36 +272,38 @@ class FairnessElicitationAlgorithm:
         # accuracy_score is the proportion of correctly predicted instances
     
     def compute_fairness_violation(self, probs, alpha_ij, gamma):
-        total_violation = 0.0
-        individual_violations = {}
+        """Calculate fairness violations based on similarity constraints"""
         max_violation = 0.0
-        processed_pairs = set()
+        total_violation = 0.0
         violation_count = 0
+        processed_pairs = set()
         
         for (i, j) in self.constraints:
+            # Skip if we've processed this pair (in either direction)
             pair_key = tuple(sorted([i, j]))
             if pair_key in processed_pairs:
                 continue
             processed_pairs.add(pair_key)
             
-            try:
-                abs_diff = abs(probs[i] - probs[j])
-                alpha_ij_value = max(alpha_ij.get((i, j), 0), alpha_ij.get((j, i), 0))
-                violation = max(0, abs_diff - gamma - alpha_ij_value)
+            # Absolute difference for similarity constraints
+            abs_diff = abs(probs[i] - probs[j])
+            
+            # Get the alpha value for this constraint
+            alpha_value = alpha_ij.get((i, j), 0)
+            
+            # Calculate violation
+            violation = max(0, abs_diff - gamma - alpha_value)
+            
+            if violation > 0:
+                violation_count += 1
+                max_violation = max(max_violation, violation)
                 
-                if violation > 0:
-                    violation_count += 1
-                    individual_violations[pair_key] = (abs_diff, violation)
-                    max_violation = max(max_violation, violation)
-                
-                weight = self.w_ij.get((i, j), 0) + self.w_ij.get((j, i), 0)
-                weighted_violation = weight * violation
-                total_violation += weighted_violation
-                    
-            except Exception as e:
-                print(f"Error processing constraint {pair_key}: {e}")
+                # Weight by importance
+                weight = self.w_ij.get((i, j), 0)
+                total_violation += weight * violation
         
-        print(f"Violations exceeding γ={gamma}: {violation_count}/{len(processed_pairs)}")
+        if len(processed_pairs) > 0:
+            print(f"Found {violation_count} violations out of {len(processed_pairs)} unique constraint pairs")
         
         return total_violation / self.A, max_violation
         
@@ -358,46 +360,44 @@ class FairnessElicitationAlgorithm:
         
 
     def update_dual_variables(self, lambda_values, tau_value, D_t, alpha_t, gamma, t):
-        """
-        Improved update mechanism with better exploration and debugging
-        """
-        # probabilities of the different things being 1
+        """Update dual variables using pure exponentiated gradient (Hedge algorithm)"""
+        # Get classification probabilities
         probs = self.compute_prediction_probs(D_t)
         
-        # Track violations for reporting
-        violation_count = 0
-        max_gradient = 0.0
-
-        # Calculate learning rates as specified in the paper
-        mu_lambda = 1.0 / (self.C_lambda * np.sqrt(np.log(self.n) * t))  # Add t to denominator
-        mu_tau = self.C_tau / np.sqrt(self.time_horizon * t)  # Add t to denominator
-    
+        # Calculate learning rates based on paper specifications
+        mu_lambda = 1.0 / (self.C_lambda * np.sqrt(np.log(self.n)))
+        mu_tau = 1.0 / (self.C_tau * np.sqrt(self.time_horizon))
         
-        # Update lambda values with more aggressive learning and exploration
+        # Update lambda values using exponentiated gradient
         lambda_new = {}
-        total_gradient_norm = 0.0
+        violation_count = 0
         
-        # Step 1: Identify all constraint violations
-        violations = []
         for (i, j) in self.constraints:
+            # Calculate gradient = violation
             diff = probs[i] - probs[j]
-            gradient = diff - gamma
+            gradient = diff - gamma - alpha_t.get((i, j), 0)
             curr_lambda = lambda_values.get((i, j), 0)
-            beta = 0.9
-            new_val = beta * curr_lambda + (1-beta) * max(0.0, min(self.C_lambda, curr_lambda + mu_lambda * gradient))
-            lambda_new[(i, j)] = new_val
-            if gradient > 0: # gradient = violation
-                violations.append(((i, j), gradient, diff))
+            
+            # Use exponentiated gradient update
+            if gradient > 0:  # There's a violation
+                # Multiplicative update
+                new_val = curr_lambda * np.exp(mu_lambda * gradient)
                 violation_count += 1
-                total_gradient_norm += gradient**2
+            else:
+                # Gradual decay for non-violations
+                new_val = curr_lambda * 0.99
+            
+            # Clip to bounds
+            new_val = min(self.C_lambda, new_val)
+            lambda_new[(i, j)] = new_val
         
+        # Update tau using gradient descent
         tau_gradient = sum(self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) 
-                       for (i, j) in self.constraints) / self.A - self.eta  # eta is often 0
+                        for (i, j) in self.constraints) / self.A - self.eta
         tau_new = max(0.0, min(self.C_tau, tau_value + mu_tau * tau_gradient))
-    
-        if violation_count > 0:
-            print(f"Iteration {t}: Violations = {violation_count}")
-       
+        
+        print(f"Iteration {t}: Found {violation_count} violations, lambda sum: {sum(lambda_new.values()):.4f}, tau: {tau_new:.4f}")
+        
         return lambda_new, tau_new
                 
     def average_models(self, models, weights=None):
@@ -440,15 +440,7 @@ class FairnessElicitationAlgorithm:
         return avg_model
         
     def run(self, gamma_values=None):
-        """
-        Run the algorithm for multiple gamma values.
-        
-        Args:
-            gamma_values: List of gamma values to test. If None, uses default values.
-            
-        Returns:
-            Results for different gamma values.
-        """
+        """Run the algorithm for multiple gamma values with proper initialization"""
         if gamma_values is None:
             gamma_values = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
         
@@ -457,7 +449,6 @@ class FairnessElicitationAlgorithm:
         for gamma in gamma_values:
             print(f"\nRunning algorithm with gamma = {gamma}")
             
-            
             # Initialize storages for this gamma
             errors = []
             fairness_violations = []
@@ -465,21 +456,35 @@ class FairnessElicitationAlgorithm:
             models = []
             
             # Initialize lambda and tau
-            lambda_t = {pair: 0 for pair in self.constraints}
+            lambda_t = {pair: 0.01 for pair in self.constraints}  # Small initial value
             tau_t = 0.0
+            
+            # Start with a strongly biased model
+            initial_model = self.initialize_vanilla_model()
+            initial_probs = self.compute_prediction_probs(initial_model)
+            initial_alpha = {pair: 0.0 for pair in self.constraints}
+            
+            # Calculate initial metrics
+            initial_error = self.compute_error(initial_model)
+            initial_violation, initial_max = self.compute_fairness_violation(
+                initial_probs, initial_alpha, gamma
+            )
+            
+            # Store initial values
+            models.append(initial_model)
+            errors.append(initial_error)
+            fairness_violations.append(initial_violation)
+            max_violations.append(initial_max)
+            
+            print(f"Initial model - Error: {initial_error:.4f}, Max violation: {initial_max:.4f}")
             
             # Run the algorithm for T iterations
             stalled_iterations = 0
-            prev_violation = float('inf')
-            prev_error = float('inf')
-            prev_lambda = {}
+            prev_violation = initial_max
+            prev_error = initial_error
+            
             for t in range(1, self.time_horizon + 1):
                 # Best response of primal player
-                print(f"Iteration {t}: lambda_t sum: {sum(lambda_t.values())}, tau_t: {tau_t}")
-                if t == 1:
-                    D_t = self.initialize_vanilla_model()
-                else:
-                    D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
                 D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
                 
                 # Compute metrics
@@ -506,18 +511,11 @@ class FairnessElicitationAlgorithm:
                 prev_error = error
                 prev_violation = max_violation
                 
-                # Update dual variables using River's no-regret optimizers
+                # Update dual variables
                 lambda_t, tau_t = self.update_dual_variables(lambda_t, tau_t, D_t, alpha_t, gamma, t)
                 
-                # After updating dual variables
-                print(f"Iteration {t}: Error: {error}, Max violation: {max_violation}")
-                lambda_changes = [(k, lambda_t[k] - prev_lambda.get(k, 0)) 
-                     for k in lambda_t 
-                     if abs(lambda_t[k] - prev_lambda.get(k, 0)) > 0.01]
-                print(f"Largest lambda changes: {sorted(lambda_changes, key=lambda x: abs(x[1]), reverse=True)[:5]}")
+                print(f"Iteration {t}: Error: {error:.4f}, Max violation: {max_violation:.4f}")
                 
-                # Store current lambda for next iteration comparison
-                prev_lambda = dict(lambda_t)
                 # Early stopping if we've made no progress
                 if stalled_iterations > 50:
                     print(f"Early stopping after {t} iterations due to lack of progress")
@@ -592,18 +590,70 @@ class FairnessElicitationAlgorithm:
         plt.show()
     
     def initialize_vanilla_model(self):
-        # Create a baseline model that always predicts 1 for some groups and 0 for others
+        """Create an initial model with good accuracy (~66%) that still violates fairness constraints"""
+        
+        # First, train a basic model to get good accuracy
+        base_model = LogisticRegression(C=1.0, class_weight='balanced')
+        base_model.fit(self.X, self.y)
+        
+        # Check its accuracy
+        base_preds = base_model.predict(self.X)
+        base_accuracy = sum(base_preds == self.y) / len(self.y)
+        print(f"Base model accuracy: {base_accuracy:.4f}")
+        
+        # Create a new model starting with the accurate base model's coefficients
         model = LogisticRegression()
         model.classes_ = np.array([0, 1])
+        model.coef_ = base_model.coef_.copy()
+        model.intercept_ = base_model.intercept_.copy()
         
-        # Set coefficients to create strong bias
-        model.coef_ = np.zeros((1, self.X.shape[1]))
-        # Add bias to a particular feature (like race or gender) to create violations
-        feature_index = 0  # Choose an appropriate feature index
-        model.coef_[0, feature_index] = 10.0  # Strong weight on this feature
+        # Identify constraint pairs that should be treated similarly
+        similar_pairs = list(self.constraints)
         
-        # Set intercept
-        model.intercept_ = np.array([0.0])
+        if similar_pairs:
+            # Find features that appear in many of the similar pairs
+            feature_counts = np.zeros(self.X.shape[1])
+            
+            for (i, j) in similar_pairs:
+                # Find features where these individuals differ
+                for k in range(self.X.shape[1]):
+                    if abs(self.X[i, k] - self.X[j, k]) > 0.01:
+                        feature_counts[k] += 1
+            
+            # Get top differentiating features
+            top_features = np.argsort(-feature_counts)[:5]  # Top 5 differentiating features
+            print(f"Top differentiating features: {top_features}")
+            
+            # Amplify these features to create violations without destroying accuracy
+            for k in top_features:
+                # Amplify existing coefficient to increase disparity
+                model.coef_[0, k] *= 5.0
+            
+            # Check if we're creating violations
+            probs = model.predict_proba(self.X)[:, 1]
+            violations = 0
+            max_diff = 0
+            
+            for (i, j) in similar_pairs:
+                diff = abs(probs[i] - probs[j])
+                max_diff = max(max_diff, diff)
+                if diff > 0.2:  # Check if there's a meaningful difference
+                    violations += 1
+            
+            print(f"Created model with {violations}/{len(similar_pairs)} violations, max diff: {max_diff:.4f}")
+            
+            # If still not enough violations, add more bias
+            if violations < len(similar_pairs) * 0.5 or max_diff < 0.3:
+                print("Adding additional bias to create more violations")
+                # Add direct bias to specific sensitive attributes
+                # This assumes first few features might be sensitive attributes
+                for k in range(min(3, self.X.shape[1])):
+                    model.coef_[0, k] += 2.0
+        
+        # Check final model accuracy
+        final_preds = model.predict(self.X)
+        final_accuracy = sum(final_preds == self.y) / len(self.y)
+        print(f"Final model accuracy: {final_accuracy:.4f}")
         
         return model
     def plot_pareto_curves(self, results):
