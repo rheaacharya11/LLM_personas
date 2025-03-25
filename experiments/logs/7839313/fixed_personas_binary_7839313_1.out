@@ -1,0 +1,16 @@
+=== SLURM Job Started ===
+Processing personas 3 to 4
+Arguments received: ['../src/fixed_comparison.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/fixed_personas_binary/fairness_judgments.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '50', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--fixed_comparisons_path', '../fixed_comparisons/fixed_comparisons.json', '--persona_start', '3', '--persona_end', '4', '--output', '../results/fixed_personas_binary/fairness_judgments_3_4.csv']
+Initializing with llama3-8b-instruct model (will be loaded when needed)
+Loading COMPAS data from ../data/processed/compas_train.parquet
+Loaded 4937 examples from ../data/processed/compas_train.parquet
+Loading personas from ../data/unique_personas.parquet
+Loaded 2 personas (index range: 3 to 4)
+Original indices: [3, 4]
+Eliciting fairness judgments for 2 personas
+Using fixed comparisons from fixed_comparisons/fixed_comparisons.json
+Using personas: True, Prompt type: chain_of_thought
+Loading LLaMA model from ../../models/llama3-8b-instruct...
+LLaMA model and tokenizer loaded successfully
+Loading fixed comparisons from fixed_comparisons/fixed_comparisons.json
+=== Job 1 finished: personas 3-4 ===

@@ -161,7 +161,7 @@ class FairnessElicitationAlgorithm:
             for constraint in focused_constraints:  # directly iterate over the list
                 pair = tuple(constraint['pair'])  # Extract the pair and convert to tuple
                 self.constraints.add(pair)
-                self.w_ij[pair] = constraint['weight']
+                self.w_ij[pair] = 2 * constraint['weight']
 
             pairs_per_judge = 50  # Assuming 50 pairs were presented
             self.A = pairs_per_judge  # A is the total number of pairs presented
@@ -247,7 +247,7 @@ class FairnessElicitationAlgorithm:
         # Use a standard classifier with sample weights
         model = LogisticRegression(
             penalty='l2',
-            C=1.0,
+            C=0.5,
             solver='liblinear',  # Faster for smaller datasets
             max_iter=1000,
             class_weight=None,  # We handle through sample_weights
@@ -476,7 +476,10 @@ class FairnessElicitationAlgorithm:
             for t in range(1, self.time_horizon + 1):
                 # Best response of primal player
                 print(f"Iteration {t}: lambda_t sum: {sum(lambda_t.values())}, tau_t: {tau_t}")
-                
+                if t == 1:
+                    D_t = self.initialize_vanilla_model()
+                else:
+                    D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
                 D_t, alpha_t = self.best_response_primal(lambda_t, tau_t, gamma)
                 
                 # Compute metrics
@@ -588,6 +591,21 @@ class FairnessElicitationAlgorithm:
         plt.savefig("trajectory_plot.png")
         plt.show()
     
+    def initialize_vanilla_model(self):
+        # Create a baseline model that always predicts 1 for some groups and 0 for others
+        model = LogisticRegression()
+        model.classes_ = np.array([0, 1])
+        
+        # Set coefficients to create strong bias
+        model.coef_ = np.zeros((1, self.X.shape[1]))
+        # Add bias to a particular feature (like race or gender) to create violations
+        feature_index = 0  # Choose an appropriate feature index
+        model.coef_[0, feature_index] = 10.0  # Strong weight on this feature
+        
+        # Set intercept
+        model.intercept_ = np.array([0.0])
+        
+        return model
     def plot_pareto_curves(self, results):
         """
         Plot the Pareto curves for different subjects/gamma values.
@@ -632,7 +650,7 @@ def main():
                         default="constraint_sets/lenient/binary_personas/constraint_sets.json",
                         help="Path to constraint sets JSON")
     parser.add_argument("--gamma", type=float, default=0.3, help="Gamma value for fairness violation")
-    parser.add_argument("--iterations", type=int, default=100, help="Number of iterations to run")
+    parser.add_argument("--iterations", type=int, default=10, help="Number of iterations to run")
     
     args = parser.parse_args()
     
@@ -641,7 +659,7 @@ def main():
         data_path=args.data_path,
         constraint_sets_path=args.constraints_path,
         time_horizon=args.iterations,
-        C_lambda=10.0, 
+        C_lambda=20.0, 
         C_tau=1.0
     )
     
@@ -650,7 +668,7 @@ def main():
         algorithm.load_constraint_sets(judge_id=args.judge_id)
     
     # Run the algorithm with specified gamma value
-    gamma_values = [args.gamma]
+    gamma_values = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
     results = algorithm.run(gamma_values)
     
     # Plot the results

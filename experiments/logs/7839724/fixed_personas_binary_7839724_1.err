@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments/../src/fixed_comparison.py", line 673, in <module>
+    main()
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments/../src/fixed_comparison.py", line 659, in main
+    result = generator.elicit_fairness_judgments(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: FairnessConstraintGenerator.elicit_fairness_judgments() got an unexpected keyword argument 'fixed_comparisons_path'

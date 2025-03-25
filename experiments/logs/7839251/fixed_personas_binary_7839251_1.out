@@ -1,0 +1,4 @@
+=== SLURM Job Started ===
+Processing personas 3 to 4
+Arguments received: ['../src/fixed_comparison.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/fixed_personas_binary/fairness_judgments.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '50', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--fixed_comparisons_path', '../fixed_comparisons/fixed_comparisons.json', '--persona_start', '3', '--persona_end', '4', '--output', '../results/fixed_personas_binary/fairness_judgments_3_4.csv']
+=== Job 1 finished: personas 3-4 ===

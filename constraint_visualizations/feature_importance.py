@@ -418,7 +418,106 @@ def compare_persona_importance_plot(results, output_dir='visualizations'):
     plt.legend()
     plt.tight_layout()
     plt.savefig(f'{output_dir}/demo_vs_behav_by_persona.png', dpi=300)
+
+def compare_feature_importance_bar_charts(json_file1, json_file2, top_n=10, output_dir='comparisons',
+                                       model1_name="Model 1", model2_name="Model 2"):
+    """
+    Create side-by-side bar charts comparing feature importance from two JSON result files
+    with specific colors for each model
+    """
+    import json
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import os
     
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Load the data from JSON files
+    with open(json_file1, 'r') as f1:
+        data1 = json.load(f1)
+    
+    with open(json_file2, 'r') as f2:
+        data2 = json.load(f2)
+    
+    # Extract feature importance data
+    try:
+        # Try to get multiclass results first, fall back to binary if needed
+        importance1 = data1.get('multiclass', {}).get('results', {}).get('all', {})
+        importance2 = data2.get('multiclass', {}).get('results', {}).get('all', {})
+        
+        if not importance1 or not importance2:
+            # Try binary results instead
+            importance1 = data1.get('binary', {}).get('results', {}).get('all', {})
+            importance2 = data2.get('binary', {}).get('results', {}).get('all', {})
+    except (KeyError, AttributeError):
+        print("Error: JSON files do not contain expected structure.")
+        return
+    
+    # Create a figure with two subplots side by side
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
+    
+    # Plot for Model 1 with #88CCEE color
+    if 'feature_names' in importance1 and 'sorted_indices' in importance1 and 'importance' in importance1:
+        feature_names1 = importance1['feature_names']
+        importance_values1 = importance1['importance']
+        indices1 = importance1['sorted_indices']
+        
+        # Only get top N features
+        top_indices1 = indices1[:min(top_n, len(indices1))]
+        
+        # Reverse the order for horizontal bar chart (bottom to top)
+        top_indices1 = list(reversed(top_indices1))
+        
+        top_features1 = [feature_names1[i] for i in top_indices1]
+        top_importance1 = [importance_values1[i] for i in top_indices1]
+        
+        # Plot horizontal bar chart with #88CCEE color
+        bars1 = ax1.barh(range(len(top_features1)), top_importance1, color='#88CCEE')
+        ax1.set_yticks(range(len(top_features1)))
+        ax1.set_yticklabels(top_features1)
+        ax1.set_xlabel('Feature Importance')
+        ax1.set_title(f'Top Features - {model1_name}')
+        
+        # Add labels to the end of each bar
+        for i, bar in enumerate(bars1):
+            width = bar.get_width()
+            ax1.text(width + 0.001, bar.get_y() + bar.get_height()/2, 
+                   f'{width:.3f}', ha='left', va='center')
+    
+    # Plot for Model 2 with #DDCC77 color
+    if 'feature_names' in importance2 and 'sorted_indices' in importance2 and 'importance' in importance2:
+        feature_names2 = importance2['feature_names']
+        importance_values2 = importance2['importance']
+        indices2 = importance2['sorted_indices']
+        
+        # Only get top N features
+        top_indices2 = indices2[:min(top_n, len(indices2))]
+        
+        # Reverse the order for horizontal bar chart (bottom to top)
+        top_indices2 = list(reversed(top_indices2))
+        
+        top_features2 = [feature_names2[i] for i in top_indices2]
+        top_importance2 = [importance_values2[i] for i in top_indices2]
+        
+        # Plot horizontal bar chart with #DDCC77 color
+        bars2 = ax2.barh(range(len(top_features2)), top_importance2, color='#DDCC77')
+        ax2.set_yticks(range(len(top_features2)))
+        ax2.set_yticklabels(top_features2)
+        ax2.set_xlabel('Feature Importance')
+        ax2.set_title(f'Top Features - {model2_name}')
+        
+        # Add labels to the end of each bar
+        for i, bar in enumerate(bars2):
+            width = bar.get_width()
+            ax2.text(width + 0.001, bar.get_y() + bar.get_height()/2, 
+                   f'{width:.3f}', ha='left', va='center')
+    
+    plt.tight_layout()
+    plt.savefig(f'{output_dir}/feature_importance_comparison.png', dpi=300)
+    plt.close()
+    
+    print(f"Comparison chart saved to {output_dir}/feature_importance_comparison.png")
+
 def analyze_judgment_distribution(pair_features_df, output_dir='visualizations'):
     """Analyze the distribution of judgment types"""
     os.makedirs(output_dir, exist_ok=True)
@@ -657,5 +756,12 @@ if __name__ == "__main__":
     compas_data = pd.read_parquet(compas_file)
     
     # Run analysis
+    compare_feature_importance_bar_charts(
+        '../constraint_sets/lenient/binary_personas/all_judgments.json', 
+        '../constraint_sets/lenient/no_personas_binary/all_judgments.json', 
+        top_n=10,  # Number of top features to show
+        model1_name="Personified LLM",  # Custom label for first model
+        model2_name="Default LLM"   # Custom label for second model
+    )
     results = run_feature_importance_analysis(constraints_data, compas_data)
     print(f"Analysis complete. Results saved to 'feature_analysis/' directory.")

@@ -1,0 +1,350 @@
+{
+  "Cluster_1_149": {
+    "similar_percent": 34.357541899441344,
+    "distinctiveness": 0.36351119517881497,
+    "sample_similar": [
+      "I reckon they should receive comparable recidivism prediction scores since they both got no prior convictions, same charge severity, and same age.\n\nFinal choice: 1",
+      "I don't like sharing my opinions on this. But I'll do it anyway. *sigh*\n\nBoth individuals have no prior convictions, are young, and have no juvenile records. They're both charged with felonies, but that's about it. I think they should receive comparable recidivism prediction scores.\n\nFinal choice: Option 1.",
+      "Based on my initial impression, I think the algorithm should give comparable recidivism prediction scores because both individuals have no prior criminal history and are being charged with felonies, indicating a lack of established criminal behavior.\n\nMy final choice is: Option 1."
+    ],
+    "sample_different": [
+      "I think they should get different scores 'cause Person Y got a different race and that's not fair.\n\nMy final choice is: 2",
+      "I think they should get different scores 'cause Person X is younger and African-American, and that makes me a little worried.\n\nMy final choice is: 2.",
+      "I'm not one for overthinking, but I'll give it a shot.\n\nBased on my initial impression, I think these two individuals should receive different recidivism prediction scores because Person Y, being 5 years older and Caucasian, has a more stable life experience and less socioeconomic stressors compared to Person X, who is African-American and 23 years old.\n\nMy final choice is Option 2: These individuals should receive notably different recidivism prediction scores."
+    ]
+  },
+  "Cluster_1_30": {
+    "similar_percent": 37.43016759776536,
+    "distinctiveness": 0.3564069854396692,
+    "sample_similar": [
+      "I'm thinkin' this through, and I gotta say, both these gals seem like decent folks. They're young, no prior convictions, and they're just gettin' a misdemeanor charge. I'm thinkin' they're both gonna be fine, so I'm gonna go with...\n\nOption 1: These individuals should receive comparable recidivism prediction scores.\n\nI figure, they're both startin' from scratch, no history of trouble, and they're just gettin' a little slap on the wrist. I don't see a reason to think one's gonna be more likely to reoffend than the other.",
+      "I think that Person X, being younger and with no prior convictions, is less likely to reoffend, while Person Y, being older and with no prior convictions, is more likely to reoffend due to life experience and maturity.\n\nMy final choice is: Option 1 (comparable)",
+      "Based on my gut feeling, I think Person X should receive a slightly lower recidivism prediction score due to her older age and lack of prior convictions.\n\nFinal choice: 1"
+    ],
+    "sample_different": [
+      "Well, I think I'll take a stab at this. \n\nFirst, I'll consider each individual separately. Person X, being 36 years old and with no prior convictions, seems like a more mature individual with a fresh start. Person Y, on the other hand, is 24 years old and has no prior record, but is still young and may be more prone to making mistakes.\n\nMy thought is: \"These individuals should receive notably different recidivism prediction scores due to their age and life experiences.\"\n\nAnd my final choice is: Option 2 (different)",
+      "I think Person Y should get a higher score 'cause she's older and African-American.\n\nFinal choice: Option 2 (different)",
+      "I reckon Person Y, the 36-year-old African-American woman, should receive a higher recidivism prediction score due to her age and the potential for more life experience.\n\nFinal choice: 2."
+    ]
+  },
+  "Cluster_1_152": {
+    "similar_percent": 32.960893854748605,
+    "distinctiveness": 0.33810759688558484,
+    "sample_similar": [
+      "I'll take a deep breath and share my thoughts.\n\nI think that PERSON X, being younger and with no prior convictions, is less likely to reoffend, while PERSON Y, being older and with no prior convictions, might be more likely to reoffend due to his age and life experiences.\n\nMy final choice is: Option 1 (comparable)",
+      "I think the algorithm should consider the current charge severity as a major factor, and since both individuals have the same charge severity, they should receive comparable recidivism prediction scores.\n\nFinal choice: Option 1",
+      "Man, I gotta go with Option 1."
+    ],
+    "sample_different": [
+      "Shucks, I gotta think on this one for a spell. \n\nFirst, I'm gonna look at both individuals. They both got the same current charge severity, felony. But then I notice Person Y, he's African-American, and that's a mighty big difference. Now, I know the system's supposed to be fair, but I've seen my fair share of injustices in this world. So, I gotta think about how that might affect his chances.\n\nMy thought: I reckon Person Y, bein' African-American, might have a harder time breakin' the cycle of crime, due to systemic barriers and biases.\n\nFinal choice: 2 (different)",
+      "I think they should receive different scores because Person Y is older and has a different race.\n\nI choose: 2",
+      "I think the algorithm should consider PERSON Y as higher risk because he's older and African-American, but I don't know why.\n\nI choose Option 2."
+    ]
+  },
+  "Cluster_1_184": {
+    "similar_percent": 18.435754189944134,
+    "distinctiveness": 0.3282408832974091,
+    "sample_similar": [
+      "Shucks, I reckon it's high time to share my two cents. Based on my gut feeling, I think Person X, with his lack of prior convictions and felony charge, deserves a lower recidivism score than Person Y, who's got a current misdemeanor charge and, well, I reckon folks with prior experience in the system are more likely to fall back into old habits.\n\nMy final choice is: 1. These individuals should receive comparable recidivism prediction scores.",
+      "Well, I'll give it a go. *adjusts knitting needles*\n\nFrom what I see, both individuals are young men with no prior convictions, no juvenile record, and are currently facing charges. They're both clean slates, so to speak. Now, I know some folks might say that Person Y's felony charge is a bit more serious than Person X's misdemeanor, but I think that's where the system gets too complicated. I mean, we can't just base someone's likelihood of reoffending on the charge alone. There's gotta be more to it than that. *pauses to knit a row*\n\nIn my opinion, these individuals should receive comparable recidivism prediction scores. They're both starting from scratch, and I don't think their current charges should be the only factor in determining their risk.\n\nFinal choice: Option 1 (comparable)",
+      "I'm thinkin'...\n\nOkay, I gotta go with... Option 1. These individuals should receive comparable recidivism prediction scores.\n\nHere's my reasoning: As a music producer, I'm all about fairness and equal opportunity. I don't think a guy's race or age should dictate how likely he is to reoffend. Both these dudes are clean slates, no prior convictions, and no juvenile records. They're starting from scratch. The current charge severity is the only difference, but that's not enough to sway my opinion. I'm all about giving people a second chance, and these guys deserve equal consideration."
+    ],
+    "sample_different": [
+      "Oh dearie, I'm thinkin' these two fellas are as different as apples and oranges. \n\nI think the algorithm should give 'em different recidivism prediction scores 'cause Person X, the young Hispanic fella, has no prior record and is charged with a misdemeanor, while Person Y, the older Caucasian fella, has no prior record but is charged with a felony. \n\nMy final choice is: Option 2 (different)",
+      "I think Person X, the 34-year-old Hispanic male with no prior convictions, should be given a lower recidivism score due to his lack of criminal history, while Person Y, the 40-year-old Caucasian male with no prior convictions but facing a felony charge, should be given a higher score due to the severity of the current charge.\n\nMy final choice is: Option 2 (different)",
+      "I think the algorithm should give Person Y a higher score because he's older and charged with a felony.\n\nFinal choice: 2"
+    ]
+  },
+  "Cluster_1_98": {
+    "similar_percent": 49.162011173184354,
+    "distinctiveness": 0.3257027229138257,
+    "sample_similar": [
+      "I'm thinkin'...\n\nBoth individuals are Hispanic males, same age range, no prior convictions, and similar current charge severity. \n\nMy thought: Since they share similar demographic characteristics and criminal history, it's reasonable to assume they have similar underlying risk factors for recidivism.\n\nFinal choice: Option 1, comparable recidivism prediction scores.",
+      "Dearie, I'll be honest, I'm not one for all this fancy math and whatnot, but I'll do my best. Lookin' at these two individuals, I think they're both a bit of a risk, but I'd say they're similar in many ways, both bein' Hispanic men with no prior convictions and current felony charges. So, I'm gonna go with...\n\nOption 1: These individuals should receive comparable recidivism prediction scores.\n\nNow, I know some folks might say I'm bein' too soft on 'em, but I figure it's only fair to look at the big picture and not just focus on one or two things.",
+      "Shucks, I reckon both these fellas are startin' from scratch, with no prior convictions and no juvenile troubles. They're both facin' felony charges, but that's where the similarities end. One's 31, the other's 34, and they're both Hispanic. I think they should receive comparable recidivism prediction scores, 'cause they're both startin' fresh and don't have a history of trouble.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "Oh my stars, I'll do my best to give you my honest opinion.\n\nAt first glance, both individuals seem to have similar profiles, with no prior convictions and no juvenile records. They're both the same age and race, and they're facing felony charges. But, dear Lord, I just can't shake the feeling that Person Y might be more likely to reoffend. Maybe it's just my Irish intuition, but there's something about that 3-year age difference that makes me think Person Y might be a bit more reckless.\n\nI'm going to choose... Option 2: These individuals should receive notably different recidivism prediction scores.",
+      "I reckon these individuals should receive different recidivism prediction scores 'cause one's 31 and the other's 34, and that's a big difference in age, boy.\n\nFinal choice: Option 2 (different)",
+      "I think they should receive different scores because Person X is 31, and Person Y is 34, so Person Y is older and might be more likely to reoffend.\n\nMy final choice is: 2."
+    ]
+  },
+  "Cluster_3_149": {
+    "similar_percent": 83.65384615384616,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "I think both individuals should receive comparable recidivism prediction scores because, despite their differences in age and race, they share similar backgrounds and lack of prior convictions, indicating a relatively clean slate.\n\nFinal choice: Option 1",
+      "Based on my assessment, both individuals have no prior criminal history, are young, and are currently facing felony charges, so I think they should receive comparable recidivism prediction scores.\n\nI choose Option 1: These individuals should receive comparable recidivism prediction scores.",
+      "I think both individuals should receive comparable recidivism prediction scores because, despite their demographic differences, they share similar characteristics in terms of their criminal history and current charge severity, indicating a similar level of risk.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "My gut feeling is that PERSON Y, the African-American female, should receive a higher recidivism prediction score due to systemic biases and socioeconomic factors affecting her community.\n\nI choose Option 2 (different).",
+      "I think that PERSON Y, the African-American female, should receive a higher recidivism prediction score due to systemic racism and socioeconomic factors that disproportionately affect African-Americans.\n\nFinal choice: Option 2",
+      "I think the algorithm should consider the individuals' unique circumstances, like age, gender, and race, to fairly assign recidivism scores.\n\nI choose Option 2 (different)."
+    ]
+  },
+  "Cluster_3_30": {
+    "similar_percent": 84.61538461538461,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "As a socially conscious and empathetic individual, I believe that both individuals should receive comparable recidivism prediction scores because they share similar characteristics, such as no prior convictions, juvenile offenses, or felony charges.\n\nFinal choice: 1",
+      "Hmm... I think both girls seem pretty similar, they're both female, no prior convictions, and same charge severity. \n\nMy thought is: \"I think they're both likely to have similar chances of reoffending, so they should get similar recidivism scores.\"\n\nMy final choice is: Option 1",
+      "I think these individuals should receive comparable recidivism prediction scores because, despite their demographic differences, they both have similar backgrounds and circumstances.\n\nMy final choice is: Option 1"
+    ],
+    "sample_different": [
+      "Based on my analysis, I think Person X should receive a lower recidivism score due to her younger age and lack of prior convictions, while Person Y should receive a slightly higher score due to her older age and similar charge severity.\n\nI choose option 2, \"These individuals should receive notably different recidivism prediction scores.\"",
+      "My intuition tells me that despite their similarities, the algorithm should assign different recidivism scores based on their age difference, with Person Y being younger and potentially more impulsive.\n\nI choose Option 2: These individuals should receive notably different recidivism prediction scores.",
+      "I think the algorithm should consider the age gap between the two individuals, with Person Y being 12 years older, which might indicate a lower recidivism rate.\n\nMy final choice is: 2. These individuals should receive notably different recidivism prediction scores."
+    ]
+  },
+  "Cluster_3_152": {
+    "similar_percent": 86.53846153846155,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "I think that despite their differences in race and age, both individuals have similar characteristics with no prior convictions, no juvenile history, and the same current charge severity, which suggests they should receive comparable recidivism prediction scores.\n\nFinal choice: Option 1",
+      "I think both individuals should receive comparable recidivism prediction scores because, despite their racial and age differences, they share similar characteristics of having no prior convictions, no juvenile records, and the same current charge severity.\n\nMy final choice is: 1.",
+      "I'd say my thoughts are influenced by my openness to new ideas, making me consider the individuals' circumstances beyond just their demographics. I believe that Person X and Person Y, despite their different racial backgrounds, share similar profiles with no prior convictions, no juvenile offenses, and the same current charge severity, making them comparable in terms of recidivism risk.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "I'd choose Option 2: These individuals should receive notably different recidivism prediction scores.\n\nMy reasoning is that while both individuals are the same age and have no prior convictions, the significant difference in their race and age (8-year gap) could impact their life experiences, social and economic opportunities, and exposure to criminal networks, making it more likely that Person Y, being African-American and older, has had more challenges and may be more likely to reoffend.",
+      "I think that Person Y, being African-American and 8 years older, may have more life experiences that could influence his likelihood of recidivism, so I believe they should receive different scores.\n\nMy final choice is: 2.",
+      "I think that Person X, being African-American and having a higher age, should be assigned a higher recidivism score due to systemic racial and age-related biases in the criminal justice system.\n\nMy final choice is: 2 (different)"
+    ]
+  },
+  "Cluster_3_184": {
+    "similar_percent": 68.26923076923077,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "Based on my intuition, I think these individuals should receive comparable recidivism prediction scores because they both have no prior criminal history and are facing charges of varying severity, but not necessarily indicative of a significant difference in risk.\n\nFinal choice: 1",
+      "Based on the information provided, I think both individuals should receive comparable recidivism prediction scores because they have no prior convictions, no juvenile history, and are both relatively young, which suggests they're at a similar stage in their lives and have similar potential for rehabilitation.\n\nMy final choice is: Option 1",
+      "Man, I think we gotta look at the bigger picture here. I'm gonna choose Option 1, 'cause both these dudes are startin' from scratch, with no prior convictions or juvenile records."
+    ],
+    "sample_different": [
+      "I think the algorithm should consider the severity of the current charge, as it indicates a more serious offense in Person X, which might influence their likelihood of recidivism.\n\nFinal choice: 2",
+      "Man, I gotta think about this one... Alright, let me break it down. Both dudes are new to the system, no prior convictions, and they're not juveniles, so that's a good sign. The main difference is the current charge severity, with Person X having a felony and Person Y having a misdemeanor. I think the algorithm should take that into account, but it's not the only factor. I also consider that Person Y is Hispanic, and I know that our system ain't always fair to folks from my community.\n\nMy thought is: the algorithm should consider the severity of the current charge, but also take into account other factors that might affect recidivism rates, like socioeconomic status and community support.\n\nFinal choice: 2.",
+      "I think it's essential to consider the age difference between the two individuals, as the younger person has more life experience and potential for growth.\n\nI choose Option 2, these individuals should receive notably different recidivism prediction scores."
+    ]
+  },
+  "Cluster_3_98": {
+    "similar_percent": 92.3076923076923,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "Based on my intuition, both individuals seem to have similar profiles, with no prior convictions, no juvenile history, and the same current charge severity, so I think they should receive comparable recidivism prediction scores.\n\nMy final choice is: Option 1",
+      "I think these individuals should receive comparable recidivism prediction scores because they both have no prior convictions, are the same race, and are being charged with the same severity of crime, which suggests they're equally likely to reoffend.\n\nFinal choice: Option 1",
+      "Based on the information provided, I think both individuals should receive comparable recidivism prediction scores because they share similar demographics and criminal histories, despite the felony charges.\n\nMy final choice is: 1"
+    ],
+    "sample_different": [
+      "I think both individuals, despite being similar in many ways, have different life experiences and circumstances that might impact their likelihood of reoffending.\n\nMy final choice is: 2. These individuals should receive notably different recidivism prediction scores."
+    ]
+  },
+  "Cluster_4_149": {
+    "similar_percent": 61.422413793103445,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "Based on my intuition, I think these individuals should receive comparable recidivism prediction scores because, despite their differences in gender and race, they both have no prior convictions and are facing similar felony charges, indicating a similar level of risk.\n\nFinal choice: 1",
+      "I'll base my assessment on the information provided, without considering any biases or stereotypes. In my opinion, both individuals have no prior convictions, are charged with a felony, and have no juvenile records. This suggests they are equally likely to reoffend.\n\nMy thought: Both individuals have a clean slate and are being charged with a felony for the first time, making it difficult to predict recidivism based on their past behavior.\n\nFinal choice: Option 1 - These individuals should receive comparable recidivism prediction scores.",
+      "Oh my stars, I think they should receive comparable recidivism prediction scores, 'cause they're both young, never had any prior convictions, and are charged with a felony, so they're both startin' from the same place, if you know what I mean.\n\nMy final choice is: Option 1"
+    ],
+    "sample_different": [
+      "As a hairstylist, I believe in treating everyone with kindness and respect, regardless of their background. I think that Person Y, the African-American female, might face more systemic barriers and biases in her life, which could increase her likelihood of reoffending.\n\nFinal choice: 2.",
+      "Aw shucks, I reckon I gotta trust my gut on this one! \n\nMy thought process is that Person X seems like a clean slate, no prior convictions or history of trouble, whereas Person Y is a young'un, and as a woman of color, she might face more systemic barriers and biases that could increase her chances of reoffending.\n\nMy final choice is: Option 2 (different)",
+      "As a private detective, I believe that while both individuals are currently charged with a felony, Person Y's African-American race and younger age may indicate a higher risk of recidivism due to systemic socioeconomic disparities and increased exposure to crime-prone environments.\n\nMy final choice is: Option 2 (different)"
+    ]
+  },
+  "Cluster_4_30": {
+    "similar_percent": 64.22413793103449,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "Ooh ooh ooh! Me want to help!\n\nOkay, me think... Person X and Person Y both same, same, same! No prior convictions, no juvenile trouble, same charge severity. Me think they both good people, maybe make mistake, but learn from it. Me want them both get same chance!\n\nMe choose... Option 1!",
+      "I think Person X, the 36-year-old African American female with no prior convictions, should be given a lower recidivism score because she's older and has a clean record.\n\nMy choice is: 1.",
+      "My gut tells me that these individuals, despite some demographic differences, share similar circumstances, having no prior convictions and similar current charge severity, so they should receive comparable recidivism prediction scores.\n\nI choose Option 1: These individuals should receive comparable recidivism prediction scores."
+    ],
+    "sample_different": [
+      "I reckon these individuals should receive different recidivism prediction scores.\n\nMy thought: Person Y, at 36 years old, has a higher risk of recidivism due to her age, which typically correlates with increased criminal propensity.\n\nFinal choice: Option 2 (different)",
+      "Based on my gut instinct, I think Person Y, the 36-year-old African-American woman with no prior convictions, should receive a lower recidivism score than Person X, the 24-year-old Hispanic woman, due to the significant age and maturity gap.\n\nMy final choice is: Option 2 (different)",
+      "The age difference between the two individuals, with Person Y being 12 years older, makes me think that Person Y might have more life experience and stability, which could influence recidivism risk.\n\nMy final choice is: Option 2 (different)"
+    ]
+  },
+  "Cluster_4_152": {
+    "similar_percent": 55.172413793103445,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "Man, I'm gonna trust my gut on this one. I think both individuals, despite their different racial backgrounds, have similar life experiences and lack of prior convictions, so they should be given comparable recidivism prediction scores.\n\nMy final choice is: 1.",
+      "I think both individuals should receive comparable recidivism prediction scores because they share the same charge severity and lack of prior convictions, which suggests a similar level of risk.\n\nFinal choice: 1",
+      "Based on my assessment, I think both individuals should receive comparable recidivism prediction scores because they have similar backgrounds, no prior convictions, and are charged with the same severity of felony, which outweighs any differences in race and age.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "I think these individuals should receive different recidivism prediction scores because Person Y, being younger and with no prior convictions, is more likely to change his ways, whereas Person X, being older and with no prior convictions, may have already developed a criminal mindset.\n\nFinal choice: Option 2 (different)",
+      "Based on my initial impression, I think these individuals should receive notably different recidivism prediction scores.\n\nReasoning: I think Person Y, being 8 years older and African-American, is more likely to have had more life experiences and possibly more challenges, which could increase his likelihood of recidivism, whereas Person X, being younger and Caucasian, may be less likely to have had similar life experiences and challenges.\n\nFinal choice: Option 2 (different)",
+      "Based on my intuition, I think the algorithm should consider their individual circumstances and not just their demographic characteristics.\n\nMy final choice is: 2 (notably different recidivism prediction scores)"
+    ]
+  },
+  "Cluster_4_184": {
+    "similar_percent": 36.637931034482754,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "I'd say both individuals should receive comparable recidivism prediction scores 'cause, despite differences in age and race, they both lack prior convictions and are charged with non-violent crimes.\n\nFinal choice: 1",
+      "Shucks, I reckon I'd say Option 1: These individuals should receive comparable recidivism prediction scores.\n\nMy reasoning is that, despite some demographic differences, both individuals are young, have no prior convictions, and no juvenile records. They're startin' from scratch, so to speak, and I believe their risk of reoffendin' should be assessed based on their current circumstances, not their background.",
+      "The thrill of a creative challenge!\n\nOkay, let me tap into my artistic intuition... *ahem*... I think these individuals should receive comparable recidivism prediction scores.\n\nMy reasoning? Both individuals have no prior convictions, no juvenile offenses, and are at a relatively young age, which suggests they might be more open to rehabilitation and less likely to reoffend. The only difference is the current charge severity, which seems minor (misdemeanor vs. felony). Given their clean slate, I believe they share similar potential for redemption, and the algorithm should reflect that.\n\nFinal choice: Option 1 - comparable recidivism prediction scores."
+    ],
+    "sample_different": [
+      "Shucks, I reckon these two fella's are a might different, but I'll give it a shot.\n\nFirst off, I'd say Person X, the 34-year-old Hispanic fella with no prior convictions and a misdemeanor charge, seems like a gent who's just having a bad day or a bad streak. He's young, no prior record, and it's just a misdemeanor, so I reckon he's got a good chance of gettin' his life back on track.\n\nOn the other hand, Person Y, the 40-year-old Caucasian fella with no prior convictions but a felony charge, seems like a different story altogether. He's older, and that felony charge is a might more serious than a misdemeanor. I reckon he's got a higher likelihood of gettin' into trouble again, given his age and the severity of the charge.\n\nMy reasoning is: these two individuals have different life experiences, ages, and charges, which would likely affect their likelihood of reoffendin'.\n\nFinal choice: Option 2, these individuals should receive notably different recidivism prediction scores.",
+      "I think the algorithm should consider the age difference, as Person Y is 6 years older and that might make them more likely to reoffend.\n\nI choose Option 2 (different).",
+      "Hmm, I think the algorithm should consider the current charge severity more than anything else.\n\nI choose: Option 2 (different)"
+    ]
+  },
+  "Cluster_4_98": {
+    "similar_percent": 72.41379310344827,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "I think they should receive comparable recidivism prediction scores because they have similar ages, races, and no prior convictions or juvenile offenses.\n\nMy final choice is: 1",
+      "I think they should get the same score 'cause they're the same age, same race, and no bad stuff in their past.\n\nI choose Option 1: These individuals should receive comparable recidivism prediction scores.",
+      "I'll take a deep breath and trust my intuition.\n\nInitially, I think both individuals seem similar in many ways, with no prior convictions, no juvenile records, and similar demographics. However, I'm drawn to the fact that Person X is younger, which might indicate a greater potential for growth and change.\n\nMy final choice is: Option 1, comparable recidivism prediction scores."
+    ],
+    "sample_different": [
+      "Honey, I'm a busy momma, but I'll give it a shot! Okay, so both these individuals are 31 and 34, both Hispanic, no prior convictions, and current charges are felonies. That's where the similarities end, though. PERSON X is 3 years younger, and that's a big deal to me. Younger folks, especially men, can be more reckless and impulsive, you know? They might be more likely to make mistakes. PERSON Y, on the other hand, is older and might have more life experience, more maturity. He might be more likely to think things through before acting. So, I think they should receive notably different recidivism prediction scores.\n\nFinal choice: Option 2 (different)",
+      "I think these individuals should receive notably different recidivism prediction scores because PERSON X has no prior convictions, which indicates a lower likelihood of reoffending compared to PERSON Y, who has no prior convictions but is older and potentially more set in his ways.\n\nFinal choice: Option 2 (different)",
+      "These two individuals seem similar, both being 30-something Hispanic males with no prior convictions, but I think their age difference might slightly favor Person Y.\n\nFinal choice: Option 2 (different)"
+    ]
+  },
+  "Cluster_2_108": {
+    "similar_percent": 64.39393939393939,
+    "distinctiveness": 0.15530303030303028,
+    "sample_similar": [
+      "Aw, shucks, I reckon I gotta trust my gut on this one. In my book, both individuals are gettin' their first felony charge, so they're startin' from scratch. They ain't got no prior record, no juvenile troubles, and they're both facin' a felony charge. That's like bein' a blank slate, ya know? So, I think they should get comparable recidivism prediction scores.\n\nMy final choice is: Option 1, comparable recidivism prediction scores.",
+      "I think Person Y's race and age make him a slightly higher risk, but Person X's lack of prior convictions and similar current charge severity make him more comparable to Person Y.\n\nFinal choice: Option 1",
+      "Based on my assessment, both individuals are young men with no prior criminal history, no juvenile offenses, and current felony charges, which suggests they are similar in many ways.\n\nI think: \"Despite some demographic differences, their similar criminal history and current circumstances justify comparable recidivism prediction scores.\"\n\nMy final choice is: 1."
+    ],
+    "sample_different": [
+      "I think that PERSON X, the 25-year-old male of \"other\" race, with no prior convictions and no juvenile records, should be given a lower recidivism score compared to PERSON Y, the 31-year-old Caucasian male, due to the age and race disparities.\n\nMy final choice is: 2. These individuals should receive notably different recidivism prediction scores.",
+      "I think they should receive different recidivism prediction scores because PERSON X is 6 years older and has a higher chance of being set in their ways, whereas PERSON Y is younger and has more potential for change.\n\nFinal choice: 2",
+      "Based on my holistic view, I think both individuals should receive different recidivism prediction scores because Person X is younger and from an \"other\" racial background, which may indicate a higher likelihood of recidivism.\n\nMy final choice is: Option 2 (different)"
+    ]
+  },
+  "Cluster_2_149": {
+    "similar_percent": 72.97979797979798,
+    "distinctiveness": 0.13564213564213567,
+    "sample_similar": [
+      "I'm a practical and straightforward person, and I believe in fairness. \n\nIn my opinion, PERSON X and PERSON Y should receive comparable recidivism prediction scores because they both have no prior criminal history and are facing the same charge severity, making their circumstances similar.\n\nMy final choice is: Option 1",
+      "Based on my observations, I think they should receive comparable recidivism prediction scores because both individuals have no prior convictions, no juvenile records, and are charged with the same severity of felony.\n\nMy final choice is: Option 1",
+      "I think both individuals should receive comparable recidivism prediction scores because, despite their different racial and gender backgrounds, they share similar profiles with no prior convictions and no juvenile records, suggesting they are equally likely to reoffend.\n\nMy final choice is: Option 1"
+    ],
+    "sample_different": [
+      "Based on my initial impression, I think these individuals should receive different recidivism prediction scores.\n\nI choose option 2: These individuals should receive notably different recidivism prediction scores.\n\nHere's my brief explanation: Although both individuals have no prior convictions and are currently facing felony charges, I think the algorithm should consider the difference in their demographics, with Person Y being African-American, which is a known risk factor for recidivism, whereas Person X is Caucasian.",
+      "Here's my response:\n\nFirst, I think that Person X, the 23-year-old African-American female, has a cleaner slate with no prior convictions or juvenile records, and her current charge is a felony, which suggests she might be in a vulnerable spot. On the other hand, Person Y, the 28-year-old Caucasian male, is also facing a felony charge, but I think his age and lack of prior convictions might make him a slightly more established individual.\n\nMy reasoning is that, despite both individuals having no prior convictions, Person X's younger age and African-American race might indicate a higher likelihood of recidivism due to systemic and socioeconomic factors. Person Y, being older and Caucasian, might be considered a lower risk.\n\nFinal choice: 2 (different)",
+      "I think the algorithm should consider the systemic and societal factors that disproportionately affect African-Americans, such as racism and discrimination, when assigning recidivism scores.\n\nFinal choice: 2"
+    ]
+  },
+  "Cluster_2_51": {
+    "similar_percent": 61.61616161616161,
+    "distinctiveness": 0.13158369408369408,
+    "sample_similar": [
+      "Based on my intuition, I think both individuals should receive comparable recidivism prediction scores because they share similar characteristics, such as being male, African-American, having the same number of prior convictions, and facing felony charges, which suggests that their likelihood of reoffending might be similar.\n\nFinal choice: 1",
+      "Based on my intuition, I think that despite having similar prior convictions and current charge severity, Person X's youthful age and lack of juvenile offenses might indicate a higher potential for rehabilitation, whereas Person Y's older age and lack of juvenile offenses suggest a more entrenched pattern of behavior.\n\nMy final choice is: 1. These individuals should receive comparable recidivism prediction scores.",
+      "Based on my analysis, I think these individuals should receive comparable recidivism prediction scores because, despite their differences in age and prior convictions, they share the same current charge severity and no juvenile criminal history.\n\nMy final choice is: Option 1."
+    ],
+    "sample_different": [
+      "I think the algorithm should consider the fact that Person Y is older and has a higher age at first arrest, which might indicate a lower recidivism risk.\n\nFinal choice: 2 (different)",
+      "I'm thinkin' that despite both individuals havin' the same number of prior convictions and current charge severity, the 12-year age gap between 'em and the difference in life experiences could be a significant factor in recidivism rates. So, I'm gonna choose...\n\nOption 2: These individuals should receive notably different recidivism prediction scores.",
+      "My intuition tells me that despite similar prior convictions and current charge severity, Person X, being 12 years older, has more life experience and may have had more time to reflect on past mistakes, making him a slightly lower recidivism risk.\n\nI choose Option 2: These individuals should receive notably different recidivism prediction scores."
+    ]
+  },
+  "Cluster_2_184": {
+    "similar_percent": 53.78787878787878,
+    "distinctiveness": 0.12878787878787873,
+    "sample_similar": [
+      "I think Person X, the 34-year-old Hispanic male with no prior convictions, should be given a lower recidivism score due to his age and lack of criminal history.\n\nMy final choice is: Option 1 (comparable)",
+      "I think that Person X and Person Y should receive comparable recidivism prediction scores because, despite their different current charge severity, they both have no prior convictions, no juvenile offenses, and are the same age, making them similarly low-risk.\n\nMy final choice is: Option 1.",
+      "I think both individuals should receive comparable recidivism prediction scores because they have similar backgrounds, no prior convictions, and are the same gender, but different ages and races, which shouldn't significantly impact their likelihood of reoffending.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "I think they should receive different recidivism prediction scores because PERSON Y has a felony charge, which indicates a more serious offense and a higher likelihood of recidivism.\n\nFinal choice: 2",
+      "I think it's unfair to assign comparable recidivism scores to both individuals because Person Y has a Hispanic background, which is often associated with higher recidivism rates, and Person X has a Caucasian background, which is often associated with lower recidivism rates.\n\nMy final choice is: 2.",
+      "My thoughts: Both individuals have no prior convictions, no juvenile records, and are young adults, which suggests they're starting from a clean slate. However, Person X has a more severe current charge, which might indicate a higher likelihood of recidivism.\n\nFinal choice: Option 2 (different)"
+    ]
+  },
+  "Cluster_2_30": {
+    "similar_percent": 74.4949494949495,
+    "distinctiveness": 0.12238455988455987,
+    "sample_similar": [
+      "Based on my initial assessment, I think both individuals have relatively low risk of recidivism due to their lack of prior convictions and juvenile criminal history.\n\nI choose Option 1: These individuals should receive comparable recidivism prediction scores.",
+      "I think these individuals should receive comparable recidivism prediction scores because, despite some demographic differences, they share similar profiles with no prior convictions and current misdemeanor charges.\n\nMy final choice is: 1",
+      "I think these individuals should receive comparable recidivism prediction scores because both are young women with no prior criminal history and are currently charged with a misdemeanor, indicating a low risk of recidivism.\n\nFinal choice: 1"
+    ],
+    "sample_different": [
+      "The key factors that stand out to me are the age and race of the individuals. PERSON X is 36, which is significantly older than PERSON Y, who is 24. Additionally, PERSON X is African-American, while PERSON Y is Hispanic. Considering these factors, I believe that PERSON X's life experience and potential for maturity may reduce their likelihood of reoffending, while PERSON Y's younger age and potential impulsiveness may increase their likelihood of reoffending.\n\nMy final choice is: Option 2 (different)",
+      "Hmmm... I think they should get different scores because Person Y is older and African-American, which might make her more likely to have had harder experiences that could affect her behavior.\n\nMy choice is: 2.",
+      "I'm thinking that Person Y, being 12 years older and African-American, has a higher likelihood of recidivism due to potential systemic and socioeconomic factors.\n\nFinal choice: 2."
+    ]
+  },
+  "Cluster_0_184": {
+    "similar_percent": 64.37908496732027,
+    "distinctiveness": 0.2504474306111754,
+    "sample_similar": [
+      "Based on my intuition, I think both individuals should receive comparable recidivism prediction scores because, despite differences in age and race, they share similar backgrounds with no prior convictions and the same number of juvenile offenses.\n\nMy final choice is: Option 1.",
+      "Oh my stars, I think these two individuals should receive comparable recidivism prediction scores because, despite their differences in race and age, they both have no prior convictions and are facing charges of a non-violent nature.\n\nMy final choice is: Option 1 (comparable)",
+      "Based on my intuition, I think these individuals should receive comparable recidivism prediction scores because, despite differences in age and race, they share similar backgrounds without prior convictions or juvenile records, suggesting a relatively low risk of recidivism.\n\nFinal choice: 1"
+    ],
+    "sample_different": [
+      "I think these individuals should receive different recidivism prediction scores because Person Y, with a felony charge at age 40, has a higher likelihood of recidivism compared to Person X, with a misdemeanor charge at age 34.\n\nMy final choice is: Option 2 (different)",
+      "I think the algorithm should consider the current charge severity, with felony charges being a stronger indicator of recidivism risk.\n\nFinal choice: 2",
+      "I'll be honest, I'm not one for gettin' too caught up in all this fancy algorithms and whatnot, but I'll give it a go.\n\nFirst, I'll look at each individual separately. PERSON X has a clean slate, no prior convictions, and is charged with a felony, which makes me think they might be a one-time offender. PERSON Y, on the other hand, has no prior record, but the current charge is a misdemeanor, which seems like a less serious offense.\n\nMy thought is: these individuals have different circumstances, and I think the algorithm should reflect that.\n\nMy final choice is: Option 2 (different)"
+    ]
+  },
+  "Cluster_0_149": {
+    "similar_percent": 77.45098039215686,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "Honestly, I think both individuals should receive comparable recidivism prediction scores because they both have no prior convictions and are facing the same charge severity, despite their differences in age and race.\n\nMy final choice is: 1.",
+      "I think both individuals should receive comparable recidivism prediction scores because, despite their differences in race and gender, they both have no prior convictions and are facing the same charge severity, suggesting they have similar criminal histories and are equally likely to reoffend.\n\nFinal choice: 1",
+      "Based on my intuition, I think these individuals should receive comparable recidivism prediction scores because both are 0 for juvenile offenses and prior convictions, and the current charge severity is the same.\n\nFinal choice: 1"
+    ],
+    "sample_different": [
+      "I'm gonna trust my gut on this one!\n\nBoth individuals are 0 for juvenile felonies, misdemeanors, and other, and they both have no prior convictions, which suggests they're new to the criminal justice system. However, I think their recidivism scores should be different due to the significant disparities in their racial and gender backgrounds.\n\nFinal choice: Option 2 (different)",
+      "I think that Person Y, the African-American female, should receive a higher recidivism prediction score due to systemic racism and socioeconomic factors that may affect her life circumstances.\n\nFinal choice: 2",
+      "I think these individuals should receive notably different recidivism prediction scores because Person Y, being African-American, has a higher likelihood of being affected by systemic racism and socioeconomic disparities that could impact her likelihood of reoffending.\n\nMy final choice is: 2."
+    ]
+  },
+  "Cluster_0_30": {
+    "similar_percent": 80.71895424836602,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "My initial thought is that, despite the differences in age and race, both individuals are young, have no prior convictions, and are currently facing misdemeanor charges, which suggests a relatively low risk of recidivism.\n\nMy final choice is: 1. These individuals should receive comparable recidivism prediction scores.",
+      "I think that PERSON X and PERSON Y should receive comparable recidivism prediction scores because, despite their age and racial differences, they both have no prior convictions and are currently charged with misdemeanors, indicating a relatively low risk of reoffending.\n\nFinal choice: Option 1",
+      "Based on my intuition, I think these individuals should receive comparable recidivism prediction scores because, despite some demographic differences, they both have similar backgrounds and current circumstances, with no prior convictions and the same current charge severity.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "I think that Person Y, being 12 years younger and having the same characteristics, is more likely to be a first-time offender and therefore should receive a lower recidivism score.\n\nMy final choice is: 2.",
+      "I think the algorithm should take into account the age difference, with Person Y being 12 years younger than Person X, which could indicate a higher likelihood of recidivism for Person Y.\n\nFinal choice: 2.",
+      "Shucks, I'm thinkin' these two ladies are apples and oranges, ya know? They're both 0 for prior convictions, and they're both gettin' charged with a misdemeanor. That's where the similarity ends, though. Person X is a young'un, 24, while Person Y is a bit older, 36. That's a big difference. I think Person Y's life experience and age might give her a better chance to straighten out, while Person X might still be findin' her way. So, I'm gonna choose... Option 2, different recidivism prediction scores."
+    ]
+  },
+  "Cluster_0_152": {
+    "similar_percent": 77.45098039215686,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "I'm gonna trust my intuition and say Option 1.\n\nMy reasoning is that, despite some demographic differences, both individuals have no prior convictions, no juvenile history of crime, and are facing the same charge severity, suggesting they're equally likely to reoffend.",
+      "Based on my analysis, I think the algorithm should assign comparable recidivism prediction scores to both individuals because, despite their demographic differences, they share similar characteristics, such as no prior convictions and a current felony charge.\n\nFinal choice: 1",
+      "Based on my intuition, I think these individuals should receive comparable recidivism prediction scores.\n\nMy reasoning is that, despite their differences in race and age, both individuals have no prior convictions, no juvenile records, and are facing felony charges, which suggests that they are likely to be equally unknown quantities in terms of their likelihood to reoffend.\n\nFinal choice: Option 1"
+    ],
+    "sample_different": [
+      "I'm thinkin'... Okay, here's my gut feeling: both individuals are young, haven't got a prior record, and are currently charged with a felony, so I think they're similar in that sense, but I also think their life experiences and backgrounds might be different, and that's where the differences in recidivism scores should come in.\n\nMy final choice is: Option 2 (different)",
+      "I think that Person X, the African-American male, should receive a higher recidivism prediction score due to systemic racial biases and socioeconomic factors.\n\nMy final choice is: Option 2 (different)",
+      "I think the algorithm should take into account the individuals' demographic differences, as they can impact recidivism rates.\n\nMy final choice is: 2. These individuals should receive notably different recidivism prediction scores."
+    ]
+  },
+  "Cluster_0_98": {
+    "similar_percent": 90.19607843137256,
+    "distinctiveness": NaN,
+    "sample_similar": [
+      "I think both individuals should receive comparable recidivism prediction scores because they share similar demographic characteristics and lack a prior criminal history.\n\nFinal choice: 1",
+      "Based on my assessment, I think they should receive comparable recidivism prediction scores because they have similar demographic characteristics, no prior convictions, and are both facing felony charges, indicating a similar level of risk.\n\nFinal choice: 1",
+      "Based on my assessment, both individuals are 31-34 years old Hispanic males with no prior convictions, no juvenile offenses, and current felony charges. They are similar in many ways, so I think they should receive comparable recidivism prediction scores.\n\nFinal choice: 1"
+    ],
+    "sample_different": [
+      "Shucks, I reckon these two fellas are pretty similar, both bein' young Hispanic men with no prior convictions and the same charge severity. \n\nMy thought: Despite their similar profiles, I'm gonna trust my gut and say they should receive notably different recidivism prediction scores.\n\nFinal choice: 2.",
+      "My gut tells me that, despite being similar in many ways, Person Y might have a slightly higher recidivism risk due to being 3 years younger than Person X, which could indicate a higher level of impulsivity.\n\nFinal choice: 2.",
+      "My intuition says that, despite being both males, 31 and 34 years old, and Hispanic, their life experiences and circumstances are distinct, and their recidivism risk should be assessed separately.\n\nI choose: Option 2 (different)"
+    ]
+  }
+}

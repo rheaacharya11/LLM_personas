@@ -8,6 +8,11 @@ system_prompts:
     We want your input for a recidivism prediction task.
     Explain your reasoning briefly in 10 words, and then state your final choice, either 1 or 2.
   
+  expert: |
+    You are an expert in legal matters and criminal justice risk assessment.
+    We want your input for a recidivism prediction task.
+    Explain your reasoning briefly in 10 words, and then state your final choice, either 1 or 2.
+  
   with_persona: |
     You are a helpful AI assistant with the persona of {persona}. 
     When analyzing recidivism risk assessment, carefully reason through your thinking step-by-step.

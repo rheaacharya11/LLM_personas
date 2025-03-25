@@ -1,0 +1,13 @@
+=== SLURM Job Started ===
+Processing personas 1101 to 1000
+Arguments received: ['../src/fixed_comparison.py', '--train_path', '../data/processed/compas_train.parquet', '--personas_path', '../data/unique_personas.parquet', '--output', '../results/fixed_personas_binary/fairness_judgments.csv', '--prompt_config', '../prompts/binary_config.yaml', '--pairs_per_persona', '50', '--use_personas', 'True', '--prompt_type', 'chain_of_thought', '--judgment_type', 'binary', '--fixed_comparisons_path', '../fixed_comparisons/fixed_comparisons.json', '--persona_start', '1101', '--persona_end', '1000', '--output', '../results/fixed_personas_binary/fairness_judgments_1101_1000.csv']
+Initializing with llama3-8b-instruct model (will be loaded when needed)
+Loading COMPAS data from ../data/processed/compas_train.parquet
+Loaded 4937 examples from ../data/processed/compas_train.parquet
+Loading personas from ../data/unique_personas.parquet
+Loaded 0 personas (index range: 1101 to 999)
+Original indices: []
+Eliciting fairness judgments for 0 personas
+Using fixed comparisons from ../fixed_comparisons/fixed_comparisons.json
+Using personas: True, Prompt type: chain_of_thought
+Loading LLaMA model from ../../models/llama3-8b-instruct...

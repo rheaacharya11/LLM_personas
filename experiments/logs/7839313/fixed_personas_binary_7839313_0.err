@@ -1,0 +1,14 @@
+Loading checkpoint shards:   0%|          | 0/7 [00:00<?, ?it/s]Loading checkpoint shards:  14%|█▍        | 1/7 [00:10<01:02, 10.42s/it]Loading checkpoint shards:  29%|██▊       | 2/7 [00:21<00:54, 10.84s/it]Loading checkpoint shards:  43%|████▎     | 3/7 [00:32<00:43, 10.94s/it]Loading checkpoint shards:  57%|█████▋    | 4/7 [00:45<00:35, 11.72s/it]Loading checkpoint shards:  71%|███████▏  | 5/7 [00:59<00:25, 12.65s/it]Loading checkpoint shards:  86%|████████▌ | 6/7 [01:13<00:12, 12.97s/it]Loading checkpoint shards: 100%|██████████| 7/7 [01:21<00:00, 11.28s/it]Loading checkpoint shards: 100%|██████████| 7/7 [01:21<00:00, 11.60s/it]
+Traceback (most recent call last):
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments/../src/fixed_comparison.py", line 673, in <module>
+    main()
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments/../src/fixed_comparison.py", line 659, in main
+    result = generator.elicit_fairness_judgments(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments/../src/fixed_comparison.py", line 361, in elicit_fairness_judgments
+    persona_comparisons = self.generate_unique_comparisons(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/n/holylabs/LABS/dwork_lab/Lab/rheaacharya/LLM_personas/experiments/../src/fixed_comparison.py", line 187, in generate_unique_comparisons
+    with open(fixed_comparisons_path, 'r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'fixed_comparisons/fixed_comparisons.json'

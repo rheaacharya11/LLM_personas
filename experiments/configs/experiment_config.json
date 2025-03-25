@@ -39,8 +39,44 @@
         "output": "../results/no_personas_binary/fairness_judgments.csv",
         "prompt_config": "../prompts/binary_config.yaml",
         "pairs_per_persona": 50,
-        "use_personas": true,
+        "use_personas": false,
         "prompt_type": "default",
         "judgment_type": "binary"
+      },
+      {
+        "_name": "fixed_personas_binary",
+        "train_path": "../data/processed/compas_train.parquet",
+        "personas_path": "../data/unique_personas.parquet",
+        "output": "../results/fixed_personas_binary/fairness_judgments.csv",
+        "prompt_config": "../prompts/binary_config.yaml",
+        "pairs_per_persona": 50,
+        "use_personas": true,
+        "prompt_type": "chain_of_thought",
+        "judgment_type": "binary",
+        "fixed_comparisons_path": "../fixed_comparisons/fixed_comparisons.json"
+      },
+      {
+        "_name": "fixed_default_binary",
+        "train_path": "../data/processed/compas_train.parquet",
+        "personas_path": "../data/unique_personas.parquet",
+        "output": "../results/fixed_default_binary/fairness_judgments.csv",
+        "prompt_config": "../prompts/binary_config.yaml",
+        "pairs_per_persona": 50,
+        "use_personas": false,
+        "prompt_type": "default",
+        "judgment_type": "binary",
+        "fixed_comparisons_path": "../fixed_comparisons/fixed_comparisons.json"
+      },
+      {
+        "_name": "fixed_expert_binary",
+        "train_path": "../data/processed/compas_train.parquet",
+        "personas_path": "../data/unique_personas.parquet",
+        "output": "../results/fixed_expert_binary/fairness_judgments.csv",
+        "prompt_config": "../prompts/binary_config.yaml",
+        "pairs_per_persona": 50,
+        "use_personas": false,
+        "prompt_type": "expert",
+        "judgment_type": "binary",
+        "fixed_comparisons_path": "../fixed_comparisons/fixed_comparisons.json"
       }
   ]

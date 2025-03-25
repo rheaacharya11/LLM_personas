@@ -1,0 +1,473 @@
+Cluster 0 (n=6):
+  Distinctive judgments:
+    (5730, 3236): similar (diff: 0.74)
+    (5632, 3624): similar (diff: 0.71)
+    (8282, 9644): similar (diff: 0.60)
+    (9945, 2857): similar (diff: 0.55)
+    (1692, 10131): similar (diff: 0.53)
+
+Cluster 1 (n=13):
+  Distinctive judgments:
+    (8885, 6299): similar (diff: 0.51)
+    (6195, 10354): similar (diff: 0.49)
+    (2077, 1670): similar (diff: 0.44)
+    (10289, 10781): similar (diff: 0.42)
+    (5574, 4012): similar (diff: 0.40)
+
+Cluster 2 (n=7):
+  Distinctive judgments:
+    (10511, 5993): similar (diff: 0.77)
+    (4219, 7354): similar (diff: 0.71)
+    (1269, 8479): similar (diff: 0.64)
+    (2583, 6735): similar (diff: 0.59)
+    (10299, 4205): similar (diff: 0.58)
+
+Cluster 3 (n=9):
+  Distinctive judgments:
+    (523, 2053): similar (diff: 0.71)
+    (3501, 5367): similar (diff: 0.69)
+    (1545, 9867): similar (diff: 0.67)
+    (222, 9092): similar (diff: 0.66)
+    (2061, 4999): similar (diff: 0.64)
+
+Cluster 4 (n=10):
+  Distinctive judgments:
+    (3700, 6934): similar (diff: 0.54)
+    (9180, 4837): similar (diff: 0.51)
+    (8703, 6583): similar (diff: 0.44)
+    (8471, 1196): similar (diff: 0.44)
+    (2998, 2579): similar (diff: 0.41)
+
+Cluster 5 (n=5):
+  Distinctive judgments:
+    (9945, 2857): similar (diff: 0.72)
+    (9820, 19): similar (diff: 0.70)
+    (3261, 9621): similar (diff: 0.70)
+    (4592, 9855): similar (diff: 0.63)
+    (4038, 6809): similar (diff: 0.60)
+
+Cluster 6 (n=8):
+  Distinctive judgments:
+    (10404, 4329): similar (diff: 0.77)
+    (9180, 4837): similar (diff: 0.71)
+    (5395, 5374): similar (diff: 0.69)
+    (9923, 4628): similar (diff: 0.64)
+    (137, 6863): similar (diff: 0.64)
+
+Cluster 7 (n=9):
+  Distinctive judgments:
+    (2061, 4999): similar (diff: 0.64)
+    (7686, 8717): similar (diff: 0.60)
+    (523, 2053): similar (diff: 0.60)
+    (3501, 5367): similar (diff: 0.58)
+    (2931, 9663): similar (diff: 0.55)
+
+Cluster 8 (n=6):
+  Distinctive judgments:
+    (9940, 8679): similar (diff: 0.82)
+    (6668, 8532): similar (diff: 0.66)
+    (8477, 10437): similar (diff: 0.60)
+    (9180, 4063): similar (diff: 0.58)
+    (42, 975): similar (diff: 0.58)
+
+Cluster 9 (n=12):
+  Distinctive judgments:
+    (6117, 9710): similar (diff: 0.53)
+    (8477, 10437): similar (diff: 0.52)
+    (1240, 9892): similar (diff: 0.49)
+    (5369, 2569): similar (diff: 0.45)
+    (5574, 4012): similar (diff: 0.39)
+
+Cluster 10 (n=6):
+  Distinctive judgments:
+    (9867, 6160): different (diff: 0.54)
+    (1613, 3225): similar (diff: 0.43)
+    (701, 1008): similar (diff: 0.42)
+    (6117, 9710): different (diff: 0.40)
+    (7447, 9787): different (diff: 0.39)
+
+Cluster 11 (n=11):
+  Distinctive judgments:
+    (10312, 1797): similar (diff: 0.49)
+    (1526, 1806): similar (diff: 0.47)
+    (5369, 2569): similar (diff: 0.45)
+    (6117, 9710): similar (diff: 0.43)
+    (1452, 6859): similar (diff: 0.42)
+
+Cluster 12 (n=8):
+  Distinctive judgments:
+    (882, 8625): similar (diff: 0.68)
+    (1801, 3137): similar (diff: 0.67)
+    (7164, 5994): similar (diff: 0.64)
+    (42, 975): similar (diff: 0.62)
+    (10361, 8816): similar (diff: 0.54)
+
+Cluster 13 (n=5):
+  Distinctive judgments:
+    (1698, 10259): similar (diff: 0.49)
+    (2061, 4999): similar (diff: 0.44)
+    (8411, 5184): similar (diff: 0.42)
+    (8148, 8230): similar (diff: 0.42)
+    (8110, 9376): different (diff: 0.41)
+
+Cluster 14 (n=10):
+  Distinctive judgments:
+    (6117, 9710): similar (diff: 0.51)
+    (6735, 2495): similar (diff: 0.44)
+    (10299, 4205): similar (diff: 0.43)
+    (2299, 9552): similar (diff: 0.40)
+    (7219, 10357): similar (diff: 0.33)
+
+Cluster 15 (n=7):
+  Distinctive judgments:
+    (5730, 3236): similar (diff: 0.74)
+    (8411, 5184): similar (diff: 0.68)
+    (9923, 4628): similar (diff: 0.64)
+    (533, 3160): similar (diff: 0.63)
+    (355, 6312): similar (diff: 0.59)
+
+Cluster 16 (n=7):
+  Distinctive judgments:
+    (4168, 10379): similar (diff: 0.60)
+    (10289, 10781): similar (diff: 0.58)
+    (9180, 4063): similar (diff: 0.58)
+    (269, 7321): similar (diff: 0.53)
+    (9940, 8679): similar (diff: 0.53)
+
+Cluster 17 (n=21):
+  Distinctive judgments:
+    (8866, 6979): different (diff: 0.34)
+    (7219, 10357): different (diff: 0.33)
+
+Cluster 18 (n=6):
+  Distinctive judgments:
+    (1198, 10657): similar (diff: 0.63)
+    (10351, 10390): similar (diff: 0.62)
+    (6117, 9710): similar (diff: 0.61)
+    (1951, 9125): similar (diff: 0.60)
+    (9178, 7249): similar (diff: 0.55)
+
+Cluster 19 (n=9):
+  Distinctive judgments:
+    (1951, 9125): similar (diff: 0.54)
+    (9940, 8679): similar (diff: 0.48)
+    (9180, 4063): similar (diff: 0.47)
+    (10277, 10945): similar (diff: 0.46)
+    (6191, 6164): similar (diff: 0.45)
+
+Cluster 20 (n=7):
+  Distinctive judgments:
+    (222, 9092): similar (diff: 0.63)
+    (8703, 6583): similar (diff: 0.54)
+    (5395, 5374): similar (diff: 0.53)
+    (2157, 5321): similar (diff: 0.50)
+    (8282, 9644): similar (diff: 0.46)
+
+Cluster 21 (n=15):
+  Distinctive judgments:
+    (8477, 10437): similar (diff: 0.47)
+    (8304, 5659): similar (diff: 0.46)
+    (1269, 8479): similar (diff: 0.45)
+    (8240, 2482): similar (diff: 0.44)
+    (269, 7321): similar (diff: 0.40)
+
+Cluster 22 (n=11):
+  Distinctive judgments:
+    (3261, 9621): similar (diff: 0.42)
+    (1545, 8179): similar (diff: 0.39)
+    (8492, 2062): similar (diff: 0.38)
+    (8565, 2863): similar (diff: 0.37)
+    (8240, 2482): similar (diff: 0.34)
+
+Cluster 23 (n=8):
+  Distinctive judgments:
+    (1640, 6616): similar (diff: 0.66)
+    (6195, 10354): similar (diff: 0.65)
+    (9867, 6160): similar (diff: 0.47)
+    (8240, 2482): similar (diff: 0.46)
+    (9398, 934): similar (diff: 0.45)
+
+Cluster 24 (n=5):
+  Distinctive judgments:
+    (7766, 5163): similar (diff: 0.57)
+    (7686, 8717): similar (diff: 0.51)
+    (4296, 10778): similar (diff: 0.51)
+    (1698, 10259): similar (diff: 0.49)
+    (5574, 4012): similar (diff: 0.48)
+
+Cluster 25 (n=5):
+  Distinctive judgments:
+    (5574, 4012): different (diff: 0.53)
+    (4909, 1850): similar (diff: 0.45)
+    (7358, 694): similar (diff: 0.44)
+    (2061, 4999): similar (diff: 0.44)
+    (7766, 5163): different (diff: 0.44)
+
+Cluster 26 (n=9):
+  Distinctive judgments:
+    (6100, 7862): similar (diff: 0.48)
+    (9494, 7721): similar (diff: 0.40)
+    (10312, 1797): similar (diff: 0.36)
+
+Cluster 27 (n=5):
+  Distinctive judgments:
+    (523, 2053): similar (diff: 0.51)
+    (5263, 3015): similar (diff: 0.50)
+    (1774, 2355): similar (diff: 0.44)
+    (5068, 9147): similar (diff: 0.42)
+    (8477, 10437): different (diff: 0.41)
+
+Cluster 28 (n=14):
+  Distinctive judgments:
+    (7327, 3181): similar (diff: 0.41)
+    (1692, 10131): similar (diff: 0.34)
+
+Cluster 29 (n=16):
+  Distinctive judgments:
+    (2077, 1670): similar (diff: 0.39)
+    (9494, 7721): similar (diff: 0.34)
+
+Cluster 30 (n=5):
+  Distinctive judgments:
+    (1669, 2770): similar (diff: 0.67)
+    (4219, 7354): similar (diff: 0.45)
+    (1774, 2355): similar (diff: 0.44)
+    (6195, 10354): similar (diff: 0.44)
+    (7683, 151): similar (diff: 0.43)
+
+Cluster 31 (n=5):
+  Distinctive judgments:
+    (9398, 934): similar (diff: 0.70)
+    (1948, 9923): similar (diff: 0.68)
+    (1198, 10657): similar (diff: 0.63)
+    (2077, 1670): similar (diff: 0.52)
+    (5914, 2764): similar (diff: 0.41)
+
+Cluster 32 (n=11):
+  Distinctive judgments:
+
+Cluster 33 (n=8):
+  Distinctive judgments:
+    (180, 9388): similar (diff: 0.39)
+    (9049, 5837): different (diff: 0.38)
+    (6735, 2495): different (diff: 0.37)
+    (3137, 9527): different (diff: 0.36)
+    (2667, 3812): different (diff: 0.35)
+
+Cluster 34 (n=17):
+  Distinctive judgments:
+    (3261, 9621): similar (diff: 0.34)
+
+Cluster 35 (n=8):
+  Distinctive judgments:
+    (53, 1706): similar (diff: 0.46)
+    (10277, 10945): similar (diff: 0.42)
+    (5914, 2764): different (diff: 0.40)
+    (6117, 9710): different (diff: 0.40)
+    (2299, 9552): different (diff: 0.38)
+
+Cluster 36 (n=10):
+  Distinctive judgments:
+    (2077, 1670): different (diff: 0.39)
+    (2061, 4999): different (diff: 0.37)
+    (5369, 2569): different (diff: 0.36)
+    (5732, 6240): different (diff: 0.35)
+    (6668, 8532): different (diff: 0.35)
+
+Cluster 37 (n=7):
+  Distinctive judgments:
+    (5369, 2569): different (diff: 0.56)
+    (7447, 9787): different (diff: 0.56)
+    (70, 815): different (diff: 0.50)
+    (5732, 6240): different (diff: 0.45)
+    (10827, 8984): different (diff: 0.45)
+
+Cluster 38 (n=7):
+  Distinctive judgments:
+    (9102, 2956): similar (diff: 0.57)
+    (1692, 10131): similar (diff: 0.41)
+    (1198, 10657): different (diff: 0.37)
+    (1640, 6616): similar (diff: 0.35)
+    (6100, 7862): similar (diff: 0.33)
+
+Cluster 39 (n=5):
+  Distinctive judgments:
+    (6896, 4680): different (diff: 0.53)
+    (2299, 9552): similar (diff: 0.50)
+    (9867, 6160): similar (diff: 0.46)
+    (8477, 10437): similar (diff: 0.40)
+    (882, 8625): similar (diff: 0.40)
+
+Cluster 40 (n=9):
+  Distinctive judgments:
+    (9867, 6160): different (diff: 0.43)
+    (10312, 1797): different (diff: 0.43)
+    (8477, 10437): different (diff: 0.41)
+    (1452, 6859): different (diff: 0.40)
+    (9923, 4628): different (diff: 0.37)
+
+Cluster 41 (n=10):
+  Distinctive judgments:
+    (2157, 5321): similar (diff: 0.45)
+    (5914, 2764): similar (diff: 0.41)
+    (10277, 10945): similar (diff: 0.40)
+    (10827, 8984): similar (diff: 0.36)
+    (1774, 2355): similar (diff: 0.34)
+
+Cluster 42 (n=14):
+  Distinctive judgments:
+    (2931, 9663): similar (diff: 0.49)
+    (8565, 2863): similar (diff: 0.40)
+    (2157, 5321): similar (diff: 0.36)
+    (3700, 6934): similar (diff: 0.35)
+    (533, 3160): similar (diff: 0.34)
+
+Cluster 43 (n=7):
+  Distinctive judgments:
+    (1452, 6859): similar (diff: 0.46)
+    (8282, 9644): similar (diff: 0.46)
+    (4168, 10379): similar (diff: 0.45)
+    (9178, 7249): similar (diff: 0.43)
+    (7219, 10357): similar (diff: 0.39)
+
+Cluster 44 (n=17):
+  Distinctive judgments:
+    (1198, 10657): similar (diff: 0.40)
+    (9494, 7721): similar (diff: 0.34)
+    (5914, 2764): similar (diff: 0.32)
+
+Cluster 45 (n=10):
+  Distinctive judgments:
+    (9049, 5837): different (diff: 0.43)
+    (8644, 9908): similar (diff: 0.40)
+    (10827, 8984): similar (diff: 0.36)
+    (5732, 6240): similar (diff: 0.36)
+    (10567, 1943): similar (diff: 0.30)
+
+Cluster 46 (n=12):
+  Distinctive judgments:
+    (6338, 9256): different (diff: 0.31)
+    (3212, 8042): different (diff: 0.31)
+
+Cluster 47 (n=13):
+  Distinctive judgments:
+    (8282, 9644): different (diff: 0.33)
+    (1198, 10657): similar (diff: 0.33)
+    (6117, 9710): different (diff: 0.32)
+    (4296, 10778): different (diff: 0.30)
+
+Cluster 48 (n=30):
+  Distinctive judgments:
+    (2077, 1670): different (diff: 0.40)
+    (70, 815): different (diff: 0.39)
+    (2998, 2579): different (diff: 0.37)
+    (5914, 2764): different (diff: 0.37)
+    (1526, 1806): different (diff: 0.36)
+
+Cluster 49 (n=15):
+  Distinctive judgments:
+    (5369, 2569): different (diff: 0.36)
+    (10312, 1797): different (diff: 0.36)
+    (7447, 9787): different (diff: 0.36)
+
+Cluster 50 (n=6):
+  Distinctive judgments:
+    (5068, 9147): different (diff: 0.58)
+    (5632, 3624): similar (diff: 0.54)
+    (5762, 2429): similar (diff: 0.49)
+    (7219, 10357): different (diff: 0.47)
+    (10312, 1797): different (diff: 0.43)
+
+Cluster 51 (n=9):
+  Distinctive judgments:
+    (269, 7321): different (diff: 0.48)
+    (9494, 7721): different (diff: 0.39)
+    (2077, 1670): different (diff: 0.38)
+    (1774, 2355): different (diff: 0.36)
+    (6191, 6164): different (diff: 0.33)
+
+Cluster 52 (n=9):
+  Distinctive judgments:
+    (1605, 7177): different (diff: 0.39)
+    (2077, 1670): different (diff: 0.38)
+    (1205, 1005): similar (diff: 0.37)
+    (8110, 9376): similar (diff: 0.37)
+    (2667, 3812): different (diff: 0.35)
+
+Cluster 53 (n=24):
+  Distinctive judgments:
+
+Cluster 54 (n=6):
+  Distinctive judgments:
+    (5789, 10945): similar (diff: 0.65)
+    (7766, 5163): different (diff: 0.44)
+    (2998, 2579): similar (diff: 0.41)
+    (7683, 151): different (diff: 0.37)
+    (1848, 2641): similar (diff: 0.36)
+
+Cluster 55 (n=5):
+  Distinctive judgments:
+    (10827, 8984): different (diff: 0.45)
+    (6735, 2495): similar (diff: 0.44)
+    (2998, 2579): different (diff: 0.40)
+    (6117, 9710): different (diff: 0.40)
+    (1801, 3137): similar (diff: 0.39)
+
+Cluster 56 (n=10):
+  Distinctive judgments:
+    (6191, 6164): different (diff: 0.44)
+    (9867, 6160): different (diff: 0.34)
+    (7766, 5163): different (diff: 0.34)
+    (6896, 4680): different (diff: 0.33)
+    (9180, 4063): different (diff: 0.32)
+
+Cluster 57 (n=7):
+  Distinctive judgments:
+    (10312, 1797): different (diff: 0.43)
+    (1548, 5295): similar (diff: 0.40)
+    (10511, 5993): similar (diff: 0.34)
+    (8866, 6979): different (diff: 0.34)
+    (8703, 6583): different (diff: 0.33)
+
+Cluster 58 (n=23):
+  Distinctive judgments:
+
+Cluster 59 (n=37):
+  Distinctive judgments:
+    (6896, 4680): different (diff: 0.41)
+    (2998, 2579): different (diff: 0.37)
+    (2299, 9552): different (diff: 0.32)
+    (6100, 7862): different (diff: 0.32)
+    (3137, 9527): different (diff: 0.31)
+
+Cluster 60 (n=6):
+  Distinctive judgments:
+    (10827, 8984): different (diff: 0.45)
+    (9180, 4063): different (diff: 0.42)
+    (8885, 6299): different (diff: 0.42)
+    (8110, 9376): different (diff: 0.41)
+    (6117, 9710): different (diff: 0.40)
+
+Cluster 61 (n=5):
+  Distinctive judgments:
+    (7219, 10357): different (diff: 0.47)
+    (7766, 5163): different (diff: 0.44)
+    (9049, 5837): different (diff: 0.43)
+    (10312, 1797): different (diff: 0.43)
+    (8110, 9376): different (diff: 0.41)
+
+Cluster 62 (n=7):
+  Distinctive judgments:
+    (9494, 7721): different (diff: 0.47)
+    (5732, 6240): different (diff: 0.45)
+    (5369, 2569): different (diff: 0.42)
+    (8110, 9376): different (diff: 0.41)
+    (9867, 6160): different (diff: 0.40)
+
+Cluster 63 (n=12):
+  Distinctive judgments:
+    (6896, 4680): different (diff: 0.48)
+    (1605, 7177): different (diff: 0.34)
+    (166, 9325): different (diff: 0.32)
+    (1692, 10131): different (diff: 0.31)
+
