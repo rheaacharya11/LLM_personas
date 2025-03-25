@@ -38,7 +38,7 @@ class FairnessElicitationAlgorithm:
                  target_column: str = 'two_year_recid',
                  time_horizon: int = 1000,
                  C_lambda: float = 10.0,
-                 C_tau: float = 10.0):
+                 C_tau: float = 100.0):
         """
         Initialize the algorithm with data and parameters.
         """
@@ -288,7 +288,7 @@ class FairnessElicitationAlgorithm:
         for i, j in sample_constraints:
             diff = abs(probs[i] - probs[j])
             alpha_val = alpha_ij.get((i, j), 0)
-            threshold = gamma + alpha_val
+            threshold = gamma
             is_violation = diff > threshold
             print(f"Sample constraint ({i},{j}): probs={probs[i]:.4f},{probs[j]:.4f}, diff={diff:.4f}, threshold={threshold:.4f}, violation={is_violation}")
         
@@ -307,7 +307,7 @@ class FairnessElicitationAlgorithm:
             alpha_value = alpha_ij.get((i, j), 0)
             
             # Calculate violation
-            violation = max(0, abs_diff - gamma - alpha_value)
+            violation = max(0, abs_diff - gamma)
             
             if violation > 0:
                 violation_count += 1
@@ -367,22 +367,28 @@ class FairnessElicitationAlgorithm:
 
             lambda_ij = lambda_values.get((i, j), 0)
 
-            condition = tau_value * weight / self.A
+            condition = 1 * weight / self.A
 
-            print(f"Constraint ({i},{j}): lambda={lambda_ij:.4f}, tau*w/|A|={condition:.4f}, alpha={1.0 if condition <= lambda_ij else 0.0}")
+            print(f"Constraint ({i},{j}): lambda={lambda_ij:.4f}, tau*w/|A|={condition:.4f}, alpha={1.0 if condition >= lambda_ij else 0.0}")
         # Compute alpha values
-        alpha_t = {}
-        for (i, j) in self.constraints:
-            # If tau * w_ij/|A| - lambda_ij ≤ 0 then alpha_ij = 1, otherwise 0
-            # comparing constraint's importance (lambda_ij) to the relaxation threshold
-            weight = self.w_ij.get((i, j), 0)
-            lambda_ij = lambda_values.get((i, j), 0)
-            
-            if tau_value * weight / self.A <= lambda_ij:
-                alpha_t[(i, j)] = 1.0
-            else:
-                alpha_t[(i, j)] = 0.0
-                
+        # In best_response_primal:
+
+        # 1. First, create alpha_t with all zeros (opposite of your current approach)
+        alpha_t = {pair: 0.0 for pair in self.constraints}
+
+        # 2. Only after that, print the alpha distribution
+        zeros = sum(v == 0 for v in alpha_t.values())
+        ones = sum(v == 1 for v in alpha_t.values())
+        print(f"INITIAL alpha distribution: {zeros} zeros, {ones} ones out of {len(alpha_t)}")
+
+        # 3. NO OTHER CODE that modifies alpha_t should happen after this
+
+        # 4. Add some final verification right before returning:
+        final_zeros = sum(v == 0 for v in alpha_t.values())
+        final_ones = sum(v == 1 for v in alpha_t.values())
+        print(f"FINAL alpha distribution: {final_zeros} zeros, {final_ones} ones out of {len(alpha_t)}")
+
+        # 5. Return the values
         return D_t, alpha_t
         
 
@@ -399,25 +405,26 @@ class FairnessElicitationAlgorithm:
         lambda_new = {}
         violation_count = 0
         
+        # Inside update_dual_variables
+        # Inside update_dual_variables
+        # In update_dual_variables
         for (i, j) in self.constraints:
-            # Calculate gradient = violation
-            diff = probs[i] - probs[j]
-            gradient = diff - gamma - alpha_t.get((i, j), 0)
-            curr_lambda = lambda_values.get((i, j), 0)
+            diff = abs(probs[i] - probs[j])
+            gradient = diff - gamma
             
-            # Use exponentiated gradient update
             if gradient > 0:  # There's a violation
-                # Multiplicative update
-                new_val = curr_lambda * np.exp(mu_lambda * gradient)
-                violation_count += 1
+                # MUCH stronger update - exponentially increasing with violation size
+                curr_lambda = lambda_values.get((i, j), 0)
+                # Increase lambda proportional to violation size
+                new_lambda = curr_lambda * np.exp(gradient * 5.0)  # Much stronger update
+                lambda_new[(i, j)] = min(self.C_lambda, new_lambda)
+                
+                # Print some updates
+                if i % 1000 == 0 and j % 1000 == 0:
+                    print(f"Lambda update ({i},{j}): {curr_lambda:.4f} → {lambda_new[(i, j)]:.4f}, violation={gradient:.4f}")
             else:
-                # Gradual decay for non-violations
-                new_val = curr_lambda * 0.99
-            
-            # Clip to bounds
-            new_val = min(self.C_lambda, new_val)
-            lambda_new[(i, j)] = new_val
-        
+                # Keep non-violated constraints the same
+                lambda_new[(i, j)] = lambda_values.get((i, j), 0)
         # Update tau using gradient descent
         tau_gradient = sum(self.w_ij.get((i, j), 0) * alpha_t.get((i, j), 0) 
                         for (i, j) in self.constraints) / self.A - self.eta
@@ -484,7 +491,7 @@ class FairnessElicitationAlgorithm:
             
             # Initialize lambda and tau
             lambda_t = {pair: 0.01 for pair in self.constraints}  # Small initial value
-            tau_t = 0.0
+            tau_t = 10
             
             # Start with a strongly biased model
             initial_model = self.initialize_vanilla_model()
@@ -617,74 +624,55 @@ class FairnessElicitationAlgorithm:
         plt.show()
     
     def initialize_vanilla_model(self):
-        """Create an initial model with good accuracy (~66%) that still violates fairness constraints"""
+        """Create an initial model with varied predictions"""
+        # Start with a simple model
+        model = LogisticRegression(C=1.0, class_weight='balanced')
+        model.fit(self.X, self.y)
         
-        # First, train a basic model to get good accuracy
-        base_model = LogisticRegression(C=1.0, class_weight='balanced')
-        base_model.fit(self.X, self.y)
+        # Check initial predictions
+        initial_probs = model.predict_proba(self.X)[:, 1]
+        print(f"Initial model: min={initial_probs.min():.4f}, max={initial_probs.max():.4f}, mean={initial_probs.mean():.4f}")
         
-        # Check its accuracy
-        base_preds = base_model.predict(self.X)
-        base_accuracy = sum(base_preds == self.y) / len(self.y)
-        print(f"Base model accuracy: {base_accuracy:.4f}")
+        # If predictions are too uniform, completely randomize the model
+        if initial_probs.min() > 0.8 or initial_probs.max() < 0.2 or np.std(initial_probs) < 0.1:
+            print("Initial model predictions too uniform, adding randomness")
+            
+            # Create a random model
+            model = LogisticRegression()
+            model.classes_ = np.array([0, 1])
+            
+            # Set random coefficients to ensure varied predictions
+            model.coef_ = np.random.normal(0, 1.0, (1, self.X.shape[1]))
+            model.intercept_ = np.array([0.0])  # Start with neutral bias
+            
+            # Verify randomized predictions
+            random_probs = model.predict_proba(self.X)[:, 1]
+            print(f"Randomized model: min={random_probs.min():.4f}, max={random_probs.max():.4f}, mean={random_probs.mean():.4f}")
+            
+            # If still too uniform, try again with more extreme values
+            if random_probs.min() > 0.8 or random_probs.max() < 0.2 or np.std(random_probs) < 0.1:
+                print("Still too uniform, trying more extreme randomization")
+                model.coef_ = np.random.normal(0, 2.0, (1, self.X.shape[1]))
         
-        # Create a new model starting with the accurate base model's coefficients
-        model = LogisticRegression()
-        model.classes_ = np.array([0, 1])
-        model.coef_ = base_model.coef_.copy()
-        model.intercept_ = base_model.intercept_.copy()
+        # Explicitly check for variations in predictions across constraint pairs
+        constraint_diffs = []
+        for i, j in list(self.constraints)[:100]:  # Check a sample of constraints
+            pred_i = model.predict_proba(self.X[i:i+1])[:, 1][0]
+            pred_j = model.predict_proba(self.X[j:j+1])[:, 1][0]
+            diff = abs(pred_i - pred_j)
+            constraint_diffs.append(diff)
         
-        # Identify constraint pairs that should be treated similarly
-        similar_pairs = list(self.constraints)
+        print(f"Constraint pair differences: min={min(constraint_diffs):.4f}, max={max(constraint_diffs):.4f}, mean={np.mean(constraint_diffs):.4f}")
         
-        if similar_pairs:
-            # Find features that appear in many of the similar pairs
-            feature_counts = np.zeros(self.X.shape[1])
+        # If we still don't have differences, force them by directly modifying predictions
+        if max(constraint_diffs) < 0.1:
+            print("Forcing prediction differences for constraint pairs")
+            # Select highly weighted features
+            important_features = np.argsort(np.abs(model.coef_[0]))[-5:]
             
-            for (i, j) in similar_pairs:
-                # Find features where these individuals differ
-                for k in range(self.X.shape[1]):
-                    if abs(self.X[i, k] - self.X[j, k]) > 0.01:
-                        feature_counts[k] += 1
-            
-            # Get top differentiating features
-            top_features = np.argsort(-feature_counts)[:5]  # Top 5 differentiating features
-            print(f"Top differentiating features: {top_features}")
-            
-            # Amplify these features to create violations without destroying accuracy
-            for k in top_features:
-                # Amplify existing coefficient to increase disparity
-                model.coef_[0, k] *= 5.0
-            
-            # Check if we're creating violations
-            # In initialize_vanilla_model, add:
-            print("Testing for violations in initial model...")
-            probs = model.predict_proba(self.X)[:, 1]
-            for i, (i_pair, j_pair) in enumerate(list(self.constraints)[:10]):
-                print(f"Constraint {i}: {i_pair},{j_pair} - probs: {probs[i_pair]:.4f}, {probs[j_pair]:.4f}, diff: {abs(probs[i_pair] - probs[j_pair]):.4f}")
-            violations = 0
-            max_diff = 0
-            
-            for (i, j) in similar_pairs:
-                diff = abs(probs[i] - probs[j])
-                max_diff = max(max_diff, diff)
-                if diff > 0.2:  # Check if there's a meaningful difference
-                    violations += 1
-            
-            print(f"Created model with {violations}/{len(similar_pairs)} violations, max diff: {max_diff:.4f}")
-            
-            # If still not enough violations, add more bias
-            if violations < len(similar_pairs) * 0.5 or max_diff < 0.3:
-                print("Adding additional bias to create more violations")
-                # Add direct bias to specific sensitive attributes
-                # This assumes first few features might be sensitive attributes
-                for k in range(min(3, self.X.shape[1])):
-                    model.coef_[0, k] += 2.0
-        
-        # Check final model accuracy
-        final_preds = model.predict(self.X)
-        final_accuracy = sum(final_preds == self.y) / len(self.y)
-        print(f"Final model accuracy: {final_accuracy:.4f}")
+            # Amplify these features to create larger differences
+            for feature in important_features:
+                model.coef_[0, feature] *= 3.0
         
         return model
     def plot_pareto_curves(self, results):
@@ -764,7 +752,7 @@ class FairnessElicitationAlgorithm:
                 
                 # Initialize lambda and tau
                 lambda_t = {pair: 0.01 for pair in self.constraints}
-                tau_t = 0.0
+                tau_t = 100
                 
                 # Start with a strongly biased model
                 initial_model = self.initialize_vanilla_model()
@@ -949,7 +937,7 @@ def main():
         constraint_sets_path=args.constraints_path,
         time_horizon=args.iterations,
         C_lambda=20.0, 
-        C_tau=1.0
+        C_tau=100
     )
     
     # Define gamma and eta values to test
