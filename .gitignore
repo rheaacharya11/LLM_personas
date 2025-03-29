@@ -10,9 +10,9 @@ job_manager_fixed_compas_study.log
 monitor_jobs.sh
 *.parquet
 *.pkl
-constraint_visualizations
+constraint_visualizations/
 fairness_analysis_results_1
-my_eyes_only
-classification_result
-classification_results
+my_eyes_only/
+classification_result/
+classification_results/
 stupid_code/
