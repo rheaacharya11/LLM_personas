@@ -11,7 +11,7 @@ monitor_jobs.sh
 *.parquet
 *.pkl
 constraint_visualizations/
-fairness_analysis_results_1
+fairness_analysis_results_1/
 my_eyes_only/
 classification_result/
 classification_results/
