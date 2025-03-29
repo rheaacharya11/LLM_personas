@@ -24,7 +24,7 @@ def load_precleaned_data():
     
     return train_df, test_df
 
-def generate_fixed_comparisons(df, num_comparisons=200, output_file="fixed_comparisons.json", random_state=11):
+def generate_fixed_comparisons(df, num_comparisons=1000, output_file="final_fixed_comparisons.json", random_state=11):
     """
     randomly sample 
     """
@@ -74,8 +74,8 @@ def generate_fixed_comparisons(df, num_comparisons=200, output_file="fixed_compa
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate fixed comparison pairs from COMPAS data")
-    parser.add_argument("--comparisons", type=int, default=200, help="Number of comparisons to generate")
-    parser.add_argument("--output", default="fixed_comparisons.json", help="Output file path")
+    parser.add_argument("--comparisons", type=int, default=1000, help="Number of comparisons to generate")
+    parser.add_argument("--output", default="final_fixed_comparisons.json", help="Output file path")
     parser.add_argument("--random_state", type=int, default=11, help="Random seed for reproducibility")
     args = parser.parse_args()
     

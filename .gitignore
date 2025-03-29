@@ -8,3 +8,7 @@ csc_oracle.py
 csc_first.py
 job_manager_fixed_compas_study.log
 monitor_jobs.sh
+*.parquet
+*.pkl
+constraint_visualizations
+fairness_analysis_results_1

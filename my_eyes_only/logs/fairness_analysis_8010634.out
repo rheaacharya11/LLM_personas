@@ -1,0 +1,96 @@
+=== Starting Fairness Analysis on results/fixed_personas_binary ===
+
+Step 1: Loading data from all CSV files...
+Found 100 files to process
+Processed 10/100 files | Total personas: 100 | Total judgments: 40000
+Processed 20/100 files | Total personas: 200 | Total judgments: 80000
+Processed 30/100 files | Total personas: 300 | Total judgments: 120000
+Processed 40/100 files | Total personas: 400 | Total judgments: 160000
+Processed 50/100 files | Total personas: 500 | Total judgments: 200000
+Processed 60/100 files | Total personas: 600 | Total judgments: 240000
+Processed 70/100 files | Total personas: 700 | Total judgments: 280000
+Processed 80/100 files | Total personas: 800 | Total judgments: 320000
+Processed 90/100 files | Total personas: 900 | Total judgments: 360000
+Processed 100/100 files | Total personas: 999 | Total judgments: 399600
+Filtering to personas aged 18+...
+Data loading complete in 11.16 seconds
+Total dataset: 325600 judgments from 814 personas on 200 comparisons
+
+Step 2: Creating persona-pair judgment matrix...
+Created pair matrix with 814 personas and 200 pairs
+
+Step 3: Analyzing pair consensus...
+
+Step 4: Extracting keyword features...
+Processed 100/814 personas for keyword analysis
+Processed 200/814 personas for keyword analysis
+Processed 300/814 personas for keyword analysis
+Processed 400/814 personas for keyword analysis
+Processed 500/814 personas for keyword analysis
+Processed 600/814 personas for keyword analysis
+Processed 700/814 personas for keyword analysis
+Processed 800/814 personas for keyword analysis
+Processed 814/814 personas for keyword analysis
+
+Step 5: Clustering personas...
+Running K-means clustering with 5 clusters on 814 personas
+Generating t-SNE visualization...
+Clustering complete
+
+Step 6: Visualizing clusters...
+
+Loading expert/default judge positions...
+Created pair matrix with 10 personas and 200 pairs
+Processed 10/10 personas for keyword analysis
+Created pair matrix with 10 personas and 200 pairs
+Processed 10/10 personas for keyword analysis
+
+Step 7: Analyzing cluster characteristics...
+
+Cluster sizes:
+Cluster 0: 183 personas (22.5%)
+Cluster 1: 247 personas (30.3%)
+Cluster 2: 226 personas (27.8%)
+Cluster 3: 29 personas (3.6%)
+Cluster 4: 129 personas (15.8%)
+
+Step 8: Analyzing top distinctive pairs for each cluster...
+
+Analyzing top distinctive comparison pairs for each cluster...
+
+Cluster 2 distinctive pairs:
+  Pair 149: 38.1% said similar (distinctiveness: 0.341)
+  Pair 30: 41.2% said similar (distinctiveness: 0.333)
+  Pair 108: 29.4% said similar (distinctiveness: 0.321)
+  Pair 152: 36.5% said similar (distinctiveness: 0.316)
+  Pair 98: 52.0% said similar (distinctiveness: 0.313)
+
+Cluster 4 distinctive pairs:
+  Pair 149: 77.5% said similar (distinctiveness: nan)
+  Pair 30: 82.9% said similar (distinctiveness: nan)
+  Pair 108: 68.6% said similar (distinctiveness: nan)
+  Pair 152: 78.7% said similar (distinctiveness: nan)
+  Pair 98: 89.5% said similar (distinctiveness: nan)
+
+Cluster 1 distinctive pairs:
+  Pair 149: 66.8% said similar (distinctiveness: nan)
+  Pair 30: 68.2% said similar (distinctiveness: nan)
+  Pair 108: 52.6% said similar (distinctiveness: nan)
+  Pair 152: 57.7% said similar (distinctiveness: nan)
+  Pair 98: 77.1% said similar (distinctiveness: nan)
+
+Cluster 0 distinctive pairs:
+  Pair 184: 57.9% said similar (distinctiveness: 0.179)
+  Pair 108: 65.8% said similar (distinctiveness: 0.170)
+  Pair 147: 58.5% said similar (distinctiveness: 0.158)
+  Pair 152: 71.6% said similar (distinctiveness: 0.158)
+  Pair 149: 73.5% said similar (distinctiveness: nan)
+
+Cluster 3 distinctive pairs:
+  Pair 138: 74.1% said similar (distinctiveness: 0.367)
+  Pair 149: 86.2% said similar (distinctiveness: nan)
+  Pair 30: 81.0% said similar (distinctiveness: nan)
+  Pair 108: 79.3% said similar (distinctiveness: nan)
+  Pair 152: 87.9% said similar (distinctiveness: nan)
+
+Step 9: Extracting common phrases from all reasoning text...
