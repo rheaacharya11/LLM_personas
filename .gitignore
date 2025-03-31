@@ -12,7 +12,7 @@ monitor_jobs.sh
 *.pkl
 constraint_visualizations/
 fairness_analysis_results_1/
-my_eyes_only/
+my_eyes_only/**.*
 classification_result/
 classification_results/
 stupid_code/
